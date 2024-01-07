@@ -2,44 +2,54 @@ from my_server import app
 from flask import render_template, request, redirect, url_for, abort, flash
 from my_server.databasehandler import create_connection
 import json
+from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt(app)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST' and  request.form['sort_name'] != '':
+    if request.method == 'POST' and request.form['sort_name'] != '':
         sort_name = request.form['sort_name']
-        sql = f'SELECT * FROM users WHERE name LIKE "{sort_name}%"'
+        sql = f'SELECT * FROM users WHERE name LIKE "?%"'
+        data = sort_name
     else:
         sql = 'SELECT * FROM users'
+        data = ''
     conn = create_connection()
     cur = conn.cursor()
     #user = cur.execute(sql).fetchone()
     #print(user)
-    users = cur.execute(sql).fetchall()
+    users = cur.execute(sql, (data, )).fetchall()
     conn.close()
 
     return render_template('index.html', users = users)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-
-        name = request.form['name']
-        password = request.form['password']
-            
-        conn = create_connection()
-        cur = conn.cursor()
-
-        sql = f'SELECT id FROM users WHERE name = "{name}" AND password = {password}'
-        id = cur.execute(sql).fetchone()
-        print(id)
-        print('Hello')
-        print('Helloo')
-        conn.close()
-        return redirect(url_for('memberarea', id = id))
-    else:
+    if request.method == 'GET':
         return render_template('login.html')
+
+    name = request.form['name']
+    password = request.form['password'].encode('utf-8')
+        
+    conn = create_connection()
+    cur = conn.cursor()
+    user = cur.execute('SELECT * FROM users WHERE name = ?').fetchone()
+    conn.close()
+
+    if bcrypt.check_password_hash(user[2], password):
+        return redirect(url_for('memberarea', user = user))
+    
+    abort(401)
+    #sql = f'SELECT id FROM users WHERE name = "{name}" AND password = {password}'
+    #id = cur.execute(sql).fetchone()
+    #print(id)
+    #print('Hello')
+    #print('Helloo')
+    #conn.close()
+    
+        
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
