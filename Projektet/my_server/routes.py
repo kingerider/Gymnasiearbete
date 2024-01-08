@@ -6,24 +6,10 @@ from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt(app)
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/index')
 def index():
-    if request.method == 'POST' and request.form['sort_name'] != '':
-        sort_name = request.form['sort_name']
-        sql = f'SELECT * FROM users WHERE name LIKE "?%"'
-        data = sort_name
-    else:
-        sql = 'SELECT * FROM users'
-        data = None
-    conn = create_connection()
-    cur = conn.cursor()
-    #user = cur.execute(sql).fetchone()
-    #print(user)
-    users = cur.execute(sql, (data, )).fetchall()
-    conn.close()
-
-    return render_template('index.html', users = users)
+    return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
