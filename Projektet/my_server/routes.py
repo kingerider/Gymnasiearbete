@@ -15,7 +15,7 @@ def index():
         data = sort_name
     else:
         sql = 'SELECT * FROM users'
-        data = ''
+        data = None
     conn = create_connection()
     cur = conn.cursor()
     #user = cur.execute(sql).fetchone()
@@ -127,13 +127,5 @@ def user_exist():
             'msg' : 'Error, user already exists',
             'success' : False
         })
-
-@app.errorhandler(404)
-def not_found_error(error):
-	return render_template('errors/404.html'), 404
-
-@app.errorhandler(401)
-def not_found_error(error):
-	return render_template('errors/401.html'), 401
 
     
