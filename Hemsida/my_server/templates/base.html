@@ -19,27 +19,27 @@
             <!--nav-->
             <div class="collapse navbar-collapse w-100 order-3 dual-collapse2" id="navbarNav">
               <ul class="navbar-nav ml-auto">
-                <!--Not logged in-->
-                {% if session['logged_in'] == False or session['logged_in'] == None %}
+                <!--logged in-->
+                {% if session['logged_in'] == True %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('index')}}">Hem</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Logga ut</a>
+                        <a class="nav-link" href="{{url_for('logout')}}">Logga ut</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Bygga banor</a>
+                        <a class="nav-link" href="#">Bygga banor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Lista existerande banor</a>
+                        <a class="nav-link" href="#">Lista existerande banor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Lista spel</a>
+                        <a class="nav-link" href="#">Lista spel</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Profil</a>
+                        <a class="nav-link" href="#">Profil</a>
                     </li>
-                <!--Logged in-->
+                <!--not logged in-->
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('index')}}">Hem</a>
@@ -48,7 +48,7 @@
                         <a class="nav-link" href="{{url_for('login')}}">Logga in</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Skapa konto</a>
+                        <a class="nav-link" href="#">Skapa konto</a>
                     </li>
                 {% endif %}
               </ul>

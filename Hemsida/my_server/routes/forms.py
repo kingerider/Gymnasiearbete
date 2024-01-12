@@ -7,10 +7,6 @@ class RegistrationForm(FlaskForm):
         DataRequired(message='fältet får inte vara tomt'),
         Length(min=2, max=15, message='Måste vara mellan 2 och 15 tecken långt')
     ])
-    email = StringField('Email', validators=[
-        DataRequired(message='fältet får inte vara tomt'),
-        Email(message='fältet måste skrivas i email-format')
-    ])
     password = PasswordField('Password', validators=[
         DataRequired(message='fältet får inte vara tomt')
     ])
@@ -18,4 +14,4 @@ class RegistrationForm(FlaskForm):
         DataRequired(message='fältet får inte vara tomt'), 
         EqualTo('password', message='du skrev fel lösenord')
     ])
-    submit = SubmitField('Register')
+    submit = SubmitField('Logga in')

@@ -10,8 +10,8 @@ bcrypt = Bcrypt(app)
 def login():
     form = RegistrationForm()
     if form.validate_on_submit():
-        username = request.form['username']
-        password = request.form['password'].encode('utf-8')
+        username = form.username.data
+        password = form.username.data.encode('utf-8')
         conn = create_connection()
         cur = conn.cursor()
         user = cur.execute("SELECT * FROM users WHERE namn = ?", (username, )).fetchone()
