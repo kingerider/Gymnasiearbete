@@ -9,6 +9,7 @@ class RegistrationForm(FlaskForm):
     ])
     password = PasswordField('Password', validators=[
         DataRequired(message='fältet får inte vara tomt')
+
     ])
     confirm_password = PasswordField('Confirm password', validators=[
         DataRequired(message='fältet får inte vara tomt'), 
