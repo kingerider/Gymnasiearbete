@@ -14,7 +14,7 @@ def login():
         password = form.username.data.encode('utf-8')
         conn = create_connection()
         cur = conn.cursor()
-        user = cur.execute("SELECT * FROM user WHERE namn = ?", (username, )).fetchone()
+        user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
 
         if bcrypt.check_password_hash(user[2], password):
             session['logged_in'] = True
