@@ -22,7 +22,7 @@ def login():
             session['user'] = user
             flash(f"Välkommen {session['username']}", "success")
             conn.close()
-            return redirect(url_for('member_area'))
+            return redirect(url_for('memberarea'))
         conn.close()
     return render_template('login.html', form = form)
         
