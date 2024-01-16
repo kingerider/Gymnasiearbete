@@ -1,7 +1,7 @@
 from my_server import app
 from flask import render_template, redirect, url_for, flash, session
-from my_server.routes.forms import LoginForm
 from my_server.routes.dbhandler import create_connection
+from my_server.routes.forms import LoginForm
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt(app)

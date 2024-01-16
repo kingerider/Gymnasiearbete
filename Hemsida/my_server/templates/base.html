@@ -20,7 +20,7 @@
             <div class="collapse navbar-collapse w-100 order-3 dual-collapse2" id="navbarNav">
               <ul class="navbar-nav ml-auto">
                 <!--logged in-->
-                {% if session['logged_in'] == True %}
+                {% if session['logged_in'] == True and session['play_game'] == None or session['play_game'] == False %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('memberarea')}}">Hem</a>
                     </li>
@@ -40,6 +40,7 @@
                         <a class="nav-link" href="#">Profil</a>
                     </li>
                 <!--not logged in-->
+                {% elif session['play_game'] == True %}
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('index')}}">Hem</a>
