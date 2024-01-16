@@ -1,5 +1,5 @@
 from my_server import app
-from flask import render_template, redirect, url_for, flash, request, session
+from flask import render_template, redirect, url_for, flash, session
 from my_server.routes.forms import LoginForm
 from my_server.routes.dbhandler import create_connection
 from flask_bcrypt import Bcrypt
@@ -18,8 +18,7 @@ def login():
 
         if bcrypt.check_password_hash(user[2], password):
             session['logged_in'] = True
-            session['username'] = username
-            session['user'] = user
+            session['username'] = user[1]
             flash(f"Välkommen {session['username']}", "success")
             conn.close()
             return redirect(url_for('memberarea'))
