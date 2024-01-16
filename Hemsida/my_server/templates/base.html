@@ -20,7 +20,7 @@
             <div class="collapse navbar-collapse w-100 order-3 dual-collapse2" id="navbarNav">
               <ul class="navbar-nav ml-auto">
                 <!--logged in-->
-                {% if session['logged_in'] == True and session['play_game'] == None or session['play_game'] == False %}
+                {% if session['logged_in'] == True %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('memberarea')}}">Hem</a>
                     </li>
@@ -40,7 +40,6 @@
                         <a class="nav-link" href="#">Profil</a>
                     </li>
                 <!--not logged in-->
-                {% elif session['play_game'] == True %}
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('index')}}">Hem</a>
@@ -57,20 +56,21 @@
           </nav>
         <div class="container-fluid">
             <!--flash-meddelande-->
-            {% for category, message in get_flashed_messages(with_categories = True) %}
-                <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
-                    <strong>Message!</strong> {{message}}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
+            
             
             <!--content-->
             <div class="container">
                 <div class="jumbotron text-center">
                     <h1>{% block headline %}{% endblock %}</h1>
                 </div>
+                {% for category, message in get_flashed_messages(with_categories = True) %}
+                  <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                      <strong>Message!</strong> {{message}}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+              {% endfor %}
                 {% block content %}{% endblock %}
             </div>
         </div>
