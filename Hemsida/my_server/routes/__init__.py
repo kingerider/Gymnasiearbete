@@ -1,1 +1,1 @@
-from my_server.routes import dbhandler, errors, forms, objects, route_index, route_login, route_memberarea, route_sign_up
+from my_server.routes import dbhandler, errors, forms, objects, route_index, route_login, route_memberarea, route_sign_up, route_play_game
