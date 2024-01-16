@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}index{% endblock %}
+{% block title %}Play Game{% endblock %}
 
-{% block headline %}{% endblock %}
+{% block headline %}Hello{% endblock %}
 
-{% block content %}<div onload="startGame()"></div>{% endblock %}
+{% block content %}
+<div onload="startGame()"></div>
 <button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
+
+{% endblock %}

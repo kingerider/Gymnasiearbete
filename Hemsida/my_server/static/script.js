@@ -11,6 +11,9 @@ $.ajax({
         
     }
 });
+
+//Game Code ==>
+
 var myGamePiece;
 var myObstacles = [];
 var myScore;
@@ -127,6 +130,3 @@ function everyinterval(n) {
 function accelerate(n) {
     myGamePiece.gravity = n;
 }
-</script>
-<br>
-<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
