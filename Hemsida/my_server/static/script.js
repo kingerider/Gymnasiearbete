@@ -1,5 +1,14 @@
 $(document).ready(() => {
-    
+    console.log(window.location.pathname)
+
+        //Load game
+    if ( window.location.pathname == '/play_game' ){
+        //code for index page
+        console.log("In index")
+        startGame.addEventListener('load', startGame())
+    }else{
+        console.log("Not in index")
+    }
 });
 
 $.ajax({
@@ -19,6 +28,7 @@ var myObstacles = [];
 var myScore;
 
 function startGame() {
+    console.log("Here");
     myGamePiece = new component(30, 30, "red", 10, 120);
     myGamePiece.gravity = 0.05;
     myScore = new component("30px", "Consolas", "black", 280, 40, "text");
