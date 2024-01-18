@@ -7,6 +7,9 @@ class Player:
         self.positionY = None
         self.health = health
     
+    def __repr__(self):
+        return self.name
+    
     def moveTo(self, newPosX, newPosY):
         self.positionX = newPosX
         self.positionY = newPosY

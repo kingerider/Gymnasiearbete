@@ -1,13 +1,15 @@
 
 from my_server import app
 from flask import render_template, abort, session
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Player, Field
 
 socket = SocketIO(app)
 
-
+@app.route('/play_game')
+def test():
+    return render_template('play_game.html')
 
 @app.route('/play_game/<id>')
 def play_game(id = None):
