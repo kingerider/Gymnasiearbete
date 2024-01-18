@@ -5,6 +5,10 @@ from flask_socketio import SocketIO
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Player, Field
 
+socket = SocketIO(app)
+
+
+
 @app.route('/play_game/<id>')
 def play_game(id = None):
     if session['logged_in']:
@@ -21,6 +25,6 @@ def play_game(id = None):
 
 @app.route('/edit-game')
 def edit_game():
-    pass
+    return render_template('edit_game.html')
 
 
