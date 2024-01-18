@@ -22,7 +22,7 @@
                 <!--logged in-->
                 {% if session['logged_in'] == True %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('index')}}">Hem</a>
+                        <a class="nav-link" href="{{url_for('memberarea')}}">Hem</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{url_for('logout')}}">Logga ut</a>
@@ -34,7 +34,7 @@
                         <a class="nav-link" href="#">Lista existerande banor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Lista spel</a>
+                        <a class="nav-link" href="{{url_for('test')}}">Lista spel</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Profil</a>
@@ -56,20 +56,21 @@
           </nav>
         <div class="container-fluid">
             <!--flash-meddelande-->
-            {% for category, message in get_flashed_messages(with_categories = True) %}
-                <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
-                    <strong>Message!</strong> {{message}}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
+            
             
             <!--content-->
             <div class="container">
                 <div class="jumbotron text-center">
                     <h1>{% block headline %}{% endblock %}</h1>
                 </div>
+                {% for category, message in get_flashed_messages(with_categories = True) %}
+                  <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                      <strong>Message!</strong> {{message}}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+              {% endfor %}
                 {% block content %}{% endblock %}
             </div>
         </div>

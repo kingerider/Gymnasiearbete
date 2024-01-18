@@ -1,7 +1,7 @@
 from my_server import app
-from flask import render_template, redirect, url_for, flash, request, session
-from my_server.routes.forms import LoginForm
+from flask import render_template, redirect, url_for, flash, session
 from my_server.routes.dbhandler import create_connection
+from my_server.routes.forms import LoginForm
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt(app)
@@ -14,15 +14,14 @@ def login():
         password = form.username.data.encode('utf-8')
         conn = create_connection()
         cur = conn.cursor()
-        user = cur.execute("SELECT * FROM user WHERE namn = ?", (username, )).fetchone()
+        user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
 
         if bcrypt.check_password_hash(user[2], password):
             session['logged_in'] = True
-            session['username'] = username
-            session['user'] = user
+            session['username'] = user[1]
             flash(f"Välkommen {session['username']}", "success")
             conn.close()
-            return redirect(url_for('member_area'))
+            return redirect(url_for('memberarea'))
         conn.close()
     return render_template('login.html', form = form)
         
