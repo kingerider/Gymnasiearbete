@@ -8,7 +8,7 @@ class Player:
         self.health = health
     
     def __repr__(self):
-        return self.name
+        print(self.name)
     
     def moveTo(self, newPosX, newPosY):
         self.positionX = newPosX

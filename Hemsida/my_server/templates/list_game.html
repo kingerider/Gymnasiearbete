@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}List games{% endblock %}
+
+{% block headline %}Hello{% endblock %}
+
+{% block content %}
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="rooms" id="radioRoom1" value="room1" checked>
+    <label class="form-check-label" for="radioRoom1">
+      Room 1
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="rooms" id="radioRoom2" value="room2">
+    <label class="form-check-label" for="radioRoom2">
+      Room 2
+    </label>
+  </div>    
+
+<button id="button-joingame-test" onclick="joingame()">Gå med spel</button>
+
+
+{% endblock %}

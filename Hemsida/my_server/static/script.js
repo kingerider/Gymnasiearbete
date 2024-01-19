@@ -1,3 +1,9 @@
+let player = {
+    username: null,
+    room: null
+}
+
+
 $(document).ready(() => {
     console.log(window.location.pathname)
 
@@ -9,6 +15,25 @@ $(document).ready(() => {
     }else{
         console.log("Not in index")
     }
+
+    $('#button-joingame-test').click(() => { 
+        let chosenRoom = $("input[name='rooms']:checked").val()
+        if (user.room != null && user.room != chosenRoom) {
+            socket.emit('leave', {
+                username: user.username,
+                room: user.room
+            })
+        }
+        
+        if (user.room == null || user.room != chosenRoom) {
+            user.room = chosenRoom
+            socket.emit('join', {
+                username: user.username,
+                room: user.room
+            })
+        }
+
+    });
 });
 
 $.ajax({

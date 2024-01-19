@@ -24,6 +24,16 @@ def play_game(id = None):
         return render_template('play_game.html', player = player, field = field)
     abort(401)
 
+@socket.on('join')
+def on_join(data):
+    join_room(data['room'])
+
+@app.route('/list_games')
+def list_games():
+    #cur = create_connection().cursor()
+    #levels = cur.execute('SELECT * FROM')
+    return render_template('list_game.html')
+
 
 @app.route('/edit-game')
 def edit_game():
