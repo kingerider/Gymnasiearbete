@@ -1,8 +1,7 @@
 let player = {
     username: null,
-    room: null
+    room: null,
 }
-
 
 $(document).ready(() => {
     console.log(window.location.pathname)
@@ -15,24 +14,14 @@ $(document).ready(() => {
     }else{
         console.log("Not in index")
     }
-
     $('#button-joingame-test').click(() => { 
-        let chosenRoom = $("input[name='rooms']:checked").val()
-        if (user.room != null && user.room != chosenRoom) {
-            socket.emit('leave', {
-                username: user.username,
-                room: user.room
-            })
-        }
+        player.username = $("username").val()
         
-        if (user.room == null || user.room != chosenRoom) {
-            user.room = chosenRoom
-            socket.emit('join', {
-                username: user.username,
-                room: user.room
-            })
-        }
-
+        player.room = $("input[name='rooms']:checked").val()
+        socket.emit('join', {
+            username: player.username,
+            room: player.room
+        })
     });
 });
 
