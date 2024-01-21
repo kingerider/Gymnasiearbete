@@ -32,6 +32,13 @@ def on_join(data):
 def on_leave(data):
     leave_room(data['room'])
 
+@socket.on('send_message_to_room')
+def send_message_to_room(data):
+    emit('message_from_server', {
+        'heading': data['heading'],
+        'message': data['message']
+    }, to=data['room'])
+
 @app.route('/list_games')
 def list_games():
     return render_template('list_game.html', username = session['username'])

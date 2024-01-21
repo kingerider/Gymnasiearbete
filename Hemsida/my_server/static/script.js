@@ -4,6 +4,8 @@ let player = {
 }
 
 $(document).ready(() => {
+    let socket = io()
+
     console.log(window.location.pathname)
 
         //Load game
@@ -16,13 +18,45 @@ $(document).ready(() => {
     }
     $('#button-joingame-test').click(() => { 
         player.username = $("username").val()
-        
         player.room = $("input[name='rooms']:checked").val()
+        
         socket.emit('join', {
             username: player.username,
             room: player.room
         })
     });
+
+    $('#button_send_message').click(() => {
+        socket.emit('send_message_to_room', {
+            heading: player.username,
+            message: $('#input_the_text').val(),
+            room: player.room
+        });
+        $('#input_the_text').val("")
+    })
+
+    socket.on('message_from_server', (data) => {
+        $("#the_text").append(
+            create_new_message(
+                data["heading"],
+                data["message"]
+            )
+        )
+    })
+
+    socket.on('connect', () => {
+        $("#the_text").append("Du är inne på servern")
+    });
+
+    const create_new_message = (heading, msg) => {
+        return `
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">${heading}</div>
+              ${msg}
+            </div>
+          </li>`
+    }
 });
 
 $.ajax({
