@@ -27,10 +27,21 @@ def play_game(id = None):
 @socket.on('join')
 def on_join(data):
     join_room(data['room'])
+    send_message_to_room({
+        'heading': 'Info',
+        'message': f'User {data["username"]} has joined the room.',
+        'room': data['room']
+    })
 
 @socket.on('leave')
 def on_leave(data):
     leave_room(data['room'])
+    send_message_to_room({
+        'heading': 'Info',
+        'message': f'User {data["username"]} has left the room.',
+        'room': data['room']
+    })
+
 
 @socket.on('send_message_to_room')
 def send_message_to_room(data):

@@ -22,6 +22,22 @@ $(document).ready(() => {
 
     let socket = io()
 
+    $('#button-joingame-test').click(() => { 
+        player.username = $("username").val()
+        
+        player.room = $("input[name='rooms']:checked").val()
+        socket.emit('join', {
+            username: player.username,
+            room: player.room
+        })
+    })
+
+    $('#button-leavegame-test').click(() => { 
+        socket.emit('leave', {
+            username: user.username,
+            room: user.room
+        })
+    })
 
     $('#button_send_message').click(() => {
         socket.emit('send_message_to_room', {
@@ -47,12 +63,10 @@ $(document).ready(() => {
 
     const create_new_message = (heading, msg) => {
         return `
-        <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
               <div class="fw-bold">${heading}</div>
               ${msg}
-            </div>
-          </li>`
+            </div>`
     }
 
     //End scoket code ---------
