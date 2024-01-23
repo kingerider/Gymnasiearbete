@@ -78,3 +78,23 @@ class Field:
                 'y': enemy.positionY
             })
         return list_of_positions
+    
+    def get_wall_pos(self):
+        list_of_positions = []
+        for wall in self.walls:
+            list_of_positions.append({
+                'x': wall.positionX,
+                'y': wall.positionY
+            })
+        return list_of_positions
+    
+    def get_item_pos(self):
+        list_of_positions = []
+        for item in self.items:
+            list_of_positions.append({
+                'x': item.positionX,
+                'y': item.positionY
+            })
+        return list_of_positions
+    
+    

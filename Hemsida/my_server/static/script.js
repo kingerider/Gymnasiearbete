@@ -1,6 +1,6 @@
 let player = {
     username: null,
-    room: null,
+    room: null
 }
 
 $(document).ready(() => {
@@ -23,9 +23,11 @@ $(document).ready(() => {
     let socket = io()
 
     $('#button-joingame-test').click(() => { 
-        player.username = $("username").val()
+        player.username = $("#username").val()
+        player.room = $("#input_room").val()
         
-        player.room = $("input[name='rooms']:checked").val()
+        console.log(`Dobro pozhalovat ${player.username} to room ${player.room}`)
+        
         socket.emit('join', {
             username: player.username,
             room: player.room
@@ -33,13 +35,16 @@ $(document).ready(() => {
     })
 
     $('#button-leavegame-test').click(() => { 
+        console.log("Ty ostavil menya")
         socket.emit('leave', {
-            username: user.username,
-            room: user.room
+            username: player.username,
+            room: player.room
         })
+        $("#the_text").text("");
     })
 
     $('#button_send_message').click(() => {
+        console.log($('#input_the_text').val())
         socket.emit('send_message_to_room', {
             heading: player.username,
             message: $('#input_the_text').val(),
