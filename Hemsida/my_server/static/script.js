@@ -94,23 +94,24 @@ function startGame() {
     var ctx = canvas.getContext("2d");
     var x = canvas.width/2;
     var y = canvas.height-30;
+    var tileSize = 10;
 
     //Ball
-    var ballRadius = 10;
+    var ballRadius = tileSize;
     var dx = 2;
     var dy = -2;
 
     //Wall
     var wallHeight = 20
     var wallWidth = 20
-    var wallX = 0;
-    var wallY = 0;
+    wallX = (Math.floor(Math.random() * 80) * tileSize)
+    wallY = (Math.floor(Math.random() * 40) * tileSize)
 
     //Player
-    var playerHeight = 15;
-    var playerWidth = 10;
-    var playerX = (canvas.width-playerWidth)/2;
-    var playerY = (canvas.height-playerHeight)/2;
+    var playerHeight = 2 * tileSize;
+    var playerWidth = tileSize;
+    var playerX = 10*tileSize;
+    var playerY = 20*tileSize;
 
     //Keys
     var rightPressed = false;
@@ -204,21 +205,21 @@ function startGame() {
         }
         
         if(rightPressed && playerX < canvas.width-playerWidth) {
-            playerX += 7;
+            playerX += tileSize;
         }
         else if(leftPressed && playerX > 0) {
-            playerX -= 7;
+            playerX -= tileSize;
         }
-        if(upPressed && playerY < canvas.height-playerHeight) {
-            playerY -= 7;
+        if(upPressed && playerY > 0) {
+            playerY -= tileSize;
         }
-        else if(downPressed && playerY > 0) {
-            playerY += 7;
+        else if(downPressed && playerY < canvas.height-playerHeight) {
+            playerY += tileSize;
         }
         
         x += dx;
         y += dy;
     }
 
-    var interval = setInterval(draw, 20);
+    var interval = setInterval(draw, 60);
 }
