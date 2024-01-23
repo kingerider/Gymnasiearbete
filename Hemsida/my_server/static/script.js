@@ -93,25 +93,40 @@ $.ajax({
 
 function startGame() {
     console.log("Here");
+
+    //Canvas
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-    var ballRadius = 10;
     var x = canvas.width/2;
     var y = canvas.height-30;
+    var tileSize = 10;
+
+    //Ball
+    var ballRadius = tileSize;
     var dx = 2;
     var dy = -2;
-    var playerHeight = 15;
-    var playerWidth = 10;
-    var playerX = (canvas.width-playerWidth)/2;
-    var playerY = (canvas.height-playerHeight)/2;
+
+    //Wall
+    var wallHeight = 20
+    var wallWidth = 20
+    wallX = (Math.floor(Math.random() * 80) * tileSize)
+    wallY = (Math.floor(Math.random() * 40) * tileSize)
+
+    //Player
+    var playerHeight = 2 * tileSize;
+    var playerWidth = tileSize;
+    var playerX = 10*tileSize;
+    var playerY = 20*tileSize;
+
+    //Keys
     var rightPressed = false;
     var leftPressed = false;
     var upPressed = false;
     var downPressed = false;
 
-
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
+
 
     function keyDownHandler(e) {
         if(e.key == "Right" || e.key == "ArrowRight") {
@@ -143,6 +158,7 @@ function startGame() {
         }
     }
 
+    //Ball
     function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -150,6 +166,17 @@ function startGame() {
         ctx.fill();
         ctx.closePath();
     }
+
+    //Wall
+    function drawWall() {
+        ctx.beginPath();
+        ctx.rect(wallX, wallY, wallWidth, wallHeight, );
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    //Player
     function drawPlayer() {
         ctx.beginPath();
         ctx.rect(playerX, playerY, playerWidth, playerHeight);
@@ -158,10 +185,12 @@ function startGame() {
         ctx.closePath();
     }
 
+    //Draw objects
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBall();
         drawPlayer();
+        drawWall();
         
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
             dx = -dx;
@@ -181,21 +210,21 @@ function startGame() {
         }
         
         if(rightPressed && playerX < canvas.width-playerWidth) {
-            playerX += 7;
+            playerX += tileSize;
         }
         else if(leftPressed && playerX > 0) {
-            playerX -= 7;
+            playerX -= tileSize;
         }
-        if(upPressed && playerY < canvas.height-playerHeight) {
-            playerY -= 7;
+        if(upPressed && playerY > 0) {
+            playerY -= tileSize;
         }
-        else if(downPressed && playerY > 0) {
-            playerY += 7;
+        else if(downPressed && playerY < canvas.height-playerHeight) {
+            playerY += tileSize;
         }
         
         x += dx;
         y += dy;
     }
 
-    var interval = setInterval(draw, 20);
+    var interval = setInterval(draw, 60);
 }
