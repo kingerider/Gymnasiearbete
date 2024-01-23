@@ -192,5 +192,5 @@ function startGame() {
         y += dy;
     }
 
-    var interval = setInterval(draw, 100);
+    var interval = setInterval(draw, 20);
 }
