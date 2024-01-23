@@ -280,8 +280,6 @@ function startGame() {
         if(upPressed && playerY > 0) {
             var checkForWalls = true
             for (let i = 0; i < wallArray.length; i++) {
-                console.log(playerY)
-                console.log(wallArray[i].getY())
                 if (playerY == (wallArray[i].getY()+tileSize) && playerX == wallArray[i].getX()) {
                     checkForWalls = false
                 }
@@ -293,8 +291,6 @@ function startGame() {
         else if(downPressed && playerY < canvas.height-playerHeight) {
             var checkForWalls = true
             for (let i = 0; i < wallArray.length; i++) {
-                console.log(playerY)
-                console.log(wallArray[i].getY())
                 if (playerY == (wallArray[i].getY()-tileSize) && playerX == wallArray[i].getX()) {
                     checkForWalls = false
                 }
