@@ -126,7 +126,7 @@ function startGame() {
     var wallWidth = tileSize;
     var wallArray = [];
     for (let index = 0; index < 100; index++) {
-        wallArray.push(new position((Math.floor(Math.random() * 80) * tileSize), (Math.floor(Math.random() * 40) * tileSize)));
+        wallArray.push(new position((Math.floor(Math.random() * canvas.width/tileSize) * tileSize), (Math.floor(Math.random() * canvas.height/tileSize) * tileSize)));
     }
     console.log("Wall x pos");
     console.log(wallArray.length)
@@ -135,8 +135,8 @@ function startGame() {
     //Player
     var playerHeight = tileSize;
     var playerWidth = tileSize;
-    var playerX = 10*tileSize;
-    var playerY = 20*tileSize;
+    var playerX = 0;
+    var playerY = 0;
 
     //Keys
     var rightPressed = false;
