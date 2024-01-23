@@ -96,19 +96,39 @@ function startGame() {
     var y = canvas.height-30;
     var tileSize = 10;
 
+    //list walls
+    class position{
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+        }
+        getX() {
+            return this.x;
+        }
+        getY() {
+            return this.y;
+        }
+        
+    }
+    
     //Ball
     var ballRadius = tileSize;
     var dx = 2;
     var dy = -2;
 
     //Wall
-    var wallHeight = 20
-    var wallWidth = 20
-    wallX = (Math.floor(Math.random() * 80) * tileSize)
-    wallY = (Math.floor(Math.random() * 40) * tileSize)
+    var wallHeight = tileSize;
+    var wallWidth = tileSize;
+    var wallArray = [];
+    for (let index = 0; index < 100; index++) {
+        wallArray.push(new position((Math.floor(Math.random() * 80) * tileSize), (Math.floor(Math.random() * 40) * tileSize)));
+    }
+    console.log("Wall x pos");
+    console.log(wallArray.length)
+    console.log(wallArray[1].getX());
 
     //Player
-    var playerHeight = 2 * tileSize;
+    var playerHeight = tileSize;
     var playerWidth = tileSize;
     var playerX = 10*tileSize;
     var playerY = 20*tileSize;
@@ -153,6 +173,25 @@ function startGame() {
         }
     }
 
+    //Grid
+    function drawGrid() {
+        for (var i = 0; i <= canvas.width; i += tileSize) {
+            ctx.beginPath(); 
+            ctx.moveTo(i, 0); 
+            ctx.lineTo(i, canvas.height); 
+            ctx.stroke();
+        }
+    
+        for (var i = 0; i <= canvas.height; i += tileSize) {
+            ctx.beginPath(); 
+            ctx.moveTo(0, i); 
+            ctx.lineTo(canvas.width, i); 
+            ctx.stroke();
+        }
+        ctx.strokeStyle = '#eeeeee';
+        ctx.stroke();
+    }
+
     //Ball
     function drawBall() {
         ctx.beginPath();
@@ -163,7 +202,7 @@ function startGame() {
     }
 
     //Wall
-    function drawWall() {
+    function drawWall(wallX, wallY) {
         ctx.beginPath();
         ctx.rect(wallX, wallY, wallWidth, wallHeight, );
         ctx.fillStyle = "#0095DD";
@@ -183,9 +222,12 @@ function startGame() {
     //Draw objects
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
         drawBall();
         drawPlayer();
-        drawWall();
+        for (let i = 0; i < wallArray.length; i++) {
+            drawWall(wallArray[i].getX(), wallArray[i].getY());            
+        }
         
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
             dx = -dx;
@@ -204,17 +246,56 @@ function startGame() {
             }
         }
         
+        //Player movement
         if(rightPressed && playerX < canvas.width-playerWidth) {
-            playerX += tileSize;
+            //Check walls
+            var checkForWalls = true
+            for (let i = 0; i < wallArray.length; i++) {
+                if (playerX == (wallArray[i].getX()-tileSize) && playerY == wallArray[i].getY()) {
+                    checkForWalls = false
+                }
+            }
+            if(checkForWalls){
+                playerX += tileSize;
+            }
         }
         else if(leftPressed && playerX > 0) {
-            playerX -= tileSize;
+            //Check walls
+            var checkForWalls = true
+            for (let i = 0; i < wallArray.length; i++) {
+                if (playerX == (wallArray[i].getX()+tileSize) && playerY == wallArray[i].getY()) {
+                    checkForWalls = false
+                }
+            }
+            if(checkForWalls){
+                playerX -= tileSize;
+            }
         }
         if(upPressed && playerY > 0) {
-            playerY -= tileSize;
+            var checkForWalls = true
+            for (let i = 0; i < wallArray.length; i++) {
+                console.log(playerY)
+                console.log(wallArray[i].getY())
+                if (playerY == (wallArray[i].getY()+tileSize) && playerX == wallArray[i].getX()) {
+                    checkForWalls = false
+                }
+            }
+            if(checkForWalls){
+                playerY -= tileSize;
+            }
         }
         else if(downPressed && playerY < canvas.height-playerHeight) {
-            playerY += tileSize;
+            var checkForWalls = true
+            for (let i = 0; i < wallArray.length; i++) {
+                console.log(playerY)
+                console.log(wallArray[i].getY())
+                if (playerY == (wallArray[i].getY()-tileSize) && playerX == wallArray[i].getX()) {
+                    checkForWalls = false
+                }
+            }
+            if(checkForWalls){
+                playerY += tileSize;
+            }
         }
         
         x += dx;
