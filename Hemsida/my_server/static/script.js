@@ -180,6 +180,8 @@ function startGame() {
 
     //Grid
     function drawGrid() {
+        ctx.strokeStyle = '#eeeeee';
+        ctx.stroke();
         for (var i = 0; i <= canvas.width; i += tileSize) {
             ctx.beginPath(); 
             ctx.moveTo(i, 0); 
@@ -193,8 +195,7 @@ function startGame() {
             ctx.lineTo(canvas.width, i); 
             ctx.stroke();
         }
-        ctx.strokeStyle = '#eeeeee';
-        ctx.stroke();
+        
     }
 
     //Ball
