@@ -18,7 +18,7 @@ def play_game(id = None):
         cur = conn.cursor()
         user = cur.execute("SELECT * FROM user WHERE username = ?", (session['username'], )).fetchone()
         level = cur.execute("SELECT * FROM level WHERE id = ?", (id, )).fetchone()
-        field = Field(id)
+        field = Field(id, level[2])
         player = Player(user[1], level[3])
         host = True
         field.load_from_database()
@@ -54,6 +54,7 @@ def send_message_to_room(data):
 
 @app.route('/list_games')
 def list_games():
+    cur = create_connection().cursor()
     return render_template('list_game.html', username = session['username'])
 
 

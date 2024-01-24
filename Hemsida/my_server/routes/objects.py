@@ -1,5 +1,12 @@
 from my_server.routes.dbhandler import create_connection
 
+class Game:
+    def __init__(self):
+        self.awaiting_players = True
+        self.players = []
+        self.field = None
+
+
 class Player: 
     def __init__(self, name, health):
         self.name = name
@@ -48,8 +55,9 @@ class Item:
         self.type = type
 
 class Field:
-    def __init__(self, id):
-        self.id = id
+    def __init__(self, id, name):
+        self.id = id,
+        self.id = name,
         self.walls = []
         self.enemies = []
         self.items = []
