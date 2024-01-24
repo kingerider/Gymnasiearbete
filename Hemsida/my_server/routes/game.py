@@ -19,8 +19,10 @@ def play_game(id = None):
         user = cur.execute("SELECT * FROM user WHERE username = ?", (session['username'], )).fetchone()
         level = cur.execute("SELECT * FROM level WHERE id = ?", (id, )).fetchone()
         field = Field(id)
-        field.load_from_database()
         player = Player(user[1], level[3])
+        host = True
+        field.load_from_database()
+        field.place_player(player, host)
         return render_template('play_game.html', player = player, field = field)
     abort(401)
 

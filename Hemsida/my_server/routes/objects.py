@@ -67,8 +67,11 @@ class Field:
             self.items.append(Item(item[0], item[1], item[2], item[3], item[4]))
 
 
-    def place_player(self, player):
-        pass
+    def place_player(self, player, host):
+        if host:
+            pass
+        else:
+            pass
 
     def get_monster_pos(self):
         list_of_positions = []
