@@ -132,11 +132,20 @@ function startGame() {
     console.log(wallArray.length)
     console.log(wallArray[1].getX());
 
+    //Monster
+    var monsterHeight = tileSize;
+    var monsterWidth = tileSize;
+    var monsterArray = [];
+    for (let index = 0; index < 2; index++) {
+        monsterArray.push(new position((Math.floor(Math.random() * canvas.width/tileSize) * tileSize), (Math.floor(Math.random() * canvas.height/tileSize) * tileSize)));
+    }
+    
     //Player
     var playerHeight = tileSize;
     var playerWidth = tileSize;
     var playerX = 0;
     var playerY = 0;
+    
 
     //Keys
     var rightPressed = false;
@@ -216,11 +225,21 @@ function startGame() {
         ctx.closePath();
     }
 
+    //Monster
+    function drawPlayer(monsterX, monsterY) {
+        ctx.beginPath();
+        ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
+        ctx.fillStyle = "#04d49d";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+
     //Player
     function drawPlayer() {
         ctx.beginPath();
         ctx.rect(playerX, playerY, playerWidth, playerHeight);
-        ctx.fillStyle = "#0095DD";
+        ctx.fillStyle = "#046cd4";
         ctx.fill();
         ctx.closePath();
     }
@@ -230,6 +249,7 @@ function startGame() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawGrid();
         drawBall();
+        //drawMonster
         drawPlayer();
         for (let i = 0; i < wallArray.length; i++) {
             drawWall(wallArray[i].getX(), wallArray[i].getY());            
