@@ -226,7 +226,7 @@ function startGame() {
     }
 
     //Monster
-    function drawPlayer(monsterX, monsterY) {
+    function drawMonster(monsterX, monsterY) {
         ctx.beginPath();
         ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
         ctx.fillStyle = "#04d49d";
@@ -249,12 +249,16 @@ function startGame() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawGrid();
         drawBall();
-        //drawMonster
         drawPlayer();
+        
         for (let i = 0; i < wallArray.length; i++) {
             drawWall(wallArray[i].getX(), wallArray[i].getY());            
         }
+        for (let i = 0; i < monsterArray.length; i++) {
+            drawMonster(monsterArray[i].getX(), monsterArray[i].getY());            
+        }
         
+        //Ball movment
         if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
             dx = -dx;
         }
@@ -269,6 +273,69 @@ function startGame() {
                 alert("GAME OVER");
                 document.location.reload();
                 clearInterval(interval); // Needed for Chrome to end game
+            }
+        }
+        x += dx;
+        y += dy;
+        //Monster movement
+        for (let i = 0; i < monsterArray.length; i++) {
+            //Choose what way to go
+            var movementChoose = Math.floor(Math.random() * 4)
+            if(movementChoose = 1){
+                //-------------------------------------------------------------
+            }else if(movementChoose = 2){
+
+            }else if(movementChoose = 3){
+
+            }else{
+
+            }
+
+            if(rightPressed && monsterArray[i].getX() < canvas.width-playerWidth) {
+                //Check walls
+                var checkForWalls = true
+                for (let i = 0; i < wallArray.length; i++) {
+                    if (monsterArray[i].getX() == (wallArray[i].getX()-tileSize) && monsterArray[i].getY() == wallArray[i].getY()) {
+                        checkForWalls = false
+                    }
+                }
+                if(checkForWalls){
+                    monsterArray[i].getX() += tileSize;
+                }
+            }
+            else if(leftPressed && monsterArray[i].getX() > 0) {
+                //Check walls
+                var checkForWalls = true
+                for (let i = 0; i < wallArray.length; i++) {
+                    if (monsterArray[i].getX() == (wallArray[i].getX()+tileSize) && monsterArray[i].getY() == wallArray[i].getY()) {
+                        checkForWalls = false
+                    }
+                }
+                if(checkForWalls){
+                    monsterArray[i].getX() -= tileSize;
+                }
+            }
+            if(upPressed && monsterArray[i].getY() > 0) {
+                var checkForWalls = true
+                for (let i = 0; i < wallArray.length; i++) {
+                    if (monsterArray[i].getY() == (wallArray[i].getY()+tileSize) && monsterArray[i].getX() == wallArray[i].getX()) {
+                        checkForWalls = false
+                    }
+                }
+                if(checkForWalls){
+                    monsterArray[i].getY() -= tileSize;
+                }
+            }
+            else if(downPressed && monsterArray[i].getY() < canvas.height-playerHeight) {
+                var checkForWalls = true
+                for (let i = 0; i < wallArray.length; i++) {
+                    if (monsterArray[i].getY() == (wallArray[i].getY()-tileSize) && monsterArray[i].getX() == wallArray[i].getX()) {
+                        checkForWalls = false
+                    }
+                }
+                if(checkForWalls){
+                    monsterArray[i].getY() += tileSize;
+                }
             }
         }
         
@@ -319,9 +386,6 @@ function startGame() {
                 playerY += tileSize;
             }
         }
-        
-        x += dx;
-        y += dy;
     }
 
     var interval = setInterval(draw, 60);
