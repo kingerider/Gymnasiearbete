@@ -19,6 +19,7 @@ def login():
         if bcrypt.check_password_hash(user[2], password):
             session['logged_in'] = True
             session['username'] = user[1]
+            session['id'] = user[0]
             flash(f"Välkommen {session['username']}", "success")
             conn.close()
             return redirect(url_for('memberarea'))

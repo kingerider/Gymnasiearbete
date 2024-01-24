@@ -1,10 +1,24 @@
 from my_server.routes.dbhandler import create_connection
 
 class Game:
-    def __init__(self):
+    def __init__(self, room_id):
         self.awaiting_players = True
         self.players = []
         self.field = None
+        self.room_id = None
+    
+    def add_field(self, field):
+        self.field = field
+    
+    def add_player(self, player):
+        self.players.append(player)
+        if len(self.players) == 2:
+            self.awaiting_players = False 
+    
+    def start_game(self):
+        if self.awaiting_players == False:
+            return True
+        return False
 
 
 class Player: 
@@ -73,13 +87,6 @@ class Field:
         fetched_items = cur.execute("SELECT * FROM item WHERE level_id = ?", (self.id, )).fetchall()
         for item in fetched_items:
             self.items.append(Item(item[0], item[1], item[2], item[3], item[4]))
-
-
-    def place_player(self, player, host):
-        if host:
-            pass
-        else:
-            pass
 
     def get_monster_pos(self):
         list_of_positions = []
