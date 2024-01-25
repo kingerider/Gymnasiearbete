@@ -132,7 +132,7 @@ function startGame() {
     var wallHeight = tileSize;
     var wallWidth = tileSize;
     var wallArray = [];
-    for (let index = 0; index < 100; index++) {
+    for (let index = 0; index < 1000; index++) {
         wallArray.push(new position((Math.floor(Math.random() * canvas.width/tileSize) * tileSize), (Math.floor(Math.random() * canvas.height/tileSize) * tileSize)));
     }
     console.log("Wall x pos");
