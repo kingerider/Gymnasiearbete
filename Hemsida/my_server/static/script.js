@@ -113,13 +113,20 @@ function startGame() {
         getY() {
             return this.y;
         }
+        setX(x) {
+            this.x = x;
+        }
+        setY(y) {
+            this.y = y;
+        }
+
         
     }
     
     //Ball
     var ballRadius = tileSize;
-    var dx = 2;
-    var dy = -2;
+    var dx = 1;
+    var dy = -1;
 
     //Wall
     var wallHeight = tileSize;
@@ -280,9 +287,10 @@ function startGame() {
         //Monster movement
         for (let j = 0; j < monsterArray.length; j++) {
             //Choose what way to go
-            var movementChoose = Math.floor(Math.random() * 4);
-
-            if(movementChoose = 0 && monsterArray[j].getX() < canvas.width-playerWidth) {
+            movementChoose = Math.floor(Math.random() * 4);
+            console.log(movementChoose);
+            if(movementChoose == 0 && monsterArray[j].getX() < canvas.width-playerWidth) {
+                console.log("0m")
                 //Check walls
                 var checkForWalls = true
                 for (let i = 0; i < wallArray.length; i++) {
@@ -291,9 +299,12 @@ function startGame() {
                     }
                 }
                 if(checkForWalls){
-                    monsterArray[j].getX() += tileSize;
+                    monsterArray[j].setX(monsterArray[j].getX() + tileSize);
                 }
-            }else if(movementChoose = 1 && monsterArray[j].getX() > 0) {
+            }
+            else if(movementChoose == 1 && monsterArray[j].getX() > 0) {
+                console.log("1m");
+                console.log(movementChoose);
                 //Check walls
                 var checkForWalls = true
                 for (let i = 0; i < wallArray.length; i++) {
@@ -302,9 +313,11 @@ function startGame() {
                     }
                 }
                 if(checkForWalls){
-                    monsterArray[j].getX() -= tileSize; //Must use diffrent method for arrayyyyyyyyyyyyy
+                    monsterArray[j].setX(monsterArray[j].getX() - tileSize); //Must use diffrent method for arrayyyyyyyyyyyyy
                 }
-            }else if(movementChoose = 2 && monsterArray[j].getY() > 0) {
+            }
+            else if(movementChoose == 2 && monsterArray[j].getY() > 0) {
+                console.log("2m")
                 var checkForWalls = true
                 for (let i = 0; i < wallArray.length; i++) {
                     if (monsterArray[j].getY() == (wallArray[i].getY()+tileSize) && monsterArray[j].getX() == wallArray[i].getX()) {
@@ -312,10 +325,11 @@ function startGame() {
                     }
                 }
                 if(checkForWalls){
-                    monsterArray[j].getY() -= tileSize;
+                    monsterArray[j].setY(monsterArray[j].getY() - tileSize);
                 }
             }
-            else if(movementChoose = 3 && monsterArray[j].getY() < canvas.height-playerHeight) {
+            else if(movementChoose == 3 && monsterArray[j].getY() < canvas.height-playerHeight) {
+                console.log("3m")
                 var checkForWalls = true
                 for (let i = 0; i < wallArray.length; i++) {
                     if (monsterArray[j].getY() == (wallArray[i].getY()-tileSize) && monsterArray[j].getX() == wallArray[i].getX()) {
@@ -323,7 +337,7 @@ function startGame() {
                     }
                 }
                 if(checkForWalls){
-                    monsterArray[j].getY() += tileSize;
+                    monsterArray[j].setY(monsterArray[j].getY() + tileSize);
                 }
             }
         }
