@@ -20,52 +20,48 @@ class Game:
             return True
         return False
 
+class Entity:
+    def __init__(self):
+        self.positionX = None,
+        self.positionY = None
+    
+    def set_position(self, posX, posY):
+        self.positionX = posX,
+        self.positionY = posY
 
-class Player: 
+class Player(Entity): 
     def __init__(self, name, health):
         self.name = name
-        self.positionX = None
-        self.positionY = None
         self.health = health
     
     def __repr__(self):
         print(self.name)
     
     def moveTo(self, newPosX, newPosY):
-        self.positionX = newPosX
-        self.positionY = newPosY
+        self.set_position(newPosX, newPosY)
     
     def damage_taken(self):
         self.health -= 1
         if self.health == 0:
             pass
 
-class Enemy:
+class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY):
         self.id = id,
         self.level_id = level_id,
-        self.positionX = posX,
-        self.positionY = posY
-    
-    #def get_x(self):
-    #    return self.positionX
-    
-    #def get_y(self):
-    #    return self.positionY
+        self.set_position(posX, posY)
 
-class Wall:
+class Wall(Entity):
     def __init__(self, id, level_id, posX, posY):
         self.id = id,
         self.level_id = level_id,
-        self.positionX = posX,
-        self.positionY = posY
+        self.set_position(posX, posY)
 
-class Item:
+class Item(Entity):
     def __init__(self, id, level_id, posX, posY, type):
         self.id = id,
         self.level_id = level_id,
-        self.positionX = posX,
-        self.positionY = posY,
+        self.set_position(posX, posY),
         self.type = type
 
 class Field:
@@ -114,5 +110,3 @@ class Field:
                 'y': item.positionY
             })
         return list_of_positions
-    
-    

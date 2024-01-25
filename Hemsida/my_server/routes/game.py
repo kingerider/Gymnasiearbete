@@ -33,13 +33,13 @@ def test():
 def play_game(room_id = None):
     if session['logged_in']:
         #om ingen room_id finns ska användaren skapa ett spel, annars ska den gå med ett spel
+        conn = create_connection()
+        cur = conn.cursor()
+        user = cur.execute("SELECT * FROM user WHERE username = ?", (session['username'], )).fetchone()
+        level = cur.execute("SELECT * FROM level WHERE creator_id = ?", (session['id'], )).fetchone()
+        player = Player(user[1], level[3])
         if room_id == None:
-            conn = create_connection()
-            cur = conn.cursor()
-            user = cur.execute("SELECT * FROM user WHERE username = ?", (session['username'], )).fetchone()
-            level = cur.execute("SELECT * FROM level WHERE creator_id = ?", (session['id'], )).fetchone()
             field = Field(session['id'], level[2])
-            player = Player(user[1], level[3])
             field.load_from_database()
             game = Game(set_room_id())
             game.add_field(field)
@@ -48,9 +48,11 @@ def play_game(room_id = None):
         else:
             for game in ongoing_games:
                 if game.room_id == room_id:
-                    pass
-
-        return render_template('play_game.html', player = player, field = field)
+                    game.add_player(player)
+        if game.start_game():
+            return render_template('play_game.html', player = player,  game = game)
+        return render_template('waitinglobby.html')
+        
     abort(401)
 
 @socket.on('join')
