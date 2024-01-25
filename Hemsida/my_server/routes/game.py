@@ -29,6 +29,7 @@ def set_room_id():
 def test():
     return render_template('play_game.html')
 
+#@app.route('/play_game')
 @app.route('/play_game/<room_id>')
 def play_game(room_id = None):
     if session['logged_in']:
