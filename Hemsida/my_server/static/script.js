@@ -143,7 +143,7 @@ function startGame() {
     var monsterHeight = tileSize;
     var monsterWidth = tileSize;
     var monsterArray = [];
-    for (let index = 0; index < 2; index++) {
+    for (let index = 0; index < 200; index++) {
         monsterArray.push(new position((Math.floor(Math.random() * canvas.width/tileSize) * tileSize), (Math.floor(Math.random() * canvas.height/tileSize) * tileSize)));
     }
     
@@ -284,10 +284,23 @@ function startGame() {
         }
         x += dx;
         y += dy;
+        
         //Monster movement
         for (let j = 0; j < monsterArray.length; j++) {
             //Choose what way to go
-            movementChoose = Math.floor(Math.random() * 4);
+            var movementChoose = 0
+
+            //how close is player
+            if(5*tileSize > (playerX - monsterArray[j].getX()) && -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
+                console.log("Hello")
+                movementChoose = 0;
+            }else{
+                movementChoose = Math.floor(Math.random() * 4);
+            }
+
+
+
+
             console.log(movementChoose);
             if(movementChoose == 0 && monsterArray[j].getX() < canvas.width-playerWidth) {
                 console.log("0m")
