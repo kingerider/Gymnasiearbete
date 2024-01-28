@@ -5,7 +5,7 @@ class Game:
         self.awaiting_players = True
         self.players = []
         self.field = None
-        self.room_id = None
+        self.room_id = room_id
     
     def add_field(self, field):
         self.field = field
@@ -19,6 +19,11 @@ class Game:
         if self.awaiting_players == False:
             return True
         return False
+    
+    def end_game(self):
+        self.players = []
+        self.awaiting_players = True
+        self.start_game()
 
 class Entity:
     def __init__(self):
@@ -40,10 +45,10 @@ class Player(Entity):
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
     
-    def damage_taken(self):
+    def damage_taken(self, game):
         self.health -= 1
         if self.health == 0:
-            pass
+            game.end_game()
 
 class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY):
