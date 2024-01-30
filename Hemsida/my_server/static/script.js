@@ -64,6 +64,7 @@ $(document).ready(() => {
 
     socket.on('connect', () => {
         $("#the_text").append("Du är inne på servern")
+
     });
 
     const create_new_message = (heading, msg) => {

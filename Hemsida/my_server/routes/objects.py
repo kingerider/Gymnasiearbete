@@ -1,7 +1,8 @@
 from my_server.routes.dbhandler import create_connection
 
 class Game:
-    def __init__(self, room_id):
+    def __init__(self, name, room_id):
+        self.name = name
         self.awaiting_players = True
         self.players = []
         self.field = None
@@ -23,7 +24,7 @@ class Game:
     def end_game(self):
         self.players = []
         self.awaiting_players = True
-        self.start_game()
+        return self.start_game()
 
 class Entity:
     def __init__(self):
@@ -70,9 +71,8 @@ class Item(Entity):
         self.type = type
 
 class Field:
-    def __init__(self, id, name):
+    def __init__(self, id):
         self.id = id,
-        self.id = name,
         self.walls = []
         self.enemies = []
         self.items = []

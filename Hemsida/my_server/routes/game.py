@@ -7,7 +7,11 @@ from my_server.routes.objects import Game, Player, Field
 
 socket = SocketIO(app)
 
-ongoing_games = []
+test_game = Game('Shadowrealmen', 'room_-1')
+
+ongoing_games = {
+    'room_-1': test_game 
+}
 
 #kollar alla id på varje spel och lägger till max + 1 som nytt id, får tillbaka 0 om listan är tom
 def set_room_id():
@@ -16,12 +20,12 @@ def set_room_id():
         if game.room_id != None:
             list_of_roomid.append(game.room_id)
     if len(list_of_roomid) == 0:
-        return 0
+        return 'room_0'
     max = list_of_roomid[0]
     for roomid in list_of_roomid:
         if roomid > max:
             max = roomid
-    return max + 1
+    return f'room_{max + 1}'
 
 
 
@@ -36,15 +40,16 @@ def play_game(room_id = None):
         #om ingen room_id finns ska användaren skapa ett spel, annars ska den gå med ett spel
         conn = create_connection()
         cur = conn.cursor()
-        level = cur.execute("SELECT title, player_health FROM level WHERE creator_id = ?", (session['id'], )).fetchone()
+        level = cur.execute("SELECT title, player_health FROM level WHERE creator_id = ?", (session['id'], )).fetchone()        
         player = Player(session['username'], level[1])
+        conn.close()
         if room_id == None:
-            field = Field(session['id'], level[0])
+            field = Field(session['id'])
             field.load_from_database()
-            game = Game(set_room_id())
+            game = Game(level[0], set_room_id())
             game.add_field(field)
             game.add_player(player)
-            ongoing_games.append(game)
+            ongoing_games[game.room_id] = game
         else:
             for game in ongoing_games:
                 if game.room_id == room_id:
@@ -80,8 +85,7 @@ def send_message_to_room(data):
 
 @app.route('/list_games')
 def list_games():
-    cur = create_connection().cursor()
-    return render_template('list_game.html', username = session['username'])
+    return render_template('list_game.html', username = session['username'], ongoing_games = ongoing_games)
 
 
 @app.route('/edit-game')
