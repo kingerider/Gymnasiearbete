@@ -194,6 +194,14 @@ function startGame() {
         }
     }
 
+    //Sound
+    function playSound(){
+        let audio = Audio("audio/adventure");
+        audio.play()
+    }
+    play.addEventListener()
+
+    playSound();
     //Grid
     function drawGrid() {
         ctx.strokeStyle = '#eeeeee';
@@ -402,4 +410,5 @@ function startGame() {
     }
 
     var interval = setInterval(draw, 60);
+
 }
