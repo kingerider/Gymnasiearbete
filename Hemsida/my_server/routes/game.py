@@ -50,7 +50,6 @@ def play_game(room_id = None):
                 if game.room_id == room_id:
                     game.add_player(player)
         return render_template('play_game.html', player = player,  game = game)
-        
     abort(401)
 
 @socket.on('join')

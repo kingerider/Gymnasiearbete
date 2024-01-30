@@ -14,8 +14,10 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!--{% if game.start_game() %}-->
+    {% if game.start_game() %}
         <canvas id="myCanvas" width="800" height="400"></canvas>
-    <!--{% endif %}-->
+    {% else %}
+        <h2>Waiting for player...</h2>
+    {% endif %}
 </body>
 </html>
