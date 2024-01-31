@@ -87,7 +87,10 @@ def send_message_to_room(data):
 def list_games():
     return render_template('list_game.html', username = session['username'], ongoing_games = ongoing_games)
 
+@app.route('/build_game')
+def build_game():
+    return render_template('build_game.html')
 
-@app.route('/edit-game')
+@app.route('/edit_game')
 def edit_game():
     return render_template('edit_game.html')

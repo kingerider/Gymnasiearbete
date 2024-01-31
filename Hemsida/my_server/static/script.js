@@ -13,6 +13,9 @@ $(document).ready(() => {
         //code for index page
         console.log("In index")
         startGame.addEventListener('load', startGame())
+    }else if (window.location.pathname == '/build_game'){
+        console.log("In index build")
+        startGame.addEventListener('load', buildGame())
     }else{
         console.log("Not in index")
     }
@@ -195,14 +198,6 @@ function startGame() {
         }
     }
 
-    //Sound
-    function playSound(){
-        let audio = Audio("audio/adventure");
-        audio.play()
-    }
-    play.addEventListener()
-
-    playSound();
     //Grid
     function drawGrid() {
         ctx.strokeStyle = '#eeeeee';
@@ -412,4 +407,21 @@ function startGame() {
 
     var interval = setInterval(draw, 60);
 
+}
+
+function buildGame() {
+    console.log("Here");
+
+    //Canvas
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var x = canvas.width/2;
+    var y = canvas.height-30;
+    var tileSize = 10;
+
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+    }
 }
