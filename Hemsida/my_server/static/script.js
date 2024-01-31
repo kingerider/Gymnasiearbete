@@ -3,6 +3,19 @@ let player = {
     room: null
 }
 
+let socket = io()
+
+function joinGame(data) {
+    console.log(data)
+    player.username = $("#playerName").val()
+    player.room = data
+
+    socket.emit('join', {
+        username: player.username,
+        room: player.room
+    })
+}
+
 $(document).ready(() => {
     
     //game code -------------
@@ -18,11 +31,10 @@ $(document).ready(() => {
     }
     //end game code -----------
 
-    //Scoket code ---------
+    //Socket code ---------
 
-    let socket = io()
 
-    $('#button-joingame-test').click(() => { 
+    /*$('#button-joingame-test').click(() => { 
         player.username = $("#username").val()
         player.room = $("#input_room").val()
         
@@ -73,10 +85,15 @@ $(document).ready(() => {
               <div class="fw-bold">${heading}</div>
               ${msg}
             </div>`
-    }
+    }*/
+
+    socket.on('navigate_to', (path) => {
+        window.location.href = path
+    })
 
     //End scoket code ---------
 
+   
 });
 
 $.ajax({

@@ -6,8 +6,10 @@
 
 {% block content %}
 
+<input type="hidden" id="playerName" value="{{username}}">
+
 {% for current_game in ongoing_games %}
-  <div class="card game_card" id="{{ongoing_games[current_game].room_id}}">
+  <div class="card game_card" onclick="joinGame('{{ongoing_games[current_game].room_id}}')">
     <div class="card-body">
       <h4>{{ongoing_games[current_game].name}} in room {{ongoing_games[current_game].room_id}}</h4>
     </div>
