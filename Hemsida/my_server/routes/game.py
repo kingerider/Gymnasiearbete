@@ -1,6 +1,6 @@
 
 from my_server import app
-from flask import render_template, abort, session
+from flask import render_template, redirect, url_for, abort, session
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Game, Player, Field
@@ -33,7 +33,7 @@ def set_room_id():
 def test():
     return render_template('play_game.html')
 
-#@app.route('/play_game')
+@app.route('/play_game')
 @app.route('/play_game/<room_id>')
 def play_game(room_id = None):
     if session['logged_in']:
@@ -58,13 +58,14 @@ def play_game(room_id = None):
     abort(401)
 
 @socket.on('join')
-def on_join(data):
+def handle_join_room(data):
     join_room(data['room'])
     send_message_to_room({
         'heading': 'Info',
         'message': f'User {data["username"]} has joined the room.',
         'room': data['room']
     })
+    emit('navigate_to', f'/play_game/{data["room"]}')
 
 @socket.on('leave')
 def on_leave(data):
