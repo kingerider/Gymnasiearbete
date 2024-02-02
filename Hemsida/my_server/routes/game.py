@@ -77,7 +77,7 @@ def handle_join_room(data):
     #    'message': f'User {data["username"]} has joined the room.',
     #    'room': data['room']
     #})
-    emit('navigate_to', f'/play_game/{data['role']}/{data["room"]}')
+    emit('navigate_to', f'/play_game/{data["role"]}/{data["room"]}')
 
 @socket.on('leave')
 def on_leave(data):
