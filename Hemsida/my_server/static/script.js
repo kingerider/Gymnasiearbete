@@ -12,8 +12,10 @@ function joinGame(data) {
 
     socket.emit('join', {
         username: player.username,
-        room: player.room
+        room: player.room,
+        role: 'join'
     })
+    console.log(`Du är inne på ${player.room}`)
 }
 
 $(document).ready(() => {
@@ -36,6 +38,9 @@ $(document).ready(() => {
 
     //Socket code ---------
 
+    socket.on('navigate_to', (path) => {
+        window.location.href = path
+    })
 
     /*$('#button-joingame-test').click(() => { 
         player.username = $("#username").val()
@@ -89,10 +94,6 @@ $(document).ready(() => {
               ${msg}
             </div>`
     }*/
-
-    socket.on('navigate_to', (path) => {
-        window.location.href = path
-    })
 
     //End scoket code ---------
 

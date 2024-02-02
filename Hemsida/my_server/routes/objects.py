@@ -1,7 +1,8 @@
 from my_server.routes.dbhandler import create_connection
 
 class Game:
-    def __init__(self, name, room_id):
+    def __init__(self, id, name, room_id):
+        self.id = id
         self.name = name
         self.awaiting_players = True
         self.players = []
@@ -40,9 +41,6 @@ class Player(Entity):
         self.name = name
         self.health = health
     
-    def __repr__(self):
-        print(self.name)
-    
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
     
@@ -50,6 +48,7 @@ class Player(Entity):
         self.health -= 1
         if self.health == 0:
             game.end_game()
+        return self.health
 
 class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY):
@@ -71,14 +70,16 @@ class Item(Entity):
         self.type = type
 
 class Field:
-    def __init__(self, id):
-        self.id = id,
+    def __init__(self, id, health):
+        self.id = id
+        self.health = health
         self.walls = []
         self.enemies = []
         self.items = []
     
     def load_from_database(self):
-        cur = create_connection().cursor()
+        conn = create_connection()
+        cur = conn.cursor()
         fetched_walls = cur.execute("SELECT * FROM wall WHERE level_id = ?", (self.id, )).fetchall()
         for wall in fetched_walls:
             self.walls.append(Wall(wall[0], wall[1], wall[2], wall[3]))
@@ -88,6 +89,7 @@ class Field:
         fetched_items = cur.execute("SELECT * FROM item WHERE level_id = ?", (self.id, )).fetchall()
         for item in fetched_items:
             self.items.append(Item(item[0], item[1], item[2], item[3], item[4]))
+        conn.close()
 
     def get_monster_pos(self):
         list_of_positions = []
