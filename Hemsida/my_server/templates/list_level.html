@@ -8,7 +8,7 @@
 
 <div class="card-deck">
     {% for level in levels %}
-    <div class="card">
+    <div class="card" onclick="createGame('{{level[0]}}')">
         <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{level[2]}}</h5>

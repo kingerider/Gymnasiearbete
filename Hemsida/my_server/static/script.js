@@ -19,7 +19,6 @@ function joinGame(data) {
 }
 
 function createGame(data) {
-    console.log(data)
     player.username = $("#playerName").val()
     player.room = data
 
