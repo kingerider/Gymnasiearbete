@@ -3,7 +3,7 @@ let player = {
     room: null
 }
 
-let socket = io()
+socket = io()
 
 function joinGame(data) {
     console.log(data)
@@ -22,16 +22,21 @@ $(document).ready(() => {
     
     //game code -------------
     console.log(window.location.pathname)
+    console.log(player.room)
+    console.log(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
 
         //Load game
-    if ( window.location.pathname == '/play_game' ){
+    if ( window.location.pathname == `/play_game/join/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
         //code for index page
         console.log("In index")
         startGame.addEventListener('load', startGame())
-    }else if (window.location.pathname == '/build_game'){
+    } else if ( window.location.pathname == `/play_game/create/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
+        console.log("In index")
+        startGame.addEventListener('load', startGame())
+    } else if (window.location.pathname == '/build_game'){
         console.log("In index build")
         startGame.addEventListener('load', buildGame())
-    }else{
+    } else{
         console.log("Not in index")
     }
     //end game code -----------
