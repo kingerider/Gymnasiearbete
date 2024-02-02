@@ -29,13 +29,13 @@ $(document).ready(() => {
     if ( window.location.pathname == `/play_game/join/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
         //code for index page
         console.log("In index")
-        startGame.addEventListener('load', startGame())
+        startGame()
     } else if ( window.location.pathname == `/play_game/create/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
         console.log("In index")
-        startGame.addEventListener('load', startGame())
+        startGame()
     } else if (window.location.pathname == '/build_game'){
         console.log("In index build")
-        startGame.addEventListener('load', buildGame())
+        buildGame()
     } else{
         console.log("Not in index")
     }
