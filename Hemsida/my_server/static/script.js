@@ -3,7 +3,7 @@ let player = {
     room: null
 }
 
-let socket = io()
+//let socket = io()
 
 function joinGame(data) {
     console.log(data)
