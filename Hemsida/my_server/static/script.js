@@ -18,6 +18,19 @@ function joinGame(data) {
     console.log(`Du är inne på ${player.room}`)
 }
 
+function createGame(data) {
+    console.log(data)
+    player.username = $("#playerName").val()
+    player.room = data
+
+    socket.emit('join', {
+        username: player.username,
+        room: player.room,
+        role: 'create'
+    })
+    console.log(`Du är inne på ${player.room}`)
+}
+
 $(document).ready(() => {
     
     //game code -------------

@@ -48,7 +48,7 @@ def play_game_create(level_id = None):
         #om ingen room_id finns ska användaren skapa ett spel, annars ska den gå med ett spel
         conn = create_connection()
         cur = conn.cursor()
-        level = cur.execute("SELECT title, player_health FROM level WHERE creator_id = ?", (level_id, )).fetchone()
+        level = cur.execute("SELECT title, player_health FROM level WHERE id = ?", (level_id, )).fetchone()
         player = Player(session['username'], level[1])
         field = Field(level_id)
         field.load_from_database()
@@ -87,6 +87,7 @@ def on_leave(data):
     #    'message': f'User {data["username"]} has left the room.',
     #   'room': data['room']
     #})
+    emit('navigate_to', f'/memberarea')
 
 
 #@socket.on('send_message_to_room')
@@ -99,6 +100,13 @@ def on_leave(data):
 @app.route('/list_games')
 def list_games():
     return render_template('list_game.html', username = session['username'], ongoing_games = ongoing_games)
+
+@app.route('/list_levels')
+def list_levels():
+    conn = create_connection()
+    cur = conn.cursor()
+    levels = cur.execute("SELECT * FROM level").fetchall()
+    return render_template('list_level.html', levels = levels)
 
 @app.route('/build_game')
 def build_game():
