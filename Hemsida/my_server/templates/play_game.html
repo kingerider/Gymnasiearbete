@@ -19,6 +19,10 @@
     {% if game.players[1] != None %}
         <h1>Player 2: {{game.players[1]}}</h1>
     {% endif %}
-    <canvas id="myCanvas" width="800" height="400"></canvas>
+    {% if game.start_game() == True %}
+        <canvas id="myCanvas" width="800" height="400"></canvas>
+    {% else %}
+        <h3>Waiting for player to join...</h3>
+    {% endif %}
 </body>
 </html>

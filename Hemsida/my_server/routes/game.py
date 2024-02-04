@@ -44,16 +44,14 @@ def test():
 @app.route('/play_game/create/<level_id>')
 def play_game_create(level_id = None):
     if session['logged_in']:
-        #om ingen room_id finns ska användaren skapa ett spel, annars ska den gå med ett spel
+        #Skapar ett nytt spel som läggs in i ongoing_games och går till playgame
         conn = create_connection()
         cur = conn.cursor()
         level = cur.execute("SELECT title, player_health FROM level WHERE id = ?", (level_id, )).fetchone()
-        player = Player(session['username'], level[1])
         field = Field(level_id, level[1])
         field.load_from_database()
         game = Game(level_id, level[0], set_room_id())
         game.add_field(field)
-        game.add_player(player)
         ongoing_games[game.room_id] = game
         conn.close()
             
