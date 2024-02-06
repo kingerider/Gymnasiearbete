@@ -123,16 +123,6 @@ $(document).ready(() => {
    
 });
 
-$.ajax({
-    method: 'POST',
-    url: "/path",
-    data: "data",
-    dataType: "json",
-    success: (response) => {
-        
-    }
-});
-
 //Game Code ==>
 //https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Create_the_Canvas_and_draw_on_it
 
@@ -167,6 +157,29 @@ function startGame() {
 
         
     }
+
+    //Ajax get positions
+
+    $.ajax({
+        type: "POST",
+        url: "/ajax_get_positions",
+        data: JSON.stringify({game: $("#gameobject").val()}),
+        dataType: "json",
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        success: (response) => {
+            if (response.success){
+                console.log(response.success)
+                console.log(response.msg)
+                loadForm();
+            }else{
+                //gets response from python, response objet . msg runs this code if true
+                console.log(response.success)
+                console.log(response.msg)
+            }
+        }
+    });
     
     //Ball
     var ballRadius = tileSize;
