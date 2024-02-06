@@ -163,7 +163,7 @@ function startGame() {
     $.ajax({
         type: "POST",
         url: "/ajax_get_positions",
-        data: JSON.stringify({game: $("#gameobject").val()}),
+        data: JSON.stringify({id: $("#gameobject").val()}),
         dataType: "json",
         headers: {
             'Content-Type': 'application/json'
