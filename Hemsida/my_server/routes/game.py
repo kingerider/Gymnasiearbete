@@ -72,6 +72,7 @@ def handle_join_room(data):
 @socket.on('leave')
 def on_leave(data):
     leave_room(data['room'])
+    print(ongoing_games)
     ongoing_games.pop(data['room'], None)
     print(ongoing_games)
     #send_message_to_room({
