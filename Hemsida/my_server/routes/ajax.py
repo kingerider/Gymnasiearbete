@@ -10,9 +10,9 @@ def ajax_get_positions():
     walls = game.field.get_wall_pos()
     monsters = game.field.get_monster_pos()
     items = game.field.get_item_pos()
-    print(walls)
-    print(monsters)
-    print(items)
+    print(f'Walls: {walls}')
+    print(f'Monsters: {monsters}')
+    print(f'Items: {items}')
     try:
         return json.dumps({
             'msg': 'Positions recieved',

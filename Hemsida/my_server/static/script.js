@@ -31,6 +31,7 @@ function createGame(data) {
 }
 
 function leaveGame() {
+    console.log(player.room)
     socket.emit('leave', {
         room: player.room
     })
