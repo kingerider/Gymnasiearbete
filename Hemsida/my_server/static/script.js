@@ -30,6 +30,12 @@ function createGame(data) {
     console.log(`Du är inne på ${player.room}`)
 }
 
+function leaveGame() {
+    socket.emit('leave', {
+        room: player.room
+    })
+}
+
 $(document).ready(() => {
     
     //game code -------------

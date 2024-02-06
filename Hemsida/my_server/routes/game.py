@@ -1,4 +1,3 @@
-
 from my_server import app
 from flask import render_template, redirect, url_for, abort, session
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -34,12 +33,6 @@ ongoing_games = {
 }
 
 #kollar alla id på varje spel och lägger till max + 1 som nytt id, får tillbaka 0 om listan är tom
-
-
-
-@app.route('/play_game')
-def test():
-    return render_template('play_game.html')
 
 @app.route('/play_game/create/<level_id>')
 def play_game_create(level_id = None):
@@ -79,6 +72,8 @@ def handle_join_room(data):
 @socket.on('leave')
 def on_leave(data):
     leave_room(data['room'])
+    ongoing_games.pop(data['room'], None)
+    print(ongoing_games)
     #send_message_to_room({
     #    'heading': 'Info',
     #    'message': f'User {data["username"]} has left the room.',
@@ -86,6 +81,9 @@ def on_leave(data):
     #})
     emit('navigate_to', f'/memberarea')
 
+@socket.on('update')
+def update_game(data):
+    pass
 
 #@socket.on('send_message_to_room')
 #def send_message_to_room(data):
