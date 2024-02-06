@@ -172,7 +172,6 @@ function startGame() {
             if (response.success){
                 console.log(response.success)
                 console.log(response.msg)
-                loadForm();
             }else{
                 //gets response from python, response objet . msg runs this code if true
                 console.log(response.success)
@@ -350,7 +349,6 @@ function startGame() {
 
             //how close is player
             if(5*tileSize > (playerX - monsterArray[j].getX()) && -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
-                console.log("Hello")
                 movementChoose = 1;
             }else{
                 movementChoose = Math.floor(Math.random() * 4);
