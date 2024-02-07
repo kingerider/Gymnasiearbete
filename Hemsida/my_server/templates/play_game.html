@@ -17,13 +17,20 @@
 <body>
     <script>
         $(document).onload(()=> {
-            let room_id = $("#gameid").val
-            let game = $("#gameObject").val
+            let room_id = $("#gameid").val()
+            let game = $("#gameObject").val()
+            let player1 = $("#player1").val()
+            let player2 = $("#player2").val()
+            let my_player = $("#username").val()
 
 
             const updatePage = () => {
                 //do socket requests that request info
                 //update the page based on the received info
+
+                socket.emit('monster_move', {
+                    room_id : room_id
+                })
 
                 socket.emit('update_canvas', {
                     room_id : room_id
@@ -32,14 +39,38 @@
 
             socket.on('update', (data)=> {
                 //update canvas based on the data receivec back from the server
+
+                //Skriv här hur canvas ska se ut
             })
 
-            $( "#myCanvas").on( "keypress", function() {
+            //Tar in input från klienten var den vill sin spelare ska röra sig
+            $( "#myCanvas").on( "keypress", function(e) {
                 console.log( "Handler for `keypress` called." );
-                //find out which key was pressed
-                socket.emit('key_pressed', {
+                let my_player_id = null
+                if (my_player == player1) {
+                    my_player_id = 0
+                }
+                else if (my_player == player2) {
+                    my_player_id = 1
+                }
+                let move = null
+                if (e.key == "Right" || e.key == "ArrowRight") {
+                    move = 'right'
+                }
+                else if(e.key == "Left" || e.key == "ArrowLeft") {
+                    move = 'left';
+                }
+                if(e.key == "Up" || e.key == "ArrowUp") {
+                    move = 'up'
+                }
+                else if(e.key == "Down" || e.key == "ArrowDown") {
+                    move = 'down'
+                }
+                socket.emit('player_move', {
+                    room_id: room_id,
                     player_id : my_player_id,
                     //info about the key pressed (for example: move: 'right')
+                    move: move
                 })
               } );
 
@@ -50,6 +81,9 @@
     </script>
     <input type="hidden" value="{{game.room_id}}" id="gameid">
     <input type="hidden" value="{{game}}" id="gameObject">
+    <input type="hidden" value="{{game.players[0].name}}" id="player1">
+    <input type="hidden" value="{{game.players[1].name}}" id="player2">
+    <input type="hidden" value="{{session['username']}}" id="username">
     
     <h1>Player 1: {{game.players[0].name}}</h1>
     {% if game.awaiting_players == False %}

@@ -7,7 +7,7 @@ class Game:
         self.awaiting_players = True
         self.players = []
         self.field = None
-        self.field_map = [][]
+        self.field_map = None
         self.room_id = room_id
     
     def add_field(self, field):
@@ -20,9 +20,12 @@ class Game:
             self.field_map[monster.positionX][monster.positionY] = monster
         for item in self.field.items:
             self.field_map[item.positionX][item.positionY] = item
-        for x in range(0, self.field.tile_size):
-            for y in range(0, self.field.tile_size):
-                self.field_map[x][y] = None
+        #for x in range(0, self.field.tile_size):
+            #for y in range(0, self.field.tile_size):
+                #if self.field_map[x][y] != None:
+                    #self.field_map[x][y] = None
+        self.field_map[self.players[0].positionX][self.players[0].positionY] = self.players[0]
+        self.field_map[self.players[1].positionX][self.players[1].positionY] = self.players[1]
 
     def add_player(self, player):
         self.players.append(player)
@@ -93,14 +96,14 @@ class Field:
         self.enemies = []
         self.items = []
 
-        self.field = [][]
-        self.field[0][5] = Monster()
-        self.field[0][6] = None
-        self.field[5][6] = Wall()
+        #self.field = [][]
+        #self.field[0][5] = Monster()
+        #self.field[0][6] = None
+        #self.field[5][6] = Wall()
 
         #Flytta monster ned ett steg.
-        self.field[1][5] = self.field[0][5]
-        self.field[0][5] = None
+        #self.field[1][5] = self.field[0][5]
+        #self.field[0][5] = None
     
     def load_from_database(self):
         conn = create_connection()

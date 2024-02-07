@@ -83,19 +83,44 @@ def on_leave(data):
     #})
     emit('navigate_to', f'/memberarea')
 
-@socket.on('update')
+#Hämtar data från servern för att sidan ska kunna uppdatera
+@socket.on('update_canvas')
 def update_game(data):
     game = ongoing_games[data['room']]
-    game.players[0].moveTo(data['player1'].positionX, data['player1'].positionY)
-    game.players[1].moveTo(data['player2'].positionX, data['player2'].positionY)
+    emit('update', {
+        'player1' : game.players[0],
+        'player2' : game.players[1],
+        'field_map' : game.field_map 
+    }, to=data['room'])
     
 
+#Ändrar lokala spelarens position i servern
+@socket.on('player_move')
+def player_move(data):
+    game = ongoing_games[data['room']]
+    if data['move'] == 'right':
+        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+    elif data['move'] == 'left': 
+        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
+    elif data['move'] == 'up': 
+        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
+    elif data['move'] == 'down': 
+        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
+
+@socket.on('monster_move')
+def monster_move(data):
+    pass
 #@socket.on('send_message_to_room')
 #def send_message_to_room(data):
 #    emit('message_from_server', {
 #        'heading': data['heading'],
 #        'message': data['message']
 #    }, to=data['room'])
+
+
+
+
+
 
 @app.route('/list_games')
 def list_games():
