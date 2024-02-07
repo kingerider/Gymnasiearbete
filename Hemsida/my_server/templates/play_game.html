@@ -26,6 +26,6 @@
         <h3>Waiting for player to join...</h3>
     {% endif %}
 
-    <button onclick="leaveGame()">Lämna spel</button>
+    <button onclick="leaveGame('{{game.room_id}}')">Lämna spel</button>
 </body>
 </html>

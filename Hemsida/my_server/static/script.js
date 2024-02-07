@@ -30,10 +30,11 @@ function createGame(data) {
     console.log(`Du är inne på ${player.room}`)
 }
 
-function leaveGame() {
-    console.log(player.room)
+function leaveGame(data) {
+    console.log(data)
+    player.room = null
     socket.emit('leave', {
-        room: player.room
+        room: data
     })
 }
 
