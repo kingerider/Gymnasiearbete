@@ -85,7 +85,10 @@ def on_leave(data):
 
 @socket.on('update')
 def update_game(data):
-    pass
+    game = ongoing_games[data['room']]
+    game.players[0].moveTo(data['player1'].positionX, data['player1'].positionY)
+    game.players[1].moveTo(data['player2'].positionX, data['player2'].positionY)
+    
 
 #@socket.on('send_message_to_room')
 #def send_message_to_room(data):

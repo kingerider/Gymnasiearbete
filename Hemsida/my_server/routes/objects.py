@@ -7,11 +7,23 @@ class Game:
         self.awaiting_players = True
         self.players = []
         self.field = None
+        self.field_map = [][]
         self.room_id = room_id
     
     def add_field(self, field):
         self.field = field
     
+    def place_objects_field(self):
+        for wall in self.field.walls:
+            self.field_map[wall.positionX][wall.positionY] = wall
+        for monster in self.field.enemies:
+            self.field_map[monster.positionX][monster.positionY] = monster
+        for item in self.field.items:
+            self.field_map[item.positionX][item.positionY] = item
+        for x in range(0, self.field.tile_size):
+            for y in range(0, self.field.tile_size):
+                self.field_map[x][y] = None
+
     def add_player(self, player):
         self.players.append(player)
         if len(self.players) == 2:
@@ -56,6 +68,9 @@ class Enemy(Entity):
         self.level_id = level_id,
         self.set_position(posX, posY)
 
+    def moveTo(self, newPosX, newPosY):
+        self.set_position(newPosX, newPosY)
+
 class Wall(Entity):
     def __init__(self, id, level_id, posX, posY):
         self.id = id,
@@ -73,9 +88,19 @@ class Field:
     def __init__(self, id, health):
         self.id = id
         self.health = health
+        self.tile_size = None #Byt None till storlek på tilesize
         self.walls = []
         self.enemies = []
         self.items = []
+
+        self.field = [][]
+        self.field[0][5] = Monster()
+        self.field[0][6] = None
+        self.field[5][6] = Wall()
+
+        #Flytta monster ned ett steg.
+        self.field[1][5] = self.field[0][5]
+        self.field[0][5] = None
     
     def load_from_database(self):
         conn = create_connection()

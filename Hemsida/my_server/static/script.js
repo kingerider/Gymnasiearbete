@@ -125,6 +125,15 @@ $(document).ready(() => {
    
 });
 
+
+socket.emit('update', {
+    room: $("#gameid").val(),
+    player1: null,
+    player2:null,
+    projectile: null,
+    monsters: []
+})
+
 //Game Code ==>
 //https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Create_the_Canvas_and_draw_on_it
 
@@ -165,7 +174,7 @@ function startGame() {
     $.ajax({
         type: "POST",
         url: "/ajax_get_positions",
-        data: JSON.stringify({id: $("#gameobject").val()}),
+        data: JSON.stringify({id: $("#gameid").val()}),
         dataType: "json",
         headers: {
             'Content-Type': 'application/json'
