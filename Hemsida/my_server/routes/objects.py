@@ -7,7 +7,13 @@ class Game:
         self.awaiting_players = True
         self.players = []
         self.field = None
-        self.field_map = None
+        self.field_map = [] #[][]
+
+        
+        for i in range(self.field.width):
+            self.field_map.append([None]*self.field.height)
+        #field_map[x][y]
+        
         self.room_id = room_id
     
     def add_field(self, field):
@@ -91,7 +97,8 @@ class Field:
     def __init__(self, id, health):
         self.id = id
         self.health = health
-        self.tile_size = None #Byt None till storlek på tilesize
+        self.width = None
+        self.height = None
         self.walls = []
         self.enemies = []
         self.items = []
