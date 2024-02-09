@@ -119,6 +119,8 @@ def monster_move(data):
     #Fix monster get array
     #Fix wall get array.size
     #Fix monster can go outside canvas
+    #Fix so player, monster and items have direction
+    #bullet go in direction that player direction facing, on wall hit get destroyed, on monster hit die
 
     for monsterPosition in monster:
 
