@@ -21,7 +21,9 @@
 
 <body>
     <script>
-        $(document).onload(() => {
+        $(document).ready(() => {
+            console.log("hello")
+
             let room_id = $("#gameid").val()
             let game = $("#gameObject").val()
             let player1 = $("#player1").val()
@@ -33,16 +35,17 @@
                 //update the page based on the received info
 
                 socket.emit('monster_move', {
-                    room_id: room_id
+                    room: room_id
                 })
 
                 socket.emit('update_canvas', {
-                    room_id: room_id
+                    room: room_id
                 })
             }
 
             socket.on('update', (data) => {
-                //update canvas based on the data receivec back from the server
+                console.log(update)
+                //update canvas based on the data received back from the server
 
                 //Skriv här hur canvas ska se ut
 
