@@ -385,7 +385,7 @@ function startGame() {
                 //Check walls
                 var checkForWalls = true
                 for (let i = 0; i < wallArray.length; i++) {
-                    if (monsterArray[j].getX() == (wallArray[i].getX()+tileSize) && monsterArray[j].getY() == wallArray[i].getY()) {
+                    etX() if (monsterArray[j].g== (wallArray[i].getX()+tileSize) && monsterArray[j].getY() == wallArray[i].getY()) {
                         checkForWalls = false
                     }
                 }

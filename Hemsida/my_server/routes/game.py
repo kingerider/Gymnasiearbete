@@ -3,8 +3,14 @@ from flask import render_template, redirect, url_for, abort, session
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Game, Player, Field
+import random
 
 socket = SocketIO(app)
+
+#should not be here later on
+tile_size = 20
+canvasw = 800
+canvasw = 400
 
 def set_room_id():
     list_of_roomid = list(ongoing_games.keys())
@@ -109,7 +115,58 @@ def player_move(data):
 
 @socket.on('monster_move')
 def monster_move(data):
-    pass
+
+    #Fix monster get array
+    #Fix wall get array.size
+    #Fix monster can go outside canvas
+
+    for monsterPosition in monster:
+
+        #movementChoose 1 = left , 2 , 3 , 4
+        movementChoose = 0
+        checkForWalls = True
+
+
+        #how close is player, if player is within 5 tiles don't do random action
+        #if(5*tileSize > (playerX - monsterArray[j].getX()) and -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
+        #movementChoose = 1;
+        if(False):
+            pass
+        else:
+            movementChoose = random.randint(1, 4)
+            
+        #movementChoose 1 = left , 2 , 3 , 4
+        if movementChoose == 1:
+            
+            #Check walls
+            for wallPosition in wallArray.size:
+                if monsterPosition.getX() == wallPosition.getX()-1 and monsterPosition.getY() == wallPosition.getY():
+                    checkForWalls = False
+            if checkForWalls:
+                monsterPosition.setX(monsterPosition.getX() - tile_size)
+        elif movementChoose == 2:
+            #Check walls
+            for wallPosition in wallArray.size:
+                if monsterPosition.getX() == wallPosition.getX()+1 and monsterPosition.getY() == wallPosition.getY():
+                    checkForWalls = False
+            if checkForWalls:
+                monsterPosition.setX(monsterPosition.getX()+1)
+        elif movementChoose == 3:
+            #Check walls
+            for wallPosition in wallArray.size:
+                if monsterPosition.getY() == wallPosition.getY()-1 and monsterPosition.getX() == wallPosition.getX():
+                    checkForWalls = False
+            if checkForWalls:
+                monsterPosition.setY(monsterPosition.getY() - 1)
+        elif movementChoose == 4:
+            #Check walls
+            for wallPosition in wallArray.size:
+                if monsterPosition.getY() == wallPosition.getY()+1 and monsterPosition.getX() == wallPosition.getX():
+                    checkForWalls = False
+            if checkForWalls:
+                monsterPosition.setY(monsterPosition.getY()+1)
+
+
 #@socket.on('send_message_to_room')
 #def send_message_to_room(data):
 #    emit('message_from_server', {
