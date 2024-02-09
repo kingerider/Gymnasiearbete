@@ -117,7 +117,7 @@ def player_move(data):
 def monster_move(data):
 
     game = ongoing_games[data['room']]
-    monsters = game.field.get_monster_pos()
+    monsters = game.field.enemies
     positions = game.field_map
     #Fix monster get array
     #Fix wall get array.size
@@ -125,11 +125,11 @@ def monster_move(data):
     #Fix so player, monster and items have direction
     #bullet go in direction that player direction facing, on wall hit get destroyed, on monster hit die
 
-    for monsterPosition in monsters:
+    for monster in monsters:
 
         #movementChoose 1 = left , 2 , 3 , 4
         movementChoose = 0
-        checkForWalls = True
+        #checkForWalls = True
 
 
         #how close is player, if player is within 5 tiles don't do random action
@@ -140,36 +140,43 @@ def monster_move(data):
         else:
             movementChoose = random.randint(1, 4)
             
-        #movementChoose 1 = left , 2 , 3 , 4
+        #Left
         if movementChoose == 1:
             
-            #Check walls
-            for wallPosition in wallArray.size:
-                if monsterPosition.getX() == wallPosition.getX()-1 and monsterPosition.getY() == wallPosition.getY():
-                    checkForWalls = False
-            if checkForWalls:
-                monsterPosition.setX(monsterPosition.getX() - tile_size)
+            #Check if movement available
+            if positions[x - 1][y] == None:
+                x = monster.positionX
+                y = monster.positionY
+                positions[x - 1][y] = monster
+                positions[x][y] = None
+
+        #Right
         elif movementChoose == 2:
-            #Check walls
-            for wallPosition in wallArray.size:
-                if monsterPosition.getX() == wallPosition.getX()+1 and monsterPosition.getY() == wallPosition.getY():
-                    checkForWalls = False
-            if checkForWalls:
-                monsterPosition.setX(monsterPosition.getX()+1)
+            #Check if movement available
+            if positions[x + 1][y] == None:
+                x = monster.positionX
+                y = monster.positionY
+                positions[x + 1][y] = monster
+                positions[x][y] = None
+        #Up
         elif movementChoose == 3:
-            #Check walls
-            for wallPosition in wallArray.size:
-                if monsterPosition.getY() == wallPosition.getY()-1 and monsterPosition.getX() == wallPosition.getX():
-                    checkForWalls = False
-            if checkForWalls:
-                monsterPosition.setY(monsterPosition.getY() - 1)
+            #Check if movement available
+            if positions[x][y - 1] == None:
+                x = monster.positionX
+                y = monster.positionY
+                positions[x][y - 1] = monster
+                positions[x][y] = None
+        #Down
         elif movementChoose == 4:
-            #Check walls
-            for wallPosition in wallArray.size:
-                if monsterPosition.getY() == wallPosition.getY()+1 and monsterPosition.getX() == wallPosition.getX():
-                    checkForWalls = False
-            if checkForWalls:
-                monsterPosition.setY(monsterPosition.getY()+1)
+            #Check if movement available
+            if positions[x][y + 1] == None:
+                x = monster.positionX
+                y = monster.positionY
+                positions[x][y + 1] = monster
+                positions[x][y] = None
+
+    ongoing_games[data['room']].game.field_map = positions
+    
 
 
 #@socket.on('send_message_to_room')
