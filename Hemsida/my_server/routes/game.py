@@ -61,7 +61,7 @@ def play_game_create(level_id = None):
 @app.route('/play_game/join/<room_id>')
 def play_game_join(room_id = None):
     if session['logged_in']:
-        game = ongoing_games.get(room_id)
+        game = ongoing_games[f'{room_id}']
         player = Player(session['username'], game.field.health)
         game.add_player(player)
         game.place_objects_field()

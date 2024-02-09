@@ -17,7 +17,9 @@ class Game:
 
         
         for i in range(int(canvasw/tile_size)):
-            self.field_map.append([None]*int(canvash/tile_size))
+            self.field_map.append([])
+            for j in range(int(canvash/tile_size)):
+                self.field_map[i].append(None)
         #field_map[x][y]
         
         self.room_id = room_id
