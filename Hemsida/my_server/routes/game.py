@@ -10,7 +10,7 @@ socket = SocketIO(app)
 #should not be here later on
 tile_size = 20
 canvasw = 800
-canvasw = 400
+canvash = 400
 
 def set_room_id():
     list_of_roomid = list(ongoing_games.keys())
@@ -57,12 +57,14 @@ def play_game_create(level_id = None):
         return redirect(url_for('play_game_join', room_id = game.room_id))
     abort(401)
 
+#Skickar spelaren till playgame och tar med game
 @app.route('/play_game/join/<room_id>')
 def play_game_join(room_id = None):
     if session['logged_in']:
         game = ongoing_games.get(room_id)
         player = Player(session['username'], game.field.health)
         game.add_player(player)
+        game.place_objects_field()
         return render_template('play_game.html', game = game)
 
 @socket.on('join')
@@ -94,7 +96,10 @@ def on_leave(data):
 def update_game(data):
     game = ongoing_games[data['room']]
     emit('update', {
-        'field_map' : game.field_map 
+        'field_map' : game.field_map,
+        'width': canvasw,
+        'height': canvash,
+        'tile_size': tile_size 
     }, to=data['room'])
     
 
@@ -109,6 +114,7 @@ def player_move(data):
         y = moved_player.positionY
         positions[x + 1][y] == moved_player
         positions[x][y] = None
+        moved_player.change_direction(data['move'])
     elif data['move'] == 'left': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
@@ -116,6 +122,7 @@ def player_move(data):
         y = moved_player.positionY
         positions[x - 1][y] == moved_player
         positions[x][y] = None
+        moved_player.change_direction(data['move'])
     elif data['move'] == 'up': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
@@ -123,6 +130,7 @@ def player_move(data):
         y = moved_player.positionY
         positions[x][y - 1] == moved_player
         positions[x][y] = None
+        moved_player.change_direction(data['move'])
     elif data['move'] == 'down': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
@@ -130,6 +138,8 @@ def player_move(data):
         y = moved_player.positionY
         positions[x][y + 1] == moved_player
         positions[x][y] = None
+        moved_player.change_direction(data['move'])
+    ongoing_games[data['room']].game.field_map = positions
 
 @socket.on('monster_move')
 def monster_move(data):

@@ -67,7 +67,11 @@ class Player(Entity):
     def __init__(self, name, health):
         self.name = name
         self.health = health
+        self.direction = None
     
+    def change_direction(self, str):
+        self.direction = str
+
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
     
@@ -79,9 +83,13 @@ class Player(Entity):
 
 class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY):
-        self.id = id,
-        self.level_id = level_id,
+        self.id = id
+        self.level_id = level_id
+        self.direction = None
         self.set_position(posX, posY)
+
+    def change_direction(self, str):
+        self.direction = str
 
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
