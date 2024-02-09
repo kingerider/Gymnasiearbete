@@ -28,108 +28,6 @@
             let player2 = $("#player2").val()
             let my_player = $("#username").val()
 
-
-            //Canvas
-            var canvas = document.getElementById("myCanvas");
-            var ctx = canvas.getContext("2d");
-            var x = canvas.width / 2;
-            var y = canvas.height - 30;
-            var tileSize = 10;
-
-            //Ball
-            var ballRadius = tileSize;
-            var dx = 1;
-            var dy = -1;
-
-            //Wall
-            var wallHeight = tileSize;
-            var wallWidth = tileSize;
-            var wallArray = [];
-
-            function loadPositions(wallPosition) {
-                for (let index = 0; index < wallPosition.length; index++) {
-                    wallArray.push(new position((wallPosition.getX() * canvas.width / tileSize) * tileSize), (wallPosition.getY() * canvas.height / tileSize) * tileSize);
-                }
-            }
-
-            console.log("Wall x pos");
-            console.log(wallArray.length)
-            console.log(wallArray[1].getX());
-
-            //Monster
-            var monsterHeight = tileSize;
-            var monsterWidth = tileSize;
-            var monsterArray = [];
-            for (let index = 0; index < 100; index++) {
-                monsterArray.push(new position((Math.floor(Math.random() * canvas.width / tileSize) * tileSize), (Math.floor(Math.random() * canvas.height / tileSize) * tileSize)));
-            }
-
-            //Player
-            var playerHeight = tileSize;
-            var playerWidth = tileSize;
-            var playerX = 0;
-            var playerY = 0;
-
-            //Grid
-            function drawGrid() {
-                ctx.strokeStyle = '#eeeeee';
-                ctx.stroke();
-                for (var i = 0; i <= canvas.width; i += tileSize) {
-                    ctx.beginPath();
-                    ctx.moveTo(i, 0);
-                    ctx.lineTo(i, canvas.height);
-                    ctx.stroke();
-                }
-
-                for (var i = 0; i <= canvas.height; i += tileSize) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, i);
-                    ctx.lineTo(canvas.width, i);
-                    ctx.stroke();
-                }
-
-            }
-
-            //Ball
-            function drawBall() {
-                ctx.beginPath();
-                ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-                ctx.fillStyle = "#0095DD";
-                ctx.fill();
-                ctx.closePath();
-            }
-
-            //Wall
-            function drawWall(wallX, wallY) {
-                ctx.beginPath();
-                ctx.rect(wallX, wallY, wallWidth, wallHeight,);
-                ctx.fillStyle = "#0095DD";
-                ctx.fill();
-                ctx.closePath();
-            }
-
-            //Monster
-            function drawMonster(monsterX, monsterY) {
-                ctx.beginPath();
-                ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
-                ctx.fillStyle = "#04d49d";
-                ctx.fill();
-                ctx.closePath();
-            }
-
-
-            //Player
-            function drawPlayer() {
-                ctx.beginPath();
-                ctx.rect(playerX, playerY, playerWidth, playerHeight);
-                ctx.fillStyle = "#046cd4";
-                ctx.fill();
-                ctx.closePath();
-            }
-
-
-
-
             const updatePage = () => {
                 //do socket requests that request info
                 //update the page based on the received info
@@ -149,13 +47,116 @@
                 //Skriv här hur canvas ska se ut
 
                 //Draw objects
+
+                //Canvas
+                var canvas = document.getElementById("myCanvas");
+                var ctx = canvas.getContext("2d");
+                canvas.width = 800;
+                canvas.height = 400;
+                var x = canvas.width / 2;
+                var y = canvas.height - 30;
+                var tileSize = 10;
+
+                //Ball
+                var ballRadius = tileSize;
+                var dx = 1;
+                var dy = -1;
+
+                //Wall
+                var wallHeight = tileSize;
+                var wallWidth = tileSize;
+                var wallArray = [];
+
+                function loadPositions(wallPosition) {
+                    for (let index = 0; index < wallPosition.length; index++) {
+                        wallArray.push(new position((wallPosition.getX() * canvas.width / tileSize) * tileSize), (wallPosition.getY() * canvas.height / tileSize) * tileSize);
+                    }
+                }
+
+                console.log("Wall x pos");
+                console.log(wallArray.length)
+                console.log(wallArray[1].getX());
+
+                //Monster
+                var monsterHeight = tileSize;
+                var monsterWidth = tileSize;
+                var monsterArray = [];
+                for (let index = 0; index < 100; index++) {
+                    monsterArray.push(new position((Math.floor(Math.random() * canvas.width / tileSize) * tileSize), (Math.floor(Math.random() * canvas.height / tileSize) * tileSize)));
+                }
+
+                //Player
+                var playerHeight = tileSize;
+                var playerWidth = tileSize;
+                var playerX = 0;
+                var playerY = 0;
+
+                //Grid
+                function drawGrid() {
+                    ctx.strokeStyle = '#eeeeee';
+                    ctx.stroke();
+                    for (var i = 0; i <= canvas.width; i += tileSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(i, 0);
+                        ctx.lineTo(i, canvas.height);
+                        ctx.stroke();
+                    }
+
+                    for (var i = 0; i <= canvas.height; i += tileSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, i);
+                        ctx.lineTo(canvas.width, i);
+                        ctx.stroke();
+                    }
+
+                }
+
+                //Ball
+                function drawBall() {
+                    ctx.beginPath();
+                    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+                    ctx.fillStyle = "#0095DD";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+                //Wall
+                function drawWall(wallX, wallY) {
+                    ctx.beginPath();
+                    ctx.rect(wallX, wallY, wallWidth, wallHeight,);
+                    ctx.fillStyle = "#0095DD";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+                //Monster
+                function drawMonster(monsterX, monsterY) {
+                    ctx.beginPath();
+                    ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
+                    ctx.fillStyle = "#04d49d";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+
+                //Player
+                function drawPlayer() {
+                    ctx.beginPath();
+                    ctx.rect(playerX, playerY, playerWidth, playerHeight);
+                    ctx.fillStyle = "#046cd4";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+
+
                 function draw() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     drawGrid();
                     drawBall();
                     drawPlayer();
 
-                    
+
 
                     //Ball movment
                     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
@@ -180,7 +181,7 @@
 
                 }
                 var interval = setInterval(draw, 60);
-                
+
             })
 
 
@@ -222,15 +223,15 @@
     </script>
     <h1>Player 1: {{game.players[0].name}}</h1>
     {% if game.awaiting_players == False %}
-        <h1>Player 2: {{game.players[1].name}}</h1>
-        <input type="hidden" value="{{game.room_id}}" id="gameid">
-        <input type="hidden" value="{{game}}" id="gameObject">
-        <input type="hidden" value="{{game.players[0].name}}" id="player1">
-        <input type="hidden" value="{{game.players[1].name}}" id="player2">
-        <input type="hidden" value="{{session['username']}}" id="username">
+    <h1>Player 2: {{game.players[1].name}}</h1>
+    <input type="hidden" value="{{game.room_id}}" id="gameid">
+    <input type="hidden" value="{{game}}" id="gameObject">
+    <input type="hidden" value="{{game.players[0].name}}" id="player1">
+    <input type="hidden" value="{{game.players[1].name}}" id="player2">
+    <input type="hidden" value="{{session['username']}}" id="username">
     {% endif %}
     {% if game.start_game() == True %}
-    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <canvas id="myCanvas"></canvas>
     {% else %}
     <h3>Waiting for player to join...</h3>
     {% endif %}
