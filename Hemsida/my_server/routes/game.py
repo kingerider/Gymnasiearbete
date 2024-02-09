@@ -94,8 +94,6 @@ def on_leave(data):
 def update_game(data):
     game = ongoing_games[data['room']]
     emit('update', {
-        'player1' : game.players[0],
-        'player2' : game.players[1],
         'field_map' : game.field_map 
     }, to=data['room'])
     
@@ -104,14 +102,34 @@ def update_game(data):
 @socket.on('player_move')
 def player_move(data):
     game = ongoing_games[data['room']]
+    positions = game.field_map
     if data['move'] == 'right':
-        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+        x = moved_player.positionX
+        y = moved_player.positionY
+        positions[x + 1][y] == moved_player
+        positions[x][y] = None
     elif data['move'] == 'left': 
-        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
+        #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
+        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+        x = moved_player.positionX
+        y = moved_player.positionY
+        positions[x - 1][y] == moved_player
+        positions[x][y] = None
     elif data['move'] == 'up': 
-        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
+        #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
+        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+        x = moved_player.positionX
+        y = moved_player.positionY
+        positions[x][y - 1] == moved_player
+        positions[x][y] = None
     elif data['move'] == 'down': 
-        game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
+        #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
+        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+        x = moved_player.positionX
+        y = moved_player.positionY
+        positions[x][y + 1] == moved_player
+        positions[x][y] = None
 
 @socket.on('monster_move')
 def monster_move(data):
@@ -175,7 +193,7 @@ def monster_move(data):
                 positions[x][y] = None
 
     ongoing_games[data['room']].game.field_map = positions
-    
+
 
 
 #@socket.on('send_message_to_room')
