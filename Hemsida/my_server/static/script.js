@@ -183,6 +183,7 @@ function startGame() {
             if (response.success){
                 console.log(response.success)
                 console.log(response.msg)
+                loadPositions(response.walls);
             }else{
                 //gets response from python, response objet . msg runs this code if true
                 console.log(response.success)
@@ -200,9 +201,13 @@ function startGame() {
     var wallHeight = tileSize;
     var wallWidth = tileSize;
     var wallArray = [];
-    for (let index = 0; index < 1000; index++) {
-        wallArray.push(new position((Math.floor(Math.random() * canvas.width/tileSize) * tileSize), (Math.floor(Math.random() * canvas.height/tileSize) * tileSize)));
+
+    function loadPositions(wallPosition){
+        for (let index = 0; index < wallPosition.length; index++) {
+            wallArray.push(new position((wallPosition.getX() * canvas.width/tileSize) * tileSize), (wallPosition.getY() * canvas.height/tileSize) * tileSize);
+        }
     }
+    
     console.log("Wall x pos");
     console.log(wallArray.length)
     console.log(wallArray[1].getX());
@@ -385,7 +390,7 @@ function startGame() {
                 //Check walls
                 var checkForWalls = true
                 for (let i = 0; i < wallArray.length; i++) {
-                    etX() if (monsterArray[j].g== (wallArray[i].getX()+tileSize) && monsterArray[j].getY() == wallArray[i].getY()) {
+                    if (monsterArray[j].getX() == (wallArray[i].getX()+tileSize) && monsterArray[j].getY() == wallArray[i].getY()) {
                         checkForWalls = false
                     }
                 }
