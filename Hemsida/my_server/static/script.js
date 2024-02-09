@@ -191,7 +191,7 @@ function startGame() {
             }
         }
     });
-    
+    /*
     //Ball
     var ballRadius = tileSize;
     var dx = 1;
@@ -435,6 +435,7 @@ function startGame() {
             }
             if(checkForWalls){
                 playerX += tileSize;
+                
             }
         }
         else if(leftPressed && playerX > 0) {
@@ -474,6 +475,7 @@ function startGame() {
     }
 
     var interval = setInterval(draw, 60);
+    */
 
 }
 
@@ -493,3 +495,4 @@ function buildGame() {
         drawGrid();
     }
 }
+

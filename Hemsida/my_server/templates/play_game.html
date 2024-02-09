@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play game</title>
@@ -9,14 +10,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"
+        integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="{{url_for('static', filename='script.js')}}"></script>
 </head>
+
 <body>
     <script>
-        $(document).onload(()=> {
+        $(document).onload(() => {
             let room_id = $("#gameid").val()
             let game = $("#gameObject").val()
             let player1 = $("#player1").val()
@@ -24,28 +29,164 @@
             let my_player = $("#username").val()
 
 
+            //Canvas
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+            var x = canvas.width / 2;
+            var y = canvas.height - 30;
+            var tileSize = 10;
+
+            //Ball
+            var ballRadius = tileSize;
+            var dx = 1;
+            var dy = -1;
+
+            //Wall
+            var wallHeight = tileSize;
+            var wallWidth = tileSize;
+            var wallArray = [];
+
+            function loadPositions(wallPosition) {
+                for (let index = 0; index < wallPosition.length; index++) {
+                    wallArray.push(new position((wallPosition.getX() * canvas.width / tileSize) * tileSize), (wallPosition.getY() * canvas.height / tileSize) * tileSize);
+                }
+            }
+
+            console.log("Wall x pos");
+            console.log(wallArray.length)
+            console.log(wallArray[1].getX());
+
+            //Monster
+            var monsterHeight = tileSize;
+            var monsterWidth = tileSize;
+            var monsterArray = [];
+            for (let index = 0; index < 100; index++) {
+                monsterArray.push(new position((Math.floor(Math.random() * canvas.width / tileSize) * tileSize), (Math.floor(Math.random() * canvas.height / tileSize) * tileSize)));
+            }
+
+            //Player
+            var playerHeight = tileSize;
+            var playerWidth = tileSize;
+            var playerX = 0;
+            var playerY = 0;
+
+            //Grid
+            function drawGrid() {
+                ctx.strokeStyle = '#eeeeee';
+                ctx.stroke();
+                for (var i = 0; i <= canvas.width; i += tileSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, canvas.height);
+                    ctx.stroke();
+                }
+
+                for (var i = 0; i <= canvas.height; i += tileSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(canvas.width, i);
+                    ctx.stroke();
+                }
+
+            }
+
+            //Ball
+            function drawBall() {
+                ctx.beginPath();
+                ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+                ctx.fillStyle = "#0095DD";
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            //Wall
+            function drawWall(wallX, wallY) {
+                ctx.beginPath();
+                ctx.rect(wallX, wallY, wallWidth, wallHeight,);
+                ctx.fillStyle = "#0095DD";
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            //Monster
+            function drawMonster(monsterX, monsterY) {
+                ctx.beginPath();
+                ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
+                ctx.fillStyle = "#04d49d";
+                ctx.fill();
+                ctx.closePath();
+            }
+
+
+            //Player
+            function drawPlayer() {
+                ctx.beginPath();
+                ctx.rect(playerX, playerY, playerWidth, playerHeight);
+                ctx.fillStyle = "#046cd4";
+                ctx.fill();
+                ctx.closePath();
+            }
+
+
+
+
             const updatePage = () => {
                 //do socket requests that request info
                 //update the page based on the received info
 
                 socket.emit('monster_move', {
-                    room_id : room_id
+                    room_id: room_id
                 })
 
                 socket.emit('update_canvas', {
-                    room_id : room_id
+                    room_id: room_id
                 })
             }
 
-            socket.on('update', (data)=> {
+            socket.on('update', (data) => {
                 //update canvas based on the data receivec back from the server
 
                 //Skriv här hur canvas ska se ut
+
+                //Draw objects
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid();
+                    drawBall();
+                    drawPlayer();
+
+                    
+
+                    //Ball movment
+                    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+                        dx = -dx;
+                    }
+                    if (y + dy < ballRadius) {
+                        dy = -dy;
+                    }
+                    else if (y + dy > canvas.height - ballRadius) {
+                        if (x > playerX && x < playerX + playerWidth) {
+                            dy = -dy;
+                        }
+                        else {
+                            alert("GAME OVER");
+                            document.location.reload();
+                            clearInterval(interval); // Needed for Chrome to end game
+                        }
+                    }
+                    x += dx;
+                    y += dy;
+
+
+                }
+                var interval = setInterval(draw, 60);
+                
             })
 
+
             //Tar in input från klienten var den vill sin spelare ska röra sig
-            $( "#myCanvas").on( "keypress", function(e) {
-                console.log( "Handler for `keypress` called." );
+            $("#myCanvas").on("keypress", function (e) {
+                console.log("Handler for `keypress` called.");
                 let my_player_id = null
                 if (my_player == player1) {
                     my_player_id = 0
@@ -57,22 +198,22 @@
                 if (e.key == "Right" || e.key == "ArrowRight") {
                     move = 'right'
                 }
-                else if(e.key == "Left" || e.key == "ArrowLeft") {
+                else if (e.key == "Left" || e.key == "ArrowLeft") {
                     move = 'left';
                 }
-                if(e.key == "Up" || e.key == "ArrowUp") {
+                if (e.key == "Up" || e.key == "ArrowUp") {
                     move = 'up'
                 }
-                else if(e.key == "Down" || e.key == "ArrowDown") {
+                else if (e.key == "Down" || e.key == "ArrowDown") {
                     move = 'down'
                 }
                 socket.emit('player_move', {
                     room_id: room_id,
-                    player_id : my_player_id,
+                    player_id: my_player_id,
                     //info about the key pressed (for example: move: 'right')
                     move: move
                 })
-              } );
+            });
 
             setInterval(updatePage, 500)
 
@@ -84,17 +225,18 @@
     <input type="hidden" value="{{game.players[0].name}}" id="player1">
     <input type="hidden" value="{{game.players[1].name}}" id="player2">
     <input type="hidden" value="{{session['username']}}" id="username">
-    
+
     <h1>Player 1: {{game.players[0].name}}</h1>
     {% if game.awaiting_players == False %}
-        <h1>Player 2: {{game.players[1].name}}</h1>
+    <h1>Player 2: {{game.players[1].name}}</h1>
     {% endif %}
     {% if game.start_game() == True %}
-        <canvas id="myCanvas" width="800" height="400"></canvas>
+    <canvas id="myCanvas" width="800" height="400"></canvas>
     {% else %}
-        <h3>Waiting for player to join...</h3>
+    <h3>Waiting for player to join...</h3>
     {% endif %}
 
     <button onclick="leaveGame('{{game.room_id}}')">Lämna spel</button>
 </body>
+
 </html>

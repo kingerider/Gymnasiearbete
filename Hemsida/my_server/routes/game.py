@@ -129,7 +129,6 @@ def monster_move(data):
 
         #movementChoose 1 = left , 2 , 3 , 4
         movementChoose = 0
-        #checkForWalls = True
 
 
         #how close is player, if player is within 5 tiles don't do random action
