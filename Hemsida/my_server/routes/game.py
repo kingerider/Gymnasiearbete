@@ -116,13 +116,16 @@ def player_move(data):
 @socket.on('monster_move')
 def monster_move(data):
 
+    game = ongoing_games[data['room']]
+    monsters = game.field.get_monster_pos()
+    positions = game.field_map
     #Fix monster get array
     #Fix wall get array.size
     #Fix monster can go outside canvas
     #Fix so player, monster and items have direction
     #bullet go in direction that player direction facing, on wall hit get destroyed, on monster hit die
 
-    for monsterPosition in monster:
+    for monsterPosition in monsters:
 
         #movementChoose 1 = left , 2 , 3 , 4
         movementChoose = 0
