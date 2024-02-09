@@ -1,5 +1,11 @@
 from my_server.routes.dbhandler import create_connection
 
+canvasw = 800
+canvash = 400
+tile_size = 20
+
+
+
 class Game:
     def __init__(self, id, name, room_id):
         self.id = id
@@ -10,8 +16,8 @@ class Game:
         self.field_map = [] #[][]
 
         
-        for i in range(self.field.width):
-            self.field_map.append([None]*self.field.height)
+        for i in range(int(canvasw/tile_size)):
+            self.field_map.append([None]*int(canvash/tile_size))
         #field_map[x][y]
         
         self.room_id = room_id
@@ -97,8 +103,6 @@ class Field:
     def __init__(self, id, health):
         self.id = id
         self.health = health
-        self.width = None
-        self.height = None
         self.walls = []
         self.enemies = []
         self.items = []
