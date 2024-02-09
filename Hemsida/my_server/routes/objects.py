@@ -57,12 +57,14 @@ class Game:
         return self.start_game()
 
 class Entity:
-    def __init__(self):
-        self.positionX = None,
-        self.positionY = None
-    
-    def set_position(self, posX, posY):
+    def __init__(self, posX, posY):
         self.positionX = posX,
+        self.positionY = posY
+    
+    def set_x(self, posX):
+        self.positionX = posX
+    
+    def set_y(self, posY):
         self.positionY = posY
 
 class Player(Entity): 
@@ -88,7 +90,6 @@ class Enemy(Entity):
         self.id = id
         self.level_id = level_id
         self.direction = None
-        self.set_position(posX, posY)
 
     def change_direction(self, str):
         self.direction = str
@@ -100,13 +101,11 @@ class Wall(Entity):
     def __init__(self, id, level_id, posX, posY):
         self.id = id,
         self.level_id = level_id,
-        self.set_position(posX, posY)
 
 class Item(Entity):
     def __init__(self, id, level_id, posX, posY, type):
         self.id = id,
         self.level_id = level_id,
-        self.set_position(posX, posY),
         self.type = type
 
 class Field:
