@@ -38,8 +38,8 @@ class Game:
             #for y in range(0, self.field.tile_size):
                 #if self.field_map[x][y] != None:
                     #self.field_map[x][y] = None
-        self.field_map[self.players[0].positionX][self.players[0].positionY] = self.players[0]
-        self.field_map[self.players[1].positionX][self.players[1].positionY] = self.players[1]
+        self.field_map[int(self.players[0].positionX)][int(self.players[0].positionY)] = self.players[0]
+        self.field_map[int(self.players[1].positionX)][int(self.players[1].positionY)] = self.players[1]
 
     def add_player(self, player):
         self.players.append(player)
@@ -68,10 +68,12 @@ class Entity:
         self.positionY = posY
 
 class Player(Entity): 
-    def __init__(self, name, health):
+    def __init__(self, name, health, posX, posY):
         self.name = name
         self.health = health
         self.direction = None
+        self.positionX = posX
+        self.positionY = posY
     
     def change_direction(self, str):
         self.direction = str
@@ -90,6 +92,8 @@ class Enemy(Entity):
         self.id = id
         self.level_id = level_id
         self.direction = None
+        self.positionX = posX
+        self.positionY = posY
 
     def change_direction(self, str):
         self.direction = str
@@ -99,13 +103,17 @@ class Enemy(Entity):
 
 class Wall(Entity):
     def __init__(self, id, level_id, posX, posY):
-        self.id = id,
-        self.level_id = level_id,
+        self.id = id
+        self.level_id = level_id
+        self.positionX = posX
+        self.positionY = posY
 
 class Item(Entity):
     def __init__(self, id, level_id, posX, posY, type):
-        self.id = id,
-        self.level_id = level_id,
+        self.id = id
+        self.level_id = level_id
+        self.positionX = posX
+        self.positionY = posY
         self.type = type
 
 class Field:

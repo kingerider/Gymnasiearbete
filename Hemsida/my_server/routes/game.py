@@ -61,13 +61,14 @@ def play_game_create(level_id = None):
 @app.route('/play_game/join/<room_id>')
 def play_game_join(room_id = None):
     if session['logged_in']:
-        game = ongoing_games.get(room_id)
+        game = ongoing_games[room_id]
         if len(game.players) == 0:
             player = Player(session['username'], game.field.health, int(canvasw/tile_size)/8, int(canvash/tile_size)/2)
+            game.add_player(player)
         else:
             player = Player(session['username'], game.field.health, int(canvasw/tile_size) - (int(canvasw/tile_size)/8), int(canvash/tile_size)/2)
-        game.add_player(player)
-        game.place_objects_field()
+            game.add_player(player)
+            game.place_objects_field()
         ongoing_games[game.room_id] = game
         return render_template('play_game.html', game = game)
 
