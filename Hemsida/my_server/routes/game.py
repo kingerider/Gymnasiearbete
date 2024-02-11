@@ -100,6 +100,7 @@ def on_leave(data):
 @socket.on('update_canvas')
 def update_game(data):
     game = ongoing_games[data['room']]
+    print(game.field_map)
     emit('update', {
         'field_map' : game.field_map,
         'width': canvasw,

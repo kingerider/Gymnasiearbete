@@ -45,6 +45,7 @@
 
             socket.on('update', (data) => {
                 console.log(update)
+                console.log(data)
                 //update canvas based on the data received back from the server
 
                 //Skriv här hur canvas ska se ut
@@ -54,8 +55,8 @@
                 //Canvas
                 var canvas = document.getElementById("myCanvas");
                 var ctx = canvas.getContext("2d");
-                canvas.width = 800;
-                canvas.height = 400;
+                canvas.width = data.width;
+                canvas.height = data.height;
                 var x = canvas.width / 2;
                 var y = canvas.height - 30;
                 var tileSize = 10;
