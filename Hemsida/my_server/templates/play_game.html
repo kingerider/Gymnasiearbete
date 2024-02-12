@@ -22,13 +22,20 @@
 <body>
     <script>
         $(document).ready(() => {
-            console.log("hello")
+            console.log("js document.ready")
 
             let room_id = $("#gameid").val()
             let game = $("#gameObject").val()
             let player1 = $("#player1").val()
             let player2 = $("#player2").val()
             let my_player = $("#username").val()
+
+            console.log(room_id)
+            console.log(game)
+            console.log(player1)
+            console.log(player2)
+            console.log(my_player)
+
 
             const updatePage = () => {
                 //do socket requests that request info

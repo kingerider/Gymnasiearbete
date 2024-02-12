@@ -51,7 +51,9 @@ def play_game_create(level_id = None):
         field.load_from_database()
         game = Game(level_id, level[0], set_room_id())
         game.add_field(field)
+        print(ongoing_games)
         ongoing_games[game.room_id] = game
+        print(ongoing_games)
         conn.close()
             
         return redirect(url_for('play_game_join', room_id = game.room_id))
@@ -60,6 +62,8 @@ def play_game_create(level_id = None):
 #Skickar spelaren till playgame och tar med game
 @app.route('/play_game/join/<room_id>')
 def play_game_join(room_id = None):
+    print("HERE JOIN")
+
     if session['logged_in']:
         game = ongoing_games[room_id]
         if len(game.players) == 0:
@@ -99,6 +103,19 @@ def on_leave(data):
 #Hämtar data från servern för att sidan ska kunna uppdatera
 @socket.on('update_canvas')
 def update_game(data):
+    print("Update_game, update_canvas")
+    print("Seems we update_canvas before ongoing_game has a key and value resulting in error")
+    print("Ass hair")
+    print("Ass hair")
+    
+    print(ongoing_games)
+    print(ongoing_games)
+    print(ongoing_games)
+    print("Ongoing_games är tom")
+    print("Ass hair")
+    print("Ass hair")
+   
+    print(data)
     game = ongoing_games[data['room']]
     print(game.field_map)
     emit('update', {
