@@ -84,7 +84,7 @@ def handle_join_room(data):
     #    'message': f'User {data["username"]} has joined the room.',
     #    'room': data['room']
     #})
-    emit('navigate_to', f'/play_game/{data["role"]}/{data["room"]}')
+    #emit('navigate_to', f'/play_game/{data["role"]}/{data["room"]}')
 
 @socket.on('leave')
 def on_leave(data):
@@ -162,7 +162,7 @@ def player_move(data):
         positions[x][y + 1] == moved_player
         positions[x][y] = None
         moved_player.change_direction(data['move'])
-    ongoing_games[data['room']].game.field_map = positions
+    ongoing_games[data['room']].field_map = positions
 
 @socket.on('monster_move')
 def monster_move(data):
@@ -225,7 +225,7 @@ def monster_move(data):
                 positions[x][y + 1] = monster
                 positions[x][y] = None
 
-    ongoing_games[data['room']].game.field_map = positions
+    ongoing_games[data['room']].field_map = positions
 
 
 

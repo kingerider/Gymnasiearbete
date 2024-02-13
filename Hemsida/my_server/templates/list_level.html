@@ -7,15 +7,17 @@
 {% block content %}
 
 <div class="card-deck">
-    {% for level in levels %}
-    <div class="card" onclick="createGame('{{level[0]}}')">
-        <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">{{level[2]}}</h5>
-          <p class="card-text">{{level[4]}}</p>
-          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      {% for level in levels %}
+        <div class="card">
+          <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+            <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{level[2]}}</h5>
+              <p class="card-text">{{level[4]}}</p>
+              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+          </a>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
 </div>
 {% endblock %}
