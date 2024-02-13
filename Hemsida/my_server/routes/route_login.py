@@ -11,11 +11,14 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
-        password = form.username.data.encode('utf-8')
+        password = form.password.data.encode('utf-8')
+        print(username)
+        print(password)
         conn = create_connection()
         cur = conn.cursor()
         user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
-
+        print("hello: ")
+        print(user[2])
         if bcrypt.check_password_hash(user[2], password):
             session['logged_in'] = True
             session['username'] = user[1]
