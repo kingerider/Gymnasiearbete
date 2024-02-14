@@ -9,16 +9,22 @@ bcrypt = Bcrypt(app)
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm()
+
+
+    #https://hyperskill.org/learn/step/27151
+    #https://popsql.com/learn-sql/sql-server/how-to-query-date-and-time-in-sql-server
+    #UPDATE level SET date = (SELECT date("now")) WHERE date = 0
+
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data.encode('utf-8')
-        print(username)
-        print(password)
         conn = create_connection()
         cur = conn.cursor()
         user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
+        time = cur.execute("SELECT datetime('now')").fetchone
         print("hello: ")
-        print(user[2])
+        print(time)
+
         if bcrypt.check_password_hash(user[2], password):
             session['logged_in'] = True
             session['username'] = user[1]
