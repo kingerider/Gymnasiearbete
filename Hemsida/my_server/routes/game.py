@@ -67,14 +67,14 @@ def play_game_join(room_id = None):
     if session['logged_in']:
         game = ongoing_games[room_id]
         if len(game.players) == 0:
-            player = Player(session['username'], game.field.health, int(canvasw/tile_size)/8, int(canvash/tile_size)/2)
+            player = Player(session['username'], game.field.health, "right", int(canvasw/tile_size)/8, int(canvash/tile_size)/2)
             game.add_player(player)
         else:
-            player = Player(session['username'], game.field.health, int(canvasw/tile_size) - (int(canvasw/tile_size)/8), int(canvash/tile_size)/2)
+            player = Player(session['username'], game.field.health, "left", int(canvasw/tile_size) - (int(canvasw/tile_size)/8), int(canvash/tile_size)/2)
             game.add_player(player)
             game.place_objects_field()
         ongoing_games[game.room_id] = game
-        return render_template('play_game.html', game = game)
+        return render_template('play_game.html', game = game.get_game_info())
 
 @socket.on('join')
 def handle_join_room(data):
@@ -135,33 +135,33 @@ def player_move(data):
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
-        positions[x + 1][y] == moved_player
+        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+        positions[x + 1][y] == dict_moved_player
         positions[x][y] = None
-        moved_player.change_direction(data['move'])
     elif data['move'] == 'left': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
-        positions[x - 1][y] == moved_player
+        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+        positions[x - 1][y] == dict_moved_player
         positions[x][y] = None
-        moved_player.change_direction(data['move'])
     elif data['move'] == 'up': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
-        positions[x][y - 1] == moved_player
+        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+        positions[x][y - 1] == dict_moved_player
         positions[x][y] = None
-        moved_player.change_direction(data['move'])
     elif data['move'] == 'down': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
-        positions[x][y + 1] == moved_player
+        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+        positions[x][y + 1] == dict_moved_player
         positions[x][y] = None
-        moved_player.change_direction(data['move'])
     ongoing_games[data['room']].field_map = positions
 
 @socket.on('monster_move')

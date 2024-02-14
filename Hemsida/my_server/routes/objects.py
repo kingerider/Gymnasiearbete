@@ -29,22 +29,37 @@ class Game:
     
     def place_objects_field(self):
         for wall in self.field.walls:
-            self.field_map[wall.positionX][wall.positionY] = wall
+            dict_wall = dict(type= "wall")
+            self.field_map[wall.positionX][wall.positionY] = dict_wall
         for monster in self.field.enemies:
-            self.field_map[monster.positionX][monster.positionY] = monster
+            dict_monster = dict(type="enemy")
+            self.field_map[monster.positionX][monster.positionY] = dict_monster
         for item in self.field.items:
+            dict_item = dict(type="item", type_of_item = item.type)
             self.field_map[item.positionX][item.positionY] = item
         #for x in range(0, self.field.tile_size):
             #for y in range(0, self.field.tile_size):
                 #if self.field_map[x][y] != None:
                     #self.field_map[x][y] = None
-        self.field_map[int(self.players[0].positionX)][int(self.players[0].positionY)] = self.players[0]
-        self.field_map[int(self.players[1].positionX)][int(self.players[1].positionY)] = self.players[1]
+        dict_player1 = dict(type = "player", name = self.players[0].name, direction = self.players[0].direction, health = self.players[0].health)
+        dict_player2 = dict(type = "player", name = self.players[1].name, direction = self.players[1].direction, health = self.players[1].health)
+        self.field_map[int(self.players[0].positionX)][int(self.players[0].positionY)] = dict_player1
+        self.field_map[int(self.players[1].positionX)][int(self.players[1].positionY)] = dict_player2
 
     def add_player(self, player):
         self.players.append(player)
         if len(self.players) == 2:
             self.awaiting_players = False 
+    
+    def get_game_info(self):
+        
+        if self.awaiting_players == True:
+            name_list = [self.players[0].name]    
+        else:
+            name_list = [self.players[0].name, self.players[1].name]
+        dict_game = dict(id = self.id, name = self.name, awaiting_players = self.awaiting_players, players = name_list, field = self.field, field_map = self.field_map, room_id = self.room_id)
+        print(dict_game)
+        return dict_game
     
     def start_game(self):
         if self.awaiting_players == False:
@@ -68,15 +83,12 @@ class Entity:
         self.positionY = posY
 
 class Player(Entity): 
-    def __init__(self, name, health, posX, posY):
+    def __init__(self, name, health, direction, posX, posY):
         self.name = name
         self.health = health
-        self.direction = None
+        self.direction = direction
         self.positionX = posX
         self.positionY = posY
-    
-    def change_direction(self, str):
-        self.direction = str
 
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
