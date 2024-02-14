@@ -11,7 +11,7 @@ def sign_up():
     form = SignUpForm()
     if form.validate_on_submit():
         username = form.username.data
-        password = form.username.data.encode('utf-8')
+        password = form.password.data.encode('utf-8')
         conn = create_connection()
         cur = conn.cursor()
         cur.execute("INSERT INTO user (username, password) VALUES (?, ?)", (username, bcrypt.generate_password_hash(password)))
