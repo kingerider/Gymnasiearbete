@@ -59,8 +59,8 @@
             }
 
             socket.on('update', (data) => {
-                console.log(update)
                 console.log(data)
+                console.log(data.field_map)
                 //update canvas based on the data received back from the server
 
                 //Skriv här hur canvas ska se ut
@@ -74,7 +74,7 @@
                 canvas.height = data.height;
                 var x = canvas.width / 2;
                 var y = canvas.height - 30;
-                var tileSize = 10;
+                var tileSize = data.tile_size;
 
                 //Ball
                 var ballRadius = tileSize;
@@ -86,23 +86,32 @@
                 var wallWidth = tileSize;
                 var wallArray = [];
 
+                console.log("yo")
+                console.log(data.field_map[5])
+                console.log("yo")
+
+                for (colum in data.field_map[5]) {
+                    console.log(colum)
+                }
+
                 function loadPositions(wallPosition) {
-                    for (let index = 0; index < wallPosition.length; index++) {
-                        wallArray.push(new position((wallPosition.getX() * canvas.width / tileSize) * tileSize), (wallPosition.getY() * canvas.height / tileSize) * tileSize);
+                    for (colum in data.field_map) {
+                        for (square in colum) {
+                            console.log(square)
+                        }
                     }
                 }
 
-                console.log("Wall x pos");
-                console.log(wallArray.length)
-                console.log(wallArray[1].getX());
+
+                console.log("hello");
 
                 //Monster
                 var monsterHeight = tileSize;
                 var monsterWidth = tileSize;
                 var monsterArray = [];
-                for (let index = 0; index < 100; index++) {
-                    monsterArray.push(new position((Math.floor(Math.random() * canvas.width / tileSize) * tileSize), (Math.floor(Math.random() * canvas.height / tileSize) * tileSize)));
-                }
+                //for (let index = 0; index < 100; index++) {
+                //    monsterArray.push(new position((Math.floor(Math.random() * canvas.width / tileSize) * tileSize), (Math.floor(Math.random() * canvas.height / tileSize) * tileSize)));
+                //}
 
                 //Player
                 var playerHeight = tileSize;
