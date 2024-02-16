@@ -21,6 +21,13 @@
 
 <body>
     <script>
+        console.log("bläbl") 
+        socket.emit('join', {
+            room: $("#gameid").val()
+        })
+        socket.on('message_from_server', (data)=> {
+            $("#message").text(data.message)
+        })
         const start = () => {
             //if room = 1;
 
@@ -33,10 +40,6 @@
             let player2 = $("#player2").val()
             let my_player = $("#username").val()
 
-
-            socket.emit('join', {
-                room: room_id
-            })
             
             console.log(room_id)
             console.log(game)
@@ -256,24 +259,21 @@
                     move: move
                 })
             });
-
-            setInterval(updatePage, 500)
-
-        }
-
-        const leave = (room_id) => {
-            socket.emit('leave', {
-                room: room_id
+            const leave = () => {
+                socket.emit('leave', {
+                    room: room_id
+                })
+            }
+            $("#btnleave").click(() => {
+                leave()
             })
+            setInterval(updatePage, 500)
         }
-        $("#btnleave").click(() => {
-            leave()
-        })
     </script>
+    <input type="hidden" value="{{game['room_id']}}" id="gameid">
     <h1>Player 1: {{game['players'][0]}}</h1>
     {% if game['awaiting_players'] == False %}
         <h1>Player 2: {{game['players'][1]}}</h1>
-        <input type="hidden" value="{{game['room_id']}}" id="gameid">
         <input type="hidden" value="{{game}}" id="gameObject">
         <input type="hidden" value="{{game['players'][0]}}" id="player1">
         <input type="hidden" value="{{game['players'][1]}}" id="player2">
@@ -289,6 +289,7 @@
     <h3>Waiting for player to join...</h3>
     {% endif %}
 
+    <p id="message"></p>
     <button id="btnleave">Lämna spel</button>
 </body>
 

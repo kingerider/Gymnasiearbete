@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}login{% endblock %}
+
+{% block headline %}Logga in{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <p><strong>Användarnamn:</strong> {{user[1]}}</p>
+                <p><strong>Lösnord:</strong> {{user[2]}}</p>
+                <p><strong>Antal spelade spel:</strong> {{user[3]}}</p>
+                <p><strong>Vinster:</strong> {{user[4]}}</p>
+                <p><strong>Förluster:</strong> {{user[5]}}</p>
+            </div>
+            <div class="col-sm card-deck">
+                {% for level in levels %}
+                    <div class="card">
+                    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+                        <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
+                        <div class="card-body">
+                        <h5 class="card-title text-dark">{{level[2]}}</h5>
+                        <p class="card-text text-dark">{{level[4]}}</p>
+                        <p class="card-text text-dark"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

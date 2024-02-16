@@ -79,6 +79,15 @@ def play_game_join(room_id = None):
 @socket.on('join')
 def handle_join_room(data):
     join_room(data['room'])
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
+
+    emit('message_from_server', {
+        'message': f'{data["room"]} fick en ny användare' 
+    }, to=data['room'])
     #send_message_to_room({
     #    'heading': 'Info',
     #    'message': f'User {data["username"]} has joined the room.',
@@ -99,6 +108,7 @@ def on_leave(data):
     #   'room': data['room']
     #})
     emit('navigate_to', f'/memberarea')
+    
 
 #Hämtar data från servern för att sidan ska kunna uppdatera
 @socket.on('update_canvas')
@@ -117,7 +127,7 @@ def update_game(data):
    
     print(data)
     game = ongoing_games[data['room']]
-    print(game.field_map)
+    #print(game.field_map)
     emit('update', {
         'field_map' : game.field_map,
         'width': canvasw,
