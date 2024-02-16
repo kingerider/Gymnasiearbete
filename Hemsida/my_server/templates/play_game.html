@@ -248,6 +248,14 @@
 
         }
 
+        const leave = (room_id) => {
+            socket.emit('leave', {
+                room: room_id
+            })
+        }
+        $("#btnleave").click(() => {
+            leave()
+        })
     </script>
     <h1>Player 1: {{game['players'][0]}}</h1>
     {% if game['awaiting_players'] == False %}
@@ -268,7 +276,7 @@
     <h3>Waiting for player to join...</h3>
     {% endif %}
 
-    <button onclick="leaveGame('{{game.room_id}}')">Lämna spel</button>
+    <button id="btnleave">Lämna spel</button>
 </body>
 
 </html>
