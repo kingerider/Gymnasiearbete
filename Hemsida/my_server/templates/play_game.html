@@ -89,9 +89,22 @@
                 console.log("yo")
                 console.log(data.field_map[5])
                 console.log("yo")
+                //for in has Object.hasOwnPropery becuase other wise it will return the arrays numbers 0, 1, 2 instead of Array null, null, Player: king
+                for (const colum in data.field_map) {
+                    if (Object.hasOwnProperty.call(data.field_map, colum)) {
+                        const element1 = data.field_map[colum];
+                        for (const square in element1) {
+                            if (Object.hasOwnProperty.call(element1, square)) {
+                                const element2 = element1[square];
+                                if (element2 != null){
+                                    if (element2["type"] == "wall"){
+                                        //This is what is wall
+                                    }
 
-                for (colum in data.field_map[5]) {
-                    console.log(colum)
+                                }
+                            }
+                        }
+                    }
                 }
 
                 function loadPositions(wallPosition) {

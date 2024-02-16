@@ -298,7 +298,6 @@ function startGame() {
         ctx.fill();
         ctx.closePath();
     }
-
     //Wall
     function drawWall(wallX, wallY) {
         ctx.beginPath();
