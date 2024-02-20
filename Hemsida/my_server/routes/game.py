@@ -73,21 +73,32 @@ def play_game_join(room_id = None):
             player = Player(session['username'], game.field.health, "left", int(canvasw/tile_size) - (int(canvasw/tile_size)/8), int(canvash/tile_size)/2)
             game.add_player(player)
             game.place_objects_field()
-        ongoing_games[game.room_id] = game
         return render_template('play_game.html', game = game.get_game_info())
 
 @socket.on('join')
 def handle_join_room(data):
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
+    print('JOIN JOIN JOY')
     join_room(data['room'])
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
 
+    #ongoing_games[data['room']].ongoing_players += 1
+
+    # if ongoing_games[data['room']].:
+    #HÄR SKA DET FIXAS MED SOCKETIO
+    if len(ongoing_games[data['room']].players) == 2:
+        emit('message_from_server', {
+            'message': f'start_game',
+            'game': ongoing_games[data['room']].get_game_info(),
+            'username': session['username']
+        }, to=data['room'])
     emit('message_from_server', {
-        'message': f'{data["room"]} fick en ny användare' 
+        'message': 'Första gick med i rummet'
     }, to=data['room'])
+
+
     #send_message_to_room({
     #    'heading': 'Info',
     #    'message': f'User {data["username"]} has joined the room.',
