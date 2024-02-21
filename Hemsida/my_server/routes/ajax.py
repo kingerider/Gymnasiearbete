@@ -1,6 +1,7 @@
 from my_server import app
 from flask import request
 import json
+from my_server.routes.dbhandler import create_connection
 from my_server.routes.game import ongoing_games
 
 @app.route('/ajax_get_positions', methods = ['POST'])
@@ -26,3 +27,17 @@ def ajax_get_positions():
             'msg': 'Something went wrong',
             'success': False
         })
+
+@app.route('/ajax-search-level')
+def ajax_search_level():
+    data = request.get_json()
+    conn = create_connection()
+    cur = conn.cursor()
+    levels = cur.execute("SELECT * FROM level WHERE title LIKE ?", (data['input'],)).fetchall()
+    conn.close()
+    print(levels)
+    return json.dumps({
+        'msg': 'levels gathered',
+        'success': True,
+        'levels': levels
+    })

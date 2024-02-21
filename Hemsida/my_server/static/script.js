@@ -61,11 +61,37 @@ $(document).ready(() => {
     }
     //end game code -----------
 
+    //HÄR SKA DET GÖRAS
+    $("#btnsearchlevel").click(() => {
+        const data = {
+            input: $("#inputsearchlevel").val()
+        }
+        console.log(data)
+        $.ajax({
+            method: 'POST',
+            url: "/ajax-search-level",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: (data) => {
+                if (data.success) {
+                    $.each(data.levels, (index, value) => { 
+                         $(".card-deck").append("hahahah")
+                    });
+                }
+                //alert(JSON.stringify(data))
+                let div = `<div class='card-body'><h5 class='card-text'>${data.title}</h5><p>${data.content}</p><p>skapad av: ${data.author}</p></div>`;
+                $("#tom").append(div);     
+            }
+        });
+    })
     //Socket code ---------
 
-    socket.on('navigate_to', (path) => {
-        window.location.href = path
-    })
+    // socket.on('navigate_to', (path) => {
+    //     window.location.href = path
+    // })
 
     /*$('#button-joingame-test').click(() => { 
         player.username = $("#username").val()
@@ -126,13 +152,13 @@ $(document).ready(() => {
 });
 
 
-socket.emit('update', {
-    room: $("#gameid").val(),
-    player1: null,
-    player2:null,
-    projectile: null,
-    monsters: []
-})
+// socket.emit('update', {
+//     room: $("#gameid").val(),
+//     player1: null,
+//     player2:null,
+//     projectile: null,
+//     monsters: []
+// })
 
 //Game Code ==>
 //https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript/Create_the_Canvas_and_draw_on_it

@@ -38,19 +38,29 @@
         })
 
 
-        const start = (start_game, username) => {
+        var start = (start_game, username) => {
             //if room = 1;
+            let room_id = $("#gameid").val()
+            let game = start_game.game
+            let player1 = start_game.players[0]
+            let player2 = start_game.players[1]
+            let my_player = username
+
+            let newHead1 = document.createElement("h1")
+            newHead1.innerText = "Player: " + player1
+            let newHead2 = document.createElement("h1")
+            newHead2.innerText = "Player: " + player2
+            $("body").append(newHead1)
+            $("body").append(newHead2)
             let canvas = document.createElement("canvas")
             canvas.id = "myCanvas"
             $("body").append(canvas)
             //else if room = 2;
             console.log("js document.ready")
 
-            let room_id = $("#gameid").val()
-            let game = start_game.game
-            let player1 = start_game.players[0]
-            let player2 = start_game.players[1]
-            let my_player = username
+            
+
+            
 
             
             console.log(room_id)
@@ -288,10 +298,10 @@
         }
     </script>
     
-    <h1>Player 1: {{game['players'][0]}}</h1>
-    {% if game['awaiting_players'] == False %}
+    <!-- <h1>Player 1: {{game['players'][0]}}</h1> -->
+    <!-- {% if game['awaiting_players'] == False %}
         <h1>Player 2: {{game['players'][1]}}</h1>
-    {% endif %}
+    {% endif %} -->
     <!-- {% if game['awaiting_players'] == False %}
     <canvas id="myCanvas"></canvas>
     {% else %} -->

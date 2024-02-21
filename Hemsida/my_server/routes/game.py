@@ -95,7 +95,8 @@ def handle_join_room(data):
             'username': session['username']
         }, to=data['room'])
     emit('message_from_server', {
-        'message': 'Första gick med i rummet'
+        'message': 'Första gick med i rummet',
+        'username': session['username']
     }, to=data['room'])
 
 

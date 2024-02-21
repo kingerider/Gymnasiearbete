@@ -57,7 +57,7 @@ class Game:
             name_list = [self.players[0].name]    
         else:
             name_list = [self.players[0].name, self.players[1].name]
-        dict_game = dict(id = self.id, name = self.name, awaiting_players = self.awaiting_players, players = name_list, field = self.field, field_map = self.field_map, room_id = self.room_id)
+        dict_game = dict(id = self.id, name = self.name, awaiting_players = self.awaiting_players, players = name_list, field_map = self.field_map, room_id = self.room_id)
         print(dict_game)
         return dict_game
     
