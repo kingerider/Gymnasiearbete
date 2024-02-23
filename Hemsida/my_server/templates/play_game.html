@@ -18,6 +18,7 @@
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="{{url_for('static', filename='script.js')}}"></script>
 </head>
+
 <body>
     <input type="hidden" value="{{game['room_id']}}" id="gameid">
     <!-- <input type="hidden" value="{{game}}" id="gameObject">
@@ -25,13 +26,13 @@
     <input type="hidden" value="{{game['players'][1]}}" id="player2">
     <input type="hidden" value="{{session['username']}}" id="username"> -->
     <script>
-        console.log("bläbl") 
+        console.log("bläbl")
         socket.emit('join', {
             room: $("#gameid").val()
         })
-        socket.on('message_from_server', (data)=> {
+        socket.on('message_from_server', (data) => {
             $("#message").text(data.message)
-            if(data.message == "start_game") {
+            if (data.message == "start_game") {
                 console.log("NU VILL NAGON STARTA SPELET")
                 start(data.game, data.username);
             }
@@ -58,11 +59,11 @@
             //else if room = 2;
             console.log("js document.ready")
 
-            
 
-            
 
-            
+
+
+
             console.log(room_id)
             console.log(game)
             console.log(player1)
@@ -88,9 +89,6 @@
                 //console.log(data.field_map)
                 //update canvas based on the data received back from the server
 
-                //Skriv här hur canvas ska se ut
-
-                //Draw objects
 
                 //Canvas
                 var canvas = document.getElementById("myCanvas");
@@ -101,43 +99,17 @@
                 var y = canvas.height - 30;
                 var tileSize = data.tile_size;
 
-                //Ball
-                var ballRadius = tileSize;
-                var dx = 1;
-                var dy = -1;
-
                 //Wall
                 var wallHeight = tileSize;
                 var wallWidth = tileSize;
                 var wallArray = [];
-
-                //console.log("yo")
-                //console.log(data.field_map[5])
-                //console.log("yo")
-                //for in has Object.hasOwnPropery becuase other wise it will return the arrays numbers 0, 1, 2 instead of Array null, null, Player: king
-                for (const colum in data.field_map) {
-                    if (Object.hasOwnProperty.call(data.field_map, colum)) {
-                        const element1 = data.field_map[colum];
-                        for (const square in element1) {
-                            if (Object.hasOwnProperty.call(element1, square)) {
-                                const element2 = element1[square];
-                                if (element2 != null){
-                                    if (element2["type"] == "wall"){
-                                        //This is what is wall
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
 
                 function loadPositions(wallPosition) {
                     for (colum in data.field_map) {
                         for (square in colum) {
                             //console.log(square)
                         }
-                    }  
+                    }
                 }
 
 
@@ -147,15 +119,10 @@
                 var monsterHeight = tileSize;
                 var monsterWidth = tileSize;
                 var monsterArray = [];
-                //for (let index = 0; index < 100; index++) {
-                //    monsterArray.push(new position((Math.floor(Math.random() * canvas.width / tileSize) * tileSize), (Math.floor(Math.random() * canvas.height / tileSize) * tileSize)));
-                //}
 
                 //Player
                 var playerHeight = tileSize;
                 var playerWidth = tileSize;
-                var playerX = 0;
-                var playerY = 0;
 
                 //Grid
                 function drawGrid() {
@@ -175,15 +142,6 @@
                         ctx.stroke();
                     }
 
-                }
-
-                //Ball
-                function drawBall() {
-                    ctx.beginPath();
-                    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-                    ctx.fillStyle = "#0095DD";
-                    ctx.fill();
-                    ctx.closePath();
                 }
 
                 //Wall
@@ -206,7 +164,7 @@
 
 
                 //Player
-                function drawPlayer() {
+                function drawPlayer(playerX, playerY) {
                     ctx.beginPath();
                     ctx.rect(playerX, playerY, playerWidth, playerHeight);
                     ctx.fillStyle = "#046cd4";
@@ -219,34 +177,35 @@
                 function draw() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     drawGrid();
-                    drawBall();
                     drawPlayer();
 
-
-
-                    //Ball movment
-                    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-                        dx = -dx;
-                    }
-                    if (y + dy < ballRadius) {
-                        dy = -dy;
-                    }
-                    else if (y + dy > canvas.height - ballRadius) {
-                        if (x > playerX && x < playerX + playerWidth) {
-                            dy = -dy;
+                    var countX = 0;
+                    for (const colum in data.field_map) {
+                        if (Object.hasOwnProperty.call(data.field_map, colum)) {
+                            const element1 = data.field_map[colum];
+                            var countY = 0;
+                            for (const square in element1) {
+                                if (Object.hasOwnProperty.call(element1, square)) {
+                                    const element2 = element1[square];
+                                    if (element2 != null) {
+                                        if (element2["type"] == "wall") {
+                                            //This is what is wall
+                                            console.log("Wall:" + element2 + "X:" + countX + "Y:" + countY);
+                                            drawWall(countX*tileSize, countY*tileSize);
+                                        }
+                                        if (element2["type"] == "player") {
+                                            drawPlayer(countX*tileSize, countY*tileSize)
+                                        }
+                                    }
+                                }
+                                countY++;
+                            }
                         }
-                        else {
-                            //alert("GAME OVER");
-                            document.location.reload();
-                            clearInterval(interval); // Needed for Chrome to end game
-                        }
+                        countX++;
                     }
-                    x += dx;
-                    y += dy;
-
 
                 }
-                var interval = setInterval(draw, 60);
+                draw();
 
             })
 
@@ -265,9 +224,9 @@
                     console.log("Spelare 2")
                 }
                 let move = null
-                let key = (event.keyCode ? 
-                       event.keyCode : 
-                       event.which);
+                let key = (event.keyCode ?
+                    event.keyCode :
+                    event.which);
                 let character = String.fromCharCode(key)
                 console.log(character)
                 if (character == "d" || character == "ArrowRight") {
@@ -309,7 +268,7 @@
             setInterval(updatePage, 500)
         }
     </script>
-    
+
     <!-- <h1>Player 1: {{game['players'][0]}}</h1> -->
     <!-- {% if game['awaiting_players'] == False %}
         <h1>Player 2: {{game['players'][1]}}</h1>
