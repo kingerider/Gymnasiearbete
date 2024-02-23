@@ -83,7 +83,7 @@ def handle_join_room(data):
     print('JOIN JOIN JOY')
     print('JOIN JOIN JOY')
     join_room(data['room'])
-
+    print(f'session: {session["username"]}')
     #ongoing_games[data['room']].ongoing_players += 1
 
     # if ongoing_games[data['room']].:
@@ -94,10 +94,11 @@ def handle_join_room(data):
             'game': ongoing_games[data['room']].get_game_info(),
             'username': session['username']
         }, to=data['room'])
-    emit('message_from_server', {
-        'message': 'Första gick med i rummet',
-        'username': session['username']
-    }, to=data['room'])
+    else:
+        emit('message_from_server', {
+            'message': 'Första gick med i rummet',
+            'username': session['username']
+        }, to=data['room'])
 
 
     #send_message_to_room({

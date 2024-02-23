@@ -26,18 +26,21 @@
     <input type="hidden" value="{{game['players'][1]}}" id="player2">
     <input type="hidden" value="{{session['username']}}" id="username"> -->
     <script>
+        let this_player = null
+
         console.log("bläbl")
         socket.emit('join', {
-            room: $("#gameid").val()
+            room: $("#gameid").val(),
         })
+        
         socket.on('message_from_server', (data) => {
             $("#message").text(data.message)
+            this_player = data.username
             if (data.message == "start_game") {
                 console.log("NU VILL NAGON STARTA SPELET")
-                start(data.game, data.username);
+                start(data.game, this_player);
             }
         })
-
 
         var start = (start_game, username) => {
             //if room = 1;
@@ -65,10 +68,10 @@
 
 
             console.log(room_id)
-            console.log(game)
-            console.log(player1)
-            console.log(player2)
-            console.log(my_player)
+            //console.log(game)
+            console.log("player1 :" +player1)
+            console.log("player2 :" +player2)
+            console.log("username:" + my_player)
 
 
             const updatePage = () => {
