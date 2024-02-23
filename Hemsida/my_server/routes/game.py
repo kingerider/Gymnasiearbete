@@ -184,7 +184,7 @@ def player_move(data):
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
         positions[x][y + 1] == dict_moved_player
         positions[x][y] = None
-    ongoing_games[data['room']].field_map = positions
+    #ongoing_games[data['room']].field_map = positions
 
 @socket.on('monster_move')
 def monster_move(data):
