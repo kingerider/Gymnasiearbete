@@ -1,5 +1,5 @@
 from my_server import app
-from flask import render_template, redirect, url_for, abort, session
+from flask import render_template, redirect, url_for, abort, session, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Game, Player, Field
@@ -75,6 +75,9 @@ def play_game_join(room_id = None):
             game.place_objects_field()
         return render_template('play_game.html', game = game.get_game_info())
 
+#SKA TESTA ATT GÖRA EN KLIENTLISTA OCH SE OM MAN KAN ANVÄNDA DEN FÖR ATT FÅ LOKAL KLIENT
+clients = []
+
 @socket.on('join')
 def handle_join_room(data):
     print('JOIN JOIN JOY')
@@ -84,12 +87,15 @@ def handle_join_room(data):
     print('JOIN JOIN JOY')
     join_room(data['room'])
     print(f'session: {session["username"]}')
+    #print('%s connected' % (request.namespace.socket.sessid))
+    #clients.append(request.namespace)
     #ongoing_games[data['room']].ongoing_players += 1
 
     # if ongoing_games[data['room']].:
     #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
-        emit('message_from_server', {
+
+        emit('message_from_server1', {
             'message': f'start_game',
             'game': ongoing_games[data['room']].get_game_info(),
             'username': session['username']
@@ -120,6 +126,8 @@ def on_leave(data):
     #    'message': f'User {data["username"]} has left the room.',
     #   'room': data['room']
     #})
+    #print("%s disconnected" % (request.namespace.socket.sessid))
+    #clients.remove(request.namespace)
     emit('navigate_to', f'/memberarea')
     
 
@@ -247,8 +255,6 @@ def monster_move(data):
                 y = monster.positionY
                 positions[x][y + 1] = monster
                 positions[x][y] = None
-
-    ongoing_games[data['room']].field_map = positions
 
 
 
