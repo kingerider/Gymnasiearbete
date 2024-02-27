@@ -1,5 +1,5 @@
-from my_server import app
+from my_server import socket, app
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=8080, debug=True)
+    socket.run(app, host='localhost', port=8080, debug=True)

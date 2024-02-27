@@ -1,11 +1,10 @@
-from my_server import app
+from my_server import app, socket
 from flask import render_template, redirect, url_for, abort, session, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Game, Player, Field
 import random
 
-socket = SocketIO(app)
 
 #should not be here later on
 tile_size = 20
@@ -77,6 +76,10 @@ def play_game_join(room_id = None):
 
 #SKA TESTA ATT GÖRA EN KLIENTLISTA OCH SE OM MAN KAN ANVÄNDA DEN FÖR ATT FÅ LOKAL KLIENT
 clients = []
+
+@socket.on("connect")
+def handle_connect():
+    print("Client connected")
 
 @socket.on('join')
 def handle_join_room(data):

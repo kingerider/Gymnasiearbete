@@ -29,6 +29,8 @@
         let this_player = null
 
         console.log("bläbl")
+        socket.connect();
+        
         socket.emit('join', {
             room: $("#gameid").val(),
         })
