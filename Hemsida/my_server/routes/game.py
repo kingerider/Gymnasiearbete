@@ -101,13 +101,13 @@ def handle_join_room(data):
         emit('message_from_server', {
             'message': f'start_game',
             'game': ongoing_games[data['room']].get_game_info(),
-            'username': session['username']
+            #'username': session['username']
         }, to=data['room'])
     else:
         emit('message_from_server', {
             'message': 'Första gick med i rummet',
             'game': None,
-            'username': session['username']
+            #'username': session['username']
         }, to=data['room'])
 
 

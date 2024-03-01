@@ -44,7 +44,6 @@
 
             socket.on('message_from_server', (data) => {
                 $("#message").text(data.message)
-                player.username
                 if (data.game != null/*data.message == "start_game"*/) {
                     console.log("NU VILL NAGON STARTA SPELET")
                     start(data.game);
@@ -79,7 +78,7 @@
                 //console.log(game)
                 console.log("player1 :" +player1)
                 console.log("player2 :" +player2)
-                console.log("username:" + $("#this_user").val())
+                //console.log("username:" + $("#this_user").val())
 
 
                 const updatePage = () => {
