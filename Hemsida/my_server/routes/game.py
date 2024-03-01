@@ -176,36 +176,36 @@ def player_move(data):
         x = moved_player.positionX
         y = moved_player.positionY
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[x + 1][y] == dict_moved_player
-        positions[x][y] = None
-        moved_player.positionX = x + 1
+        positions[int(x + 1)][int(y)] == dict_moved_player
+        positions[int(x)][(int(y))] = None
+        moved_player.positionX += 1
     elif data['move'] == 'left': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[x - 1][y] == dict_moved_player
-        positions[x][y] = None
-        moved_player.positionX = x - 1
+        positions[int(x - 1)][int(y)] == dict_moved_player
+        positions[int(x)][(int(y))] = None
+        moved_player.positionX -= 1
     elif data['move'] == 'up': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[x][y - 1] == dict_moved_player
-        positions[x][y] = None
-        moved_player.positionY = y - 1
+        positions[int(x)][int(y - 1)] == dict_moved_player
+        positions[int(x)][(int(y))] = None
+        moved_player.positionY -= 1
     elif data['move'] == 'down': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[x][y + 1] == dict_moved_player
-        positions[x][y] = None
-        moved_player.positionY = y + 1
+        positions[int(x)][int(y + 1)] == dict_moved_player
+        positions[int(x)][(int(y))] = None
+        moved_player.positionY += 1
     #ongoing_games[data['room']].field_map = positions
 
 @socket.on('monster_move')
