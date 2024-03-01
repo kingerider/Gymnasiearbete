@@ -174,40 +174,52 @@ def player_move(data):
     game = ongoing_games[data['room']]
     positions = game.field_map
     if data['move'] == 'right':
-        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
-        x = moved_player.positionX
-        y = moved_player.positionY
-        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[int(x + 1)][(int(y))] = dict_moved_player
-        positions[int(x)][(int(y))] = None
-        moved_player.positionX += 1
+        try:
+            moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            x = moved_player.positionX
+            y = moved_player.positionY
+            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+            positions[int(x + 1)][(int(y))] = dict_moved_player
+            positions[int(x)][(int(y))] = None
+            moved_player.positionX += 1
+        except:
+            print("Ajabaja, kan inte röra dig dära lillen")
     elif data['move'] == 'left': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
-        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
-        x = moved_player.positionX
-        y = moved_player.positionY
-        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[int(x - 1)][(int(y))] = dict_moved_player
-        positions[int(x)][(int(y))] = None
-        moved_player.positionX -= 1
+        try:
+            moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            x = moved_player.positionX
+            y = moved_player.positionY
+            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+            positions[int(x - 1)][(int(y))] = dict_moved_player
+            positions[int(x)][(int(y))] = None
+            moved_player.positionX -= 1
+        except:
+            print("Ajabaja, kan inte röra dig dära lillen")
     elif data['move'] == 'up': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
-        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
-        x = moved_player.positionX
-        y = moved_player.positionY
-        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[int(x)][(int(y - 1))] = dict_moved_player
-        positions[int(x)][(int(y))] = None
-        moved_player.positionY -= 1
+        try:
+            moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            x = moved_player.positionX
+            y = moved_player.positionY
+            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+            positions[int(x)][(int(y - 1))] = dict_moved_player
+            positions[int(x)][(int(y))] = None
+            moved_player.positionY -= 1
+        except:
+            print("Ajabaja, kan inte röra dig dära lillen")
     elif data['move'] == 'down': 
-        #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
-        moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
-        x = moved_player.positionX
-        y = moved_player.positionY
-        dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[int(x)][(int(y + 1))] = dict_moved_player
-        positions[int(x)][(int(y))] = None
-        moved_player.positionY += 1
+        try:
+            #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
+            moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            x = moved_player.positionX
+            y = moved_player.positionY
+            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+            positions[int(x)][(int(y + 1))] = dict_moved_player
+            positions[int(x)][(int(y))] = None
+            moved_player.positionY += 1
+        except:
+            print("Ajabaja, kan inte röra dig dära lillen")
     #ongoing_games[data['room']].field_map = positions
 
 @socket.on('monster_move')
