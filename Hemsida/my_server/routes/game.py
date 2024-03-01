@@ -146,18 +146,20 @@ def get_clients_in_room(data):
 @socket.on('update_canvas')
 def update_game(data):
     print("Update_game, update_canvas")
-    print("Seems we update_canvas before ongoing_game has a key and value resulting in error")
     print("Ass hair")
-    print("Ass hair")
+    print('Is game ongoing:')
     print(ongoing_games)
-    print(ongoing_games)
-    print(ongoing_games)
+    print('What is data:')
+    print(data)
+    print('What does game.fieldmap contain')
+    print(ongoing_games[data['room']].field_map)
     print("Ass hair")
     print("Ass hair")
    
-    print(data)
     game = ongoing_games[data['room']]
+
     #print(game.field_map)
+
     emit('update', {
         'field_map' : game.field_map,
         'width': canvasw,
@@ -175,8 +177,21 @@ def player_move(data):
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
         x = moved_player.positionX
         y = moved_player.positionY
+        
+        #x = 5
+        #y = 10
+
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[int(x + 1)][int(y)] == dict_moved_player
+        newX = x + 1
+        print(x)
+        print(newX)
+        print(newX)
+        print(newX)
+        print(newX)
+        print(newX)
+        print(newX)
+
+        positions[int(x + 1)][(int(y))] == dict_moved_player
         positions[int(x)][(int(y))] = None
         moved_player.positionX += 1
     elif data['move'] == 'left': 
