@@ -205,7 +205,7 @@ def player_move(data):
         x = moved_player.positionX
         y = moved_player.positionY
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-        positions[int(x)][(int(y + 1))] == dict_moved_player
+        positions[int(x)][(int(y + 1))] = dict_moved_player
         positions[int(x)][(int(y))] = None
         moved_player.positionY += 1
     #ongoing_games[data['room']].field_map = positions
