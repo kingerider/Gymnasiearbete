@@ -62,31 +62,98 @@
             var start = (start_game) => {
                 //if room = 1;
                 let room_id = player.room
+
                 //let game = start_game.game
                 let player1 = start_game.players[0]
                 let player2 = start_game.players[1]
+                let newData = null
 
-                let data_field_map = null
-
+                //Players
                 let newHead1 = document.createElement("h1")
                 newHead1.innerText = "Player: " + player1
                 let newHead2 = document.createElement("h1")
                 newHead2.innerText = "Player: " + player2
                 $("body").append(newHead1)
                 $("body").append(newHead2)
+
+                //New canvas
                 let canvas = document.createElement("canvas")
                 canvas.id = "myCanvas"
                 $("body").append(canvas)
-                //else if room = 2;
+
+                //Else if room = 2;
                 console.log("js document.ready")
 
-
                 console.log(room_id)
-                //console.log(game)
                 console.log("player1 :" + player1)
                 console.log("player2 :" + player2)
-                //console.log("username:" + $("#this_user").val())
+                //Console.log("username:" + $("#this_user").val())
 
+                //Canvas
+                var ctx = canvas.getContext("2d");
+                var tileSize = null;
+
+                //Wall
+                var wallHeight = tileSize;
+                var wallWidth = tileSize;
+                var wallArray = [];
+
+                //Monster
+                var monsterHeight = tileSize;
+                var monsterWidth = tileSize;
+                var monsterArray = [];
+
+                //Player
+                var playerHeight = tileSize;
+                var playerWidth = tileSize;
+
+                //Grid
+                function drawGrid() {
+                    ctx.strokeStyle = '#eeeeee';
+                    ctx.stroke();
+                    for (var i = 0; i <= canvas.width; i += tileSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(i, 0);
+                        ctx.lineTo(i, canvas.height);
+                        ctx.stroke();
+                    }
+
+                    for (var i = 0; i <= canvas.height; i += tileSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, i);
+                        ctx.lineTo(canvas.width, i);
+                        ctx.stroke();
+                    }
+
+                }
+
+                //Wall
+                function drawWall(wallX, wallY) {
+                    ctx.beginPath();
+                    ctx.rect(wallX, wallY, wallWidth, wallHeight,);
+                    ctx.fillStyle = "#0095DD";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+                //Monster
+                function drawMonster(monsterX, monsterY) {
+                    ctx.beginPath();
+                    ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
+                    ctx.fillStyle = "#04d49d";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+
+                //Player
+                function drawPlayer(playerX, playerY) {
+                    ctx.beginPath();
+                    ctx.rect(playerX, playerY, playerWidth, playerHeight);
+                    ctx.fillStyle = "#046cd4";
+                    ctx.fill();
+                    ctx.closePath();
+                }
 
                 const updatePage = () => {
                     //do socket requests that request info
@@ -105,98 +172,35 @@
                     })
                 }
 
-                
-
+                //Updates variebles and gui
                 socket.on('update', (data) => {
                     //console.log(data)
                     //console.log(data.field_map)
                     //update canvas based on the data received back from the server
 
-                    data_field_map = data.field_map
-                    //Canvas
-                    var canvas = document.getElementById("myCanvas");
-                    var ctx = canvas.getContext("2d");
-                    canvas.width = data.width;
-                    canvas.height = data.height;
-                    var x = canvas.width / 2;
-                    var y = canvas.height - 30;
-                    var tileSize = data.tile_size;
+                    //newData
+                    newData = data
+
+                    //canvas
+                    canvas = document.getElementById("myCanvas");                    
+                    ctx = canvas.getContext("2d");
+                    canvas.width = newData.width;
+                    canvas.height = newData.height;
+                    tileSize = newData.tile_size;
 
                     //Wall
-                    var wallHeight = tileSize;
-                    var wallWidth = tileSize;
-                    var wallArray = [];
-
-                    function loadPositions(wallPosition) {
-                        for (colum in data.field_map) {
-                            for (square in colum) {
-                                //console.log(square)
-                            }
-                        }
-                    }
-
-
-                    //console.log("hello");
+                    wallHeight = tileSize;
+                    wallWidth = tileSize;
+                    wallArray = [];
 
                     //Monster
-                    var monsterHeight = tileSize;
-                    var monsterWidth = tileSize;
-                    var monsterArray = [];
+                    monsterHeight = tileSize;
+                    monsterWidth = tileSize;
+                    monsterArray = [];
 
                     //Player
-                    var playerHeight = tileSize;
-                    var playerWidth = tileSize;
-
-                    //Grid
-                    function drawGrid() {
-                        ctx.strokeStyle = '#eeeeee';
-                        ctx.stroke();
-                        for (var i = 0; i <= canvas.width; i += tileSize) {
-                            ctx.beginPath();
-                            ctx.moveTo(i, 0);
-                            ctx.lineTo(i, canvas.height);
-                            ctx.stroke();
-                        }
-
-                        for (var i = 0; i <= canvas.height; i += tileSize) {
-                            ctx.beginPath();
-                            ctx.moveTo(0, i);
-                            ctx.lineTo(canvas.width, i);
-                            ctx.stroke();
-                        }
-
-                    }
-
-                    //Wall
-                    function drawWall(wallX, wallY) {
-                        ctx.beginPath();
-                        ctx.rect(wallX, wallY, wallWidth, wallHeight,);
-                        ctx.fillStyle = "#0095DD";
-                        ctx.fill();
-                        ctx.closePath();
-                    }
-
-                    //Monster
-                    function drawMonster(monsterX, monsterY) {
-                        ctx.beginPath();
-                        ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
-                        ctx.fillStyle = "#04d49d";
-                        ctx.fill();
-                        ctx.closePath();
-                    }
-
-
-                    //Player
-                    function drawPlayer(playerX, playerY) {
-                        ctx.beginPath();
-                        ctx.rect(playerX, playerY, playerWidth, playerHeight);
-                        ctx.fillStyle = "#046cd4";
-                        ctx.fill();
-                        ctx.closePath();
-                    }
-
-                    //Gives returns a instence of position with the X and Y position of player with given username
-                    
+                    playerHeight = tileSize;
+                    playerWidth = tileSize;
 
                     function draw() {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -204,9 +208,9 @@
                         drawPlayer();
 
                         var countX = 0;
-                        for (const colum in data.field_map) {
-                            if (Object.hasOwnProperty.call(data.field_map, colum)) {
-                                const element1 = data.field_map[colum];
+                        for (const colum in newData.field_map) {
+                            if (Object.hasOwnProperty.call(newData.field_map, colum)) {
+                                const element1 = newData.field_map[colum];
                                 var countY = 0;
                                 for (const square in element1) {
                                     if (Object.hasOwnProperty.call(element1, square)) {
@@ -256,12 +260,13 @@
 
                 }
                 
+                //Gives returns a instence of position with the X and Y position of player with given username
                 function userPosition(username) {
                     pos = new Position(0, 0);
                     var countX = 0;
-                    for (const colum in data_field_map) {
-                        if (Object.hasOwnProperty.call(data_field_map, colum)) {
-                            const element1 = data_field_map[colum];
+                    for (const colum in newData.field_map) {
+                        if (Object.hasOwnProperty.call(newData.field_map, colum)) {
+                            const element1 = newData.field_map[colum];
                             var countY = 0;
                             for (const square in element1) {
                                 if (Object.hasOwnProperty.call(element1, square)) {
@@ -310,7 +315,7 @@
                     
                     usernamePosition = userPosition(username);
                     
-                    if (character == "d" || character == "ArrowRight" && usernamePosition.getX < canvas.width) {
+                    if (character == "d" || character == "ArrowRight" && usernamePosition.getX < canvas.width-1) {
                         move = 'right'
                         console.log("Höger")
                         console.log("Spelare: " + this_player_id)
@@ -320,7 +325,7 @@
                         console.log("Vänster")
                         console.log("Spelare: " + this_player_id)
                     }
-                    if (character == "w" || character == "ArrowUp" && usernamePosition.getY > canvas.height) {
+                    if (character == "w" || character == "ArrowUp" && usernamePosition.getY > canvas.height-1) {
                         move = 'up'
                         console.log("Upp")
                         console.log("Spelare: " + this_player_id)
