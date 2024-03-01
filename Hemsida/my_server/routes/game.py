@@ -149,11 +149,9 @@ def update_game(data):
     print("Seems we update_canvas before ongoing_game has a key and value resulting in error")
     print("Ass hair")
     print("Ass hair")
-    
     print(ongoing_games)
     print(ongoing_games)
     print(ongoing_games)
-    print("Ongoing_games är tom")
     print("Ass hair")
     print("Ass hair")
    
