@@ -43,24 +43,24 @@ function leaveGame(data) {
 $(document).ready(() => {
     
     //game code -------------
-    console.log(window.location.pathname)
-    console.log(player.room)
-    console.log(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
+    // console.log(window.location.pathname)
+    // console.log(player.room)
+    // console.log(window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1))
 
-        //Load game
-    if ( window.location.pathname == `/play_game/join/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
-        //code for index page
-        console.log("In index")
-        startGame()
-    } else if ( window.location.pathname == `/play_game/create/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
-        console.log("In index")
-        startGame()
-    } else if (window.location.pathname == '/build_game'){
-        console.log("In index build")
-        buildGame()
-    } else{
-        console.log("Not in index")
-    }
+    //     //Load game
+    // if ( window.location.pathname == `/play_game/join/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
+    //     //code for index page
+    //     console.log("In index")
+    //     startGame()
+    // } else if ( window.location.pathname == `/play_game/create/${window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)}`) {
+    //     console.log("In index")
+    //     startGame()
+    // } else if (window.location.pathname == '/build_game'){
+    //     console.log("In index build")
+    //     buildGame()
+    // } else{
+    //     console.log("Not in index")
+    // }
     //end game code -----------
 
     //HÄR SKA DET GÖRAS

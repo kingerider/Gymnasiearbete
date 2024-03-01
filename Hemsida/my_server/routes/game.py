@@ -1,6 +1,6 @@
 from my_server import app, socket
 from flask import render_template, redirect, url_for, abort, session, request
-from flask_socketio import SocketIO, emit, join_room, leave_room
+from flask_socketio import emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Game, Player, Field
 import random
@@ -58,6 +58,8 @@ def play_game_create(level_id = None):
         return redirect(url_for('play_game_join', room_id = game.room_id))
     abort(401)
 
+clients = []
+
 #Skickar spelaren till playgame och tar med game
 @app.route('/play_game/join/<room_id>')
 def play_game_join(room_id = None):
@@ -75,7 +77,6 @@ def play_game_join(room_id = None):
         return render_template('play_game.html', game = game.get_game_info())
 
 #SKA TESTA ATT GÖRA EN KLIENTLISTA OCH SE OM MAN KAN ANVÄNDA DEN FÖR ATT FÅ LOKAL KLIENT
-clients = []
 
 @socket.on("connect")
 def handle_connect():
@@ -97,8 +98,7 @@ def handle_join_room(data):
     # if ongoing_games[data['room']].:
     #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
-
-        emit('message_from_server1', {
+        emit('message_from_server', {
             'message': f'start_game',
             'game': ongoing_games[data['room']].get_game_info(),
             'username': session['username']
@@ -106,6 +106,7 @@ def handle_join_room(data):
     else:
         emit('message_from_server', {
             'message': 'Första gick med i rummet',
+            'game': None,
             'username': session['username']
         }, to=data['room'])
 
@@ -133,6 +134,13 @@ def on_leave(data):
     #clients.remove(request.namespace)
     emit('navigate_to', f'/memberarea')
     
+@socket.on('clientlist')
+def get_clients_in_room(data):
+    #clients = socket.server.manager.rooms[data['room']]
+    clients = socket.server.manager.get_participants(data['room'])
+    print('clients:' + clients)
+    
+    #return {'clients': clients}
 
 #Hämtar data från servern för att sidan ska kunna uppdatera
 @socket.on('update_canvas')
@@ -172,6 +180,7 @@ def player_move(data):
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
         positions[x + 1][y] == dict_moved_player
         positions[x][y] = None
+        moved_player.positionX = x + 1
     elif data['move'] == 'left': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
@@ -180,6 +189,7 @@ def player_move(data):
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
         positions[x - 1][y] == dict_moved_player
         positions[x][y] = None
+        moved_player.positionX = x - 1
     elif data['move'] == 'up': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
@@ -188,6 +198,7 @@ def player_move(data):
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
         positions[x][y - 1] == dict_moved_player
         positions[x][y] = None
+        moved_player.positionY = y - 1
     elif data['move'] == 'down': 
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
         moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
@@ -196,6 +207,7 @@ def player_move(data):
         dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
         positions[x][y + 1] == dict_moved_player
         positions[x][y] = None
+        moved_player.positionY = y + 1
     #ongoing_games[data['room']].field_map = positions
 
 @socket.on('monster_move')
