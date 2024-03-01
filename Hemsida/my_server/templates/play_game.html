@@ -66,6 +66,8 @@
                 let player1 = start_game.players[0]
                 let player2 = start_game.players[1]
 
+                let data_field_map = null
+
                 let newHead1 = document.createElement("h1")
                 newHead1.innerText = "Player: " + player1
                 let newHead2 = document.createElement("h1")
@@ -103,34 +105,14 @@
                     })
                 }
 
-                //Position class for objects
-                class Position {
-                    constructor(x, y) {
-                        this.x = x;
-                        this.y = y;
-                    }
-                    getX() {
-                        return this.x;
-                    }
-                    getY() {
-                        return this.y;
-                    }
-                    setX(x) {
-                        this.x = x;
-                    }
-                    setY(y) {
-                        this.y = y;
-                    }
-
-
-                }
+                
 
                 socket.on('update', (data) => {
                     //console.log(data)
                     //console.log(data.field_map)
                     //update canvas based on the data received back from the server
 
-
+                    data_field_map = data.field_map
                     //Canvas
                     var canvas = document.getElementById("myCanvas");
                     var ctx = canvas.getContext("2d");
@@ -214,30 +196,7 @@
                     }
 
                     //Gives returns a instence of position with the X and Y position of player with given username
-                    function userPosition(username) {
-                        pos = new Position(0, 0);
-                        var countX = 0;
-                        for (const colum in data.field_map) {
-                            if (Object.hasOwnProperty.call(data.field_map, colum)) {
-                                const element1 = data.field_map[colum];
-                                var countY = 0;
-                                for (const square in element1) {
-                                    if (Object.hasOwnProperty.call(element1, square)) {
-                                        const element2 = element1[square];
-                                        if (element2 != null) {
-                                            if (element2["name"] == username) {
-                                                pos.setX = countX;
-                                                pos.setY = countY;
-                                            }
-                                        }
-                                    }
-                                    countY++;
-                                }
-                            }
-                            countX++;
-                        }
-                        return pos;
-                    }
+                    
 
                     function draw() {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -275,6 +234,52 @@
 
                 })
 
+                //Position class for objects
+                class Position {
+                    constructor(x, y) {
+                        this.x = x;
+                        this.y = y;
+                    }
+                    getX() {
+                        return this.x;
+                    }
+                    getY() {
+                        return this.y;
+                    }
+                    setX(x) {
+                        this.x = x;
+                    }
+                    setY(y) {
+                        this.y = y;
+                    }
+
+
+                }
+                
+                function userPosition(username) {
+                    pos = new Position(0, 0);
+                    var countX = 0;
+                    for (const colum in data_field_map) {
+                        if (Object.hasOwnProperty.call(data_field_map, colum)) {
+                            const element1 = data_field_map[colum];
+                            var countY = 0;
+                            for (const square in element1) {
+                                if (Object.hasOwnProperty.call(element1, square)) {
+                                    const element2 = element1[square];
+                                    if (element2 != null) {
+                                        if (element2["name"] == username) {
+                                            pos.setX = countX;
+                                            pos.setY = countY;
+                                        }
+                                    }
+                                }
+                                countY++;
+                            }
+                        }
+                        countX++;
+                    }
+                    return pos;
+                }
                 //Tar in input från klienten var den vill sin spelare ska röra sig
                 //KOD SKA TESTAS
                 $("body").on("keypress", function (event) {
