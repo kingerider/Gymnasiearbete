@@ -28,7 +28,7 @@
     <div id="this_user">{{ session['username'] }}</div>
     <script>
         player.room = $("#gameid").val()
-        
+
 
 
         $(document).ready(() => {
@@ -41,11 +41,11 @@
             console.log($("#this_user").text())
             console.log($("#this_user").text())
             socket.connect();
-            
+
             socket.emit('join', {
                 room: player.room,
             })
-            
+
             //socket.on('message_from_server', (data) => {
             //    $("#message").text(data.message)
             //    $("#this_user").val() = data.username
@@ -79,14 +79,10 @@
                 console.log("js document.ready")
 
 
-
-
-
-
                 console.log(room_id)
                 //console.log(game)
-                console.log("player1 :" +player1)
-                console.log("player2 :" +player2)
+                console.log("player1 :" + player1)
+                console.log("player2 :" + player2)
                 //console.log("username:" + $("#this_user").val())
 
 
@@ -105,6 +101,28 @@
                     socket.emit('update_canvas', {
                         room: room_id
                     })
+                }
+
+                //Position class for objects
+                class Position {
+                    constructor(x, y) {
+                        this.x = x;
+                        this.y = y;
+                    }
+                    getX() {
+                        return this.x;
+                    }
+                    getY() {
+                        return this.y;
+                    }
+                    setX(x) {
+                        this.x = x;
+                    }
+                    setY(y) {
+                        this.y = y;
+                    }
+
+
                 }
 
                 socket.on('update', (data) => {
@@ -195,7 +213,31 @@
                         ctx.closePath();
                     }
 
-
+                    //Gives returns a instence of position with the X and Y position of player with given username
+                    function userPosition(username) {
+                        pos = new Position(0, 0);
+                        var countX = 0;
+                        for (const colum in data.field_map) {
+                            if (Object.hasOwnProperty.call(data.field_map, colum)) {
+                                const element1 = data.field_map[colum];
+                                var countY = 0;
+                                for (const square in element1) {
+                                    if (Object.hasOwnProperty.call(element1, square)) {
+                                        const element2 = element1[square];
+                                        if (element2 != null) {
+                                            if (element2["name"] == username) {
+                                                pos.setX = countX;
+                                                pos.setY = countY;
+                                            }
+                                        }
+                                    }
+                                    countY++;
+                                }
+                            }
+                            countX++;
+                        }
+                        return pos;
+                    }
 
                     function draw() {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -212,12 +254,13 @@
                                         const element2 = element1[square];
                                         if (element2 != null) {
                                             if (element2["type"] == "wall") {
-                                                //This is what is wall
+                                                //This is what wall is
                                                 //console.log("Wall:" + element2 + "X:" + countX + "Y:" + countY);
-                                                drawWall(countX*tileSize, countY*tileSize);
+                                                drawWall(countX * tileSize, countY * tileSize);
                                             }
                                             if (element2["type"] == "player") {
-                                                drawPlayer(countX*tileSize, countY*tileSize)
+                                                drawPlayer(countX * tileSize, countY * tileSize)
+                                                console.log(element2);
                                             }
                                         }
                                     }
@@ -232,7 +275,6 @@
 
                 })
 
-
                 //Tar in input från klienten var den vill sin spelare ska röra sig
                 //KOD SKA TESTAS
                 $("body").on("keypress", function (event) {
@@ -245,7 +287,7 @@
                     console.log(player1.length);
                     console.log(player2.length);
                     console.log(username.length);
-                    
+
                     if (username == player1) {
                         this_player_id = 0
                         console.log("Spelare 1");
@@ -260,30 +302,34 @@
                         event.which);
                     let character = String.fromCharCode(key)
                     console.log(character)
-                    if (character == "d" || character == "ArrowRight") {
+                    
+                    usernamePosition = userPosition(username);
+                    
+                    if (character == "d" || character == "ArrowRight" && usernamePosition.getX < canvas.width) {
                         move = 'right'
                         console.log("Höger")
                         console.log("Spelare: " + this_player_id)
                     }
-                    else if (character == "a" || character == "ArrowLeft") {
+                    else if (character == "a" || character == "ArrowLeft" && usernamePosition.getX > 0) {
                         move = 'left';
                         console.log("Vänster")
                         console.log("Spelare: " + this_player_id)
                     }
-                    if (character == "w" || character == "ArrowUp") {
+                    if (character == "w" || character == "ArrowUp" && usernamePosition.getY > canvas.height) {
                         move = 'up'
                         console.log("Upp")
                         console.log("Spelare: " + this_player_id)
                     }
-                    else if (character == "s" || character == "ArrowDown") {
+                    else if (character == "s" || character == "ArrowDown" && usernamePosition.getY > 0) {
                         move = 'down'
                         console.log("Ner")
                         console.log("Spelare: " + this_player_id)
+                    }else{
+                        console.log("Error, player going out of bounds")
                     }
                     socket.emit('player_move', {
                         room: room_id,
                         player_id: this_player_id,
-                        //info about the key pressed (for example: move: 'right')
                         move: move
                     })
                 });
@@ -304,9 +350,9 @@
                     window.location.href = path
                 })
                 setInterval(updatePage, 500)
-        }
-    })
-        
+            }
+        })
+
     </script>
 
     <!-- <h1>Player 1: {{game['players'][0]}}</h1> -->
