@@ -15,25 +15,37 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 </head>
 <body>
-    
-<div>
-    <div>Monster</div>
-    <div>Wall</div>
-</div>
-<div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-    <label class="form-check-label" for="flexCheckDefault">
-        Items
-    </label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-    <label class="form-check-label" for="flexCheckChecked">
-        Destory wall
-    </label>
-  </div>
-
-  <canvas id="myCanvas" width="800" height="400"></canvas>
+    <script>
+        var titlevalue = () => {
+            return $("#lbltitle").text()
+        }
+    </script>
+    <div class="col-sm">
+        <p>Title: <p id="lbltitle"></p></p>
+        <input class="form-control mr-sm-2" type="change" placeholder="Byt titel" aria-label="Change" id="inputchangetitle">
+        <button class="btn btn-outline-info my-2 my-sm-0" id="btnchangetitle">Byt titel</button>
+        <div>
+            <div>Monster</div>
+            <div>Wall</div>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+                Items
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+            <label class="form-check-label" for="flexCheckChecked">
+                Destory wall
+            </label>
+        </div>
+    </div>
+    <div class="col">
+        <canvas id="myCanvas" width="800" height="400"></canvas>
+    </div>
+    <input type="hidden" value="" id="inputtitle">
+    <a class="nav-link" href="#"><p>Spara bana</p></a>
 </body>
 </html>
 

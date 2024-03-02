@@ -1,9 +1,10 @@
 from my_server import app, socket
-from flask import render_template, redirect, url_for, abort, session, request
+from flask import render_template, redirect, url_for, abort, flash, session, request
 from flask_socketio import emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.objects import Game, Player, Field
 import random
+from datetime import datetime
 
 
 #should not be here later on
@@ -312,6 +313,22 @@ def list_levels():
 def build_game():
     return render_template('build_game.html')
 
-@app.route('/edit_game')
-def edit_game():
-    return render_template('edit_game.html')
+@app.route('/edit_game/<level_id>')
+def edit_game(level_id = None):
+    return render_template('edit_game.html', id = level_id)
+
+@app.route('/save_level/<status>')
+def save_level(status = None, title = None, player_health = None, description = None):
+    now = datetime.now()
+    date = now.strftime('%Y-%m-%d %H h')
+    conn = create_connection()
+    cur = conn.cursor()
+    if status == 'build':
+        cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (session['id'], title, player_health, description, date))
+        conn.commit()
+    elif status == 'edit':
+        cur.execute("UPDATE level SET title = ?, player_health = ?, description = ?, date = ?", (title, player_health, description, date))
+        conn.commit()
+    conn.close()
+    flash("Banan har sparats", 'success')
+    return redirect(url_for('list_levels'))

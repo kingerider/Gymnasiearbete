@@ -17,7 +17,7 @@
             <div class="col-sm card-deck">
                 {% for level in levels %}
                     <div class="card">
-                    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+                    <a class="nav-link" href="{{url_for('edit_game', level_id = level[0])}}">
                         <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
                         <div class="card-body">
                         <h5 class="card-title text-dark">{{level[2]}}</h5>
