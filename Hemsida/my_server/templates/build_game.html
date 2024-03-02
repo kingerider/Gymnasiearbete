@@ -1,29 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"> 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play game</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <script src="{{url_for('static', filename='script.js')}}"></script> 
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}edit{% endblock %}
+
+{% block headline %}{% endblock %}
+
+{% block content %}
+    <input type="hidden" id="saveTitle" value="">
+    <input type="hidden" id="savePlayer_health" value="">
+    <input type="hidden" id="saveDescription" value="">
     <script>
         var titlevalue = () => {
-            return $("#lbltitle").text()
+            return $("#lbltitle").val()
         }
+        $("#saveLevel").click(() => {
+            $("#saveTitle").val(titlevalue())
+            $("#savePlayer_health").val()
+            $("#saveDescription").val()
+
+
+            window.location.href = `/save_level/build/${$("#saveTitle").val()}/${$("#savePlayer_health").val()}/${$("#saveDescription").val()}`
+        })
     </script>
     <div class="col-sm">
-        <p>Title: <p id="lbltitle"></p></p>
-        <input class="form-control mr-sm-2" type="change" placeholder="Byt titel" aria-label="Change" id="inputchangetitle">
-        <button class="btn btn-outline-info my-2 my-sm-0" id="btnchangetitle">Byt titel</button>
+        <p>Title: <input type="text" id="lbltitle"></p>
         <div>
             <div>Monster</div>
             <div>Wall</div>
@@ -41,13 +40,33 @@
             </label>
         </div>
     </div>
-    <div class="col">
+    <div class="col-sm">
         <canvas id="myCanvas" width="800" height="400"></canvas>
     </div>
     <input type="hidden" value="" id="inputtitle">
-    <a class="nav-link" href="#"><p>Spara bana</p></a>
+    <button id="saveLevel">Spara bana</button>
+    
+{% endblock %}
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <script src="{{url_for('static', filename='script.js')}}"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+</head>
+<body>
+    
 </body>
-</html>
+</html> -->
 
 
 

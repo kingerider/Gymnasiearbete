@@ -318,7 +318,7 @@ def build_game():
 def edit_game(level_id = None):
     return render_template('edit_game.html', id = level_id)
 
-@app.route('/save_level/<status>')
+@app.route('/save_level/<status>/<title>/<player_health>/<description>')
 def save_level(status = None, title = None, player_health = None, description = None):
     now = datetime.now()
     date = now.strftime('%Y-%m-%d %H h')
