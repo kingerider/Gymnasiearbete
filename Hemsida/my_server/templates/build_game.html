@@ -47,47 +47,50 @@
 <button type="button" class="btn btn-primary m-5" id="saveLevel">Spara bana</button>
 <script>
     $(document).ready(() => {
-        canvas = document.getElementById("myCanvas");
-
+        //Canvas
+        var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
-        var tileSize = null;
-
-        //Wall
-        var wallHeight = tileSize;
-        var wallWidth = tileSize;
-        var wallArray = [];
-
-        //Monster
-        var monsterHeight = tileSize;
-        var monsterWidth = tileSize;
-        var monsterArray = [];
+        var tileSize = 20;
+        var canvasHeight = canvas.height/tileSize
+        var canvasWidth = canvas.width/tileSize
 
         //Player
         var playerHeight = tileSize;
         var playerWidth = tileSize;
         var playerArray = [];
 
-
-        //Grid
-        var gridHeight = canvas.height / tileSize
-        var gridWdith = canvas.width / tileSize
-
-        var wait = false;
-        function waitUpdate() {
-            if (wait == false) {
-                wait = true;
-                return true
-            } else {
-                return false
+        //Position class for objects
+        class Position {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+            getX() {
+                return this.x;
+            }
+            getY() {
+                return this.y;
+            }
+            setX(x) {
+                this.x = x;
+            }
+            setY(y) {
+                this.y = y;
             }
         }
-        function cancelWait() {
-            wait = false;
+
+        //Player
+        function drawPlayer(playerX, playerY) {
+            ctx.beginPath();
+            ctx.rect(playerX, playerY, playerWidth, playerHeight);
+            ctx.fillStyle = "#046cd4";
+            ctx.fill();
+            ctx.closePath();
         }
 
         //Grid
         function drawGrid() {
-            ctx.strokeStyle = '#eeeeee';
+            ctx.strokeStyle = '#cccccc';
             ctx.stroke();
             for (var i = 0; i <= canvas.width; i += tileSize) {
                 ctx.beginPath();
@@ -102,48 +105,33 @@
                 ctx.moveTo(0, i);
                 ctx.lineTo(canvas.width, i);
                 ctx.stroke();
-                ctx.closePath();
             }
 
         }
-
-        //Wall
-        function drawWall(wallX, wallY) {
-            ctx.beginPath();
-            ctx.rect(wallX, wallY, wallWidth, wallHeight,);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        //Monster
-        function drawMonster(monsterX, monsterY) {
-            ctx.beginPath();
-            ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
-            ctx.fillStyle = "#04d49d";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-
-        //Player
-        function drawPlayer(playerX, playerY) {
-            ctx.beginPath();
-            ctx.rect(playerX, playerY, playerWidth, playerHeight);
-            ctx.fillStyle = "#046cd4";
-            ctx.fill();
-            ctx.closePath();
-        }
-
+        
+        //Draw objects
         function draw() {
-            ctx.beginPath();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.closePath();
             drawGrid();
-            drawPlayer();
+            for (let i = 0; i < playerArray.length; i++) {
+                drawPlayer(playerArray[i].getX()*tileSize, playerArray[i].getY()*tileSize);
+            }
         }
-        setInterval(draw(), 500);
+        var interval = setInterval(draw, 60);
 
+        addEventListener("mouseup", (event) => {
+            var rect = canvas.getBoundingClientRect();
+            var x = event.clientX - rect.left + (canvas.width - parseInt(getComputedStyle(canvas).getPropertyValue("width"), 10))/2; //Sets origo in canvas corner
+            var y = event.clientY - rect.top + (canvas.height - parseInt(getComputedStyle(canvas).getPropertyValue("height"), 10))/2;
+            
+            canvasClickX = parseInt(x/tileSize)
+            canvasClickY = parseInt(y/tileSize)
+          
+            if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
+                playerArray.push(new Position(canvasClickX, canvasClickY));
+            }
+        });
     });
+
 </script>
 {% endblock %}
