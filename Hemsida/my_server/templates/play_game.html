@@ -97,7 +97,7 @@
                 var wallHeight = tileSize;
                 var wallWidth = tileSize;
                 var wallArray = [];
-                
+
                 //Monster
                 var monsterHeight = tileSize;
                 var monsterWidth = tileSize;
@@ -200,8 +200,8 @@
                     //update canvas based on the data received back from the server
 
                     //newData
-                    cancelWait()
-                    newData = data
+                    cancelWait();
+                    newData = data;
                     updateEntityPosition();
                     //canvas
                     canvas = document.getElementById("myCanvas");
@@ -222,8 +222,8 @@
                     playerWidth = tileSize;
 
                     //Grid
-                    gridHeight = canvas.height / tileSize
-                    gridWdith = canvas.width / tileSize
+                    gridHeight = canvas.height / tileSize;
+                    gridWdith = canvas.width / tileSize;
 
                     function draw() {
                         ctx.beginPath();
@@ -244,10 +244,13 @@
                                             if (element2["type"] == "wall") {
                                                 //This is what wall is
                                                 //console.log("Wall:" + element2 + "X:" + countX + "Y:" + countY);
-                                                drawWall(countX*tileSize, countY*tileSize);
+                                                drawWall(countX * tileSize, countY * tileSize);
+                                            }
+                                            if (element2["type"] == "enemy") {
+                                                drawMonster(countX * tileSize, countY * tileSize);
                                             }
                                             if (element2["type"] == "player") {
-                                                drawPlayer(countX*tileSize, countY*tileSize)
+                                                drawPlayer(countX * tileSize, countY * tileSize)
                                             }
                                         }
                                     }
@@ -256,10 +259,8 @@
                             }
                             countX++;
                         }
-
                     }
                     draw();
-
                 })
 
                 //Position class for objects
@@ -301,9 +302,9 @@
                                         if (element2["type"] == "wall") {
                                             wallArray.push(new Position(countX, countY));
                                         }
-                                        //if (element2["type"] == "monster") {
-                                        //    monsterArray.push(new Position(countX, countY));
-                                        //}
+                                        if (element2["type"] == "enemy") {
+                                            monsterArray.push(new Position(countX, countY));
+                                        }
                                         if (element2["type"] == "player") {
                                             playerArray.push(new Position(countX, countY));
                                         }
@@ -325,67 +326,68 @@
                     switch (direction) {
                         case "right":
                             for (let i = 0; i < wallArray.length; i++) {
-                                if (position.getX()+1 == wallArray[i].getX() && position.getY() == wallArray[i].getY()) {
+                                if (position.getX() + 1 == wallArray[i].getX() && position.getY() == wallArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
-                            //for (let i = 0; i < monsterArray.length; i++) {
-                                //if (position.getX()+1 == monsterArray[i].getX() && position.getY() == monsterArray[i].getY()) {
-                                //    entityNotThere = false;
-                                //}
-                            //}
+                            for (let i = 0; i < monsterArray.length; i++) {
+                                if (position.getX() + 1 == monsterArray[i].getX() && position.getY() == monsterArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
                             for (let i = 0; i < playerArray.length; i++) {
-                                if (position.getX()+1 == playerArray[i].getX() && position.getY() == playerArray[i].getY()) {
+                                if (position.getX() + 1 == playerArray[i].getX() && position.getY() == playerArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
                             break;
                         case "left":
                             for (let i = 0; i < wallArray.length; i++) {
-                                if (position.getX()-1 == wallArray[i].getX() && position.getY() == wallArray[i].getY()) {
+                                if (position.getX() - 1 == wallArray[i].getX() && position.getY() == wallArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
-                            //for (let i = 0; i < monsterArray.length; i++) {
-                                //if (position.getX()-1 == monsterArray[i].getX() && position.getY() == monsterArray[i].getY()) {
-                                //    entityNotThere = false;
-                                //}
-                            //}
+                            for (let i = 0; i < monsterArray.length; i++) {
+                                if (position.getX() - 1 == monsterArray[i].getX() && position.getY() == monsterArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
                             for (let i = 0; i < playerArray.length; i++) {
-                                if (position.getX()-1 == playerArray[i].getX() && position.getY() == playerArray[i].getY()) {
+                                if (position.getX() - 1 == playerArray[i].getX() && position.getY() == playerArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
                             break;
                         case "up":
                             for (let i = 0; i < wallArray.length; i++) {
-                                if (position.getX() == wallArray[i].getX() && position.getY()-1 == wallArray[i].getY()) {
+                                if (position.getX() == wallArray[i].getX() && position.getY() - 1 == wallArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
-                            //for (let i = 0; i < monsterArray.length; i++) {
-                                //if (position.getX() == monsterArray[i].getX() && position.getY()-1 == monsterArray[i].getY()) {
-                                //    entityNotThere = false;
-                            //}
+                            for (let i = 0; i < monsterArray.length; i++) {
+                                if (position.getX() == monsterArray[i].getX() && position.getY() - 1 == monsterArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
                             for (let i = 0; i < playerArray.length; i++) {
-                                if (position.getX() == playerArray[i].getX() && position.getY()-1 == playerArray[i].getY()) {
+                                if (position.getX() == playerArray[i].getX() && position.getY() - 1 == playerArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
                             break;
                         case "down":
                             for (let i = 0; i < wallArray.length; i++) {
-                                if (position.getX() == wallArray[i].getX() && position.getY()+1 == wallArray[i].getY()) {
+                                if (position.getX() == wallArray[i].getX() && position.getY() + 1 == wallArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
-                            //for (let i = 0; i < monsterArray.length; i++) {        
-                                //if (position.getX() == monsterArray[i].getX() && position.getY()+1 == monsterArray[i].getY()) {
-                                //    entityNotThere = false;
-                                //}
-                            //}
+                            for (let i = 0; i < monsterArray.length; i++) {
+                                if (position.getX() == monsterArray[i].getX() && position.getY() + 1 == monsterArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
                             for (let i = 0; i < playerArray.length; i++) {
-                                if (position.getX() == playerArray[i].getX() && position.getY()+1 == playerArray[i].getY()) {
+                                if (position.getX() == playerArray[i].getX() && position.getY() + 1 == playerArray[i].getY()) {
                                     entityNotThere = false;
                                 }
                             }
@@ -423,18 +425,11 @@
                 }
 
                 //Tar in input från klienten var den vill sin spelare ska röra sig
-                //KOD SKA TESTAS
                 $("body").on("keypress", function (event) {
                     if (waitUpdate()) {
                         console.log("Handler for `keypress` called.");
                         let this_player_id = null
                         let username = $("#this_user").text();
-                        console.log(player1);
-                        console.log(player2);
-                        console.log(username);
-                        console.log(player1.length);
-                        console.log(player2.length);
-                        console.log(username.length);
 
                         if (username == player1) {
                             this_player_id = 0
@@ -463,7 +458,7 @@
                             console.log("Vänster")
                             console.log("Spelare: " + this_player_id)
                         }
-                        if (character == "w" && usernamePosition.getY() > 0 && checkForEntity(usernamePosition, "up")) {
+                        else if (character == "w" && usernamePosition.getY() > 0 && checkForEntity(usernamePosition, "up")) {
                             move = 'up'
                             console.log("Upp")
                             console.log("Spelare: " + this_player_id)
