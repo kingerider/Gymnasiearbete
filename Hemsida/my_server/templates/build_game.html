@@ -20,12 +20,25 @@
 
         window.location.href = `/save_level/build/${$("#saveTitle").val()}/${$("#savePlayer_health").val()}/${$("#saveDescription").val()}`
     })
+    function setWall(){
+        button = document.getElementById("wall");
+        button.disabled = true;  
+        button = document.getElementById("monster");
+        button.disabled = false;   
+        
+    }
+    function setMonster(){
+        button = document.getElementById("wall");
+        button.disabled = false;  
+        button = document.getElementById("monster");
+        button.disabled = true;  
+    }
 </script>
 <div class="col-sm">
     <p>Title: <input type="text" id="lbltitle"></p>
     <div>
-        <div>Monster</div>
-        <div>Wall</div>
+        <button id="wall" onclick="setWall()" disabled>Wall</button>
+        <button id="monster" onclick="setMonster()">Monster</button>
     </div>
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -59,6 +72,16 @@
         var playerWidth = tileSize;
         var playerArray = [];
 
+        //Wall
+        var wallHeight = tileSize;
+        var wallWidth = tileSize;
+        var wallArray = [];
+
+        //Monster
+        var monsterHeight = tileSize;
+        var monsterWidth = tileSize;
+        var monsterArray = [];
+
         //Position class for objects
         class Position {
             constructor(x, y) {
@@ -88,6 +111,24 @@
             ctx.closePath();
         }
 
+        //Wall
+        function drawWall(wallX, wallY) {
+            ctx.beginPath();
+            ctx.rect(wallX, wallY, wallWidth, wallHeight,);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        //Monster
+        function drawMonster(monsterX, monsterY) {
+            ctx.beginPath();
+            ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
+            ctx.fillStyle = "#04d49d";
+            ctx.fill();
+            ctx.closePath();
+        }
+
         //Grid
         function drawGrid() {
             ctx.strokeStyle = '#cccccc';
@@ -113,8 +154,13 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawGrid();
-            for (let i = 0; i < playerArray.length; i++) {
-                drawPlayer(playerArray[i].getX()*tileSize, playerArray[i].getY()*tileSize);
+            for (let i = 0; i < wallArray.length; i++) {
+                console.log(wallArray)
+                drawWall(wallArray[i].getX()*tileSize, wallArray[i].getY()*tileSize);
+            }
+            for (let i = 0; i < monsterArray.length; i++) {
+                console.log(monsterArray)
+                drawMonster(monsterArray[i].getX()*tileSize, monsterArray[i].getY()*tileSize);
             }
         }
         var interval = setInterval(draw, 60);
@@ -126,11 +172,20 @@
             
             canvasClickX = parseInt(x/tileSize)
             canvasClickY = parseInt(y/tileSize)
-          
-            if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
-                playerArray.push(new Position(canvasClickX, canvasClickY));
+            
+            if (document.getElementById("wall").disabled == true){
+                if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
+                    wallArray.push(new Position(canvasClickX, canvasClickY));
+                }
+            }else{
+                if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
+                    monsterArray.push(new Position(canvasClickX, canvasClickY));
+                }
             }
         });
+       
+        
+
     });
 
 </script>
