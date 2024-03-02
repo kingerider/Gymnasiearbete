@@ -5,68 +5,145 @@
 {% block headline %}{% endblock %}
 
 {% block content %}
-    <input type="hidden" id="saveTitle" value="">
-    <input type="hidden" id="savePlayer_health" value="">
-    <input type="hidden" id="saveDescription" value="">
-    <script>
-        var titlevalue = () => {
-            return $("#lbltitle").val()
+<input type="hidden" id="saveTitle" value="">
+<input type="hidden" id="savePlayer_health" value="">
+<input type="hidden" id="saveDescription" value="">
+<script>
+    var titlevalue = () => {
+        return $("#lbltitle").val()
+    }
+    $("#saveLevel").click(() => {
+        $("#saveTitle").val(titlevalue())
+        $("#savePlayer_health").val()
+        $("#saveDescription").val()
+
+
+        window.location.href = `/save_level/build/${$("#saveTitle").val()}/${$("#savePlayer_health").val()}/${$("#saveDescription").val()}`
+    })
+</script>
+<div class="col-sm">
+    <p>Title: <input type="text" id="lbltitle"></p>
+    <div>
+        <div>Monster</div>
+        <div>Wall</div>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+            Items
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+        <label class="form-check-label" for="flexCheckChecked">
+            Destory wall
+        </label>
+    </div>
+</div>
+<div class="col-sm" style="height: 500px;">
+    <canvas id="myCanvas" width="800" height="400"></canvas>
+</div>
+<input type="hidden" value="" id="inputtitle">
+<button type="button" class="btn btn-primary m-5" id="saveLevel">Spara bana</button>
+<script>
+    $(document).ready(() => {
+        canvas = document.getElementById("myCanvas");
+
+        var ctx = canvas.getContext("2d");
+        var tileSize = null;
+
+        //Wall
+        var wallHeight = tileSize;
+        var wallWidth = tileSize;
+        var wallArray = [];
+
+        //Monster
+        var monsterHeight = tileSize;
+        var monsterWidth = tileSize;
+        var monsterArray = [];
+
+        //Player
+        var playerHeight = tileSize;
+        var playerWidth = tileSize;
+        var playerArray = [];
+
+
+        //Grid
+        var gridHeight = canvas.height / tileSize
+        var gridWdith = canvas.width / tileSize
+
+        var wait = false;
+        function waitUpdate() {
+            if (wait == false) {
+                wait = true;
+                return true
+            } else {
+                return false
+            }
         }
-        $("#saveLevel").click(() => {
-            $("#saveTitle").val(titlevalue())
-            $("#savePlayer_health").val()
-            $("#saveDescription").val()
+        function cancelWait() {
+            wait = false;
+        }
+
+        //Grid
+        function drawGrid() {
+            ctx.strokeStyle = '#eeeeee';
+            ctx.stroke();
+            for (var i = 0; i <= canvas.width; i += tileSize) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+                ctx.closePath();
+            }
+
+            for (var i = 0; i <= canvas.height; i += tileSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+                ctx.closePath();
+            }
+
+        }
+
+        //Wall
+        function drawWall(wallX, wallY) {
+            ctx.beginPath();
+            ctx.rect(wallX, wallY, wallWidth, wallHeight,);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        //Monster
+        function drawMonster(monsterX, monsterY) {
+            ctx.beginPath();
+            ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
+            ctx.fillStyle = "#04d49d";
+            ctx.fill();
+            ctx.closePath();
+        }
 
 
-            window.location.href = `/save_level/build/${$("#saveTitle").val()}/${$("#savePlayer_health").val()}/${$("#saveDescription").val()}`
-        })
-    </script>
-    <div class="col-sm">
-        <p>Title: <input type="text" id="lbltitle"></p>
-        <div>
-            <div>Monster</div>
-            <div>Wall</div>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-                Items
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-            <label class="form-check-label" for="flexCheckChecked">
-                Destory wall
-            </label>
-        </div>
-    </div>
-    <div class="col-sm">
-        <canvas id="myCanvas" width="800" height="400"></canvas>
-    </div>
-    <input type="hidden" value="" id="inputtitle">
-    <button id="saveLevel">Spara bana</button>
-    
+        //Player
+        function drawPlayer(playerX, playerY) {
+            ctx.beginPath();
+            ctx.rect(playerX, playerY, playerWidth, playerHeight);
+            ctx.fillStyle = "#046cd4";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function draw() {
+            ctx.beginPath();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.closePath();
+            drawGrid();
+            drawPlayer();
+        }
+        setInterval(draw(), 500);
+
+    });
+</script>
 {% endblock %}
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"> 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play game</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <script src="{{url_for('static', filename='script.js')}}"></script> 
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-</head>
-<body>
-    
-</body>
-</html> -->
-
-
-

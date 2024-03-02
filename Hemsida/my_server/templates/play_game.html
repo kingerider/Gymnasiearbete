@@ -34,12 +34,6 @@
         $(document).ready(() => {
             console.log("bläbl")
             console.log($("#this_user").text())
-            console.log($("#this_user").text())
-            console.log($("#this_user").text())
-            console.log($("#this_user").text())
-            console.log($("#this_user").text())
-            console.log($("#this_user").text())
-            console.log($("#this_user").text())
             socket.connect();
 
             socket.emit('join', {
@@ -90,6 +84,7 @@
                 //Console.log("username:" + $("#this_user").val())
 
                 //Canvas
+                canvas = document.getElementById("myCanvas"); //Does not need var because it already exists
                 var ctx = canvas.getContext("2d");
                 var tileSize = null;
 
@@ -230,7 +225,6 @@
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         ctx.closePath();
                         drawGrid();
-                        drawPlayer();
 
                         var countX = 0;
                         for (const colum in newData.field_map) {
