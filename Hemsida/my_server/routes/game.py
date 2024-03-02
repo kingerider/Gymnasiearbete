@@ -159,8 +159,6 @@ def update_game(data):
    
     game = ongoing_games[data['room']]
 
-    #print(game.field_map)
-
     emit('update', {
         'field_map' : game.field_map,
         'width': canvasw,
@@ -229,20 +227,13 @@ def monster_move(data):
     game = ongoing_games[data['room']]
     monsters = game.field.enemies
     positions = game.field_map
-    #Fix monster get array
-    #Fix wall get array.size
-    #Fix monster can go outside canvas
-    #Fix so player, monster and items have direction
-    #bullet go in direction that player direction facing, on wall hit get destroyed, on monster hit die
 
     for monster in monsters:
 
-        #movementChoose 1 = left , 2 , 3 , 4
         movementChoose = 0
         x = monster.positionX
         y = monster.positionY
         dict_monster = dict(type="enemy")
-
         #how close is player, if player is within 5 tiles don't do random action
         #if(5*tileSize > (playerX - monsterArray[j].getX()) and -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
         #movementChoose = 1;
