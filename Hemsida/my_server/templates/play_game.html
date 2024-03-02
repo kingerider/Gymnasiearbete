@@ -108,6 +108,23 @@
                 var playerWidth = tileSize;
 
                 //Grid
+                var gridHeight = canvas.height / tileSize
+                var gridWdith = canvas.width / tileSize
+
+                var wait = false;
+                function waitUpdate() {
+                    if (wait == false){
+                        wait = true;
+                        return true
+                    }else{
+                        return false
+                    }
+                }
+                function cancelWait() {
+                    wait = false;
+                }
+
+                //Grid
                 function drawGrid() {
                     ctx.strokeStyle = '#eeeeee';
                     ctx.stroke();
@@ -116,6 +133,7 @@
                         ctx.moveTo(i, 0);
                         ctx.lineTo(i, canvas.height);
                         ctx.stroke();
+                        ctx.closePath();
                     }
 
                     for (var i = 0; i <= canvas.height; i += tileSize) {
@@ -123,6 +141,7 @@
                         ctx.moveTo(0, i);
                         ctx.lineTo(canvas.width, i);
                         ctx.stroke();
+                        ctx.closePath();
                     }
 
                 }
@@ -179,10 +198,10 @@
                     //update canvas based on the data received back from the server
 
                     //newData
+                    cancelWait()
                     newData = data
-
                     //canvas
-                    canvas = document.getElementById("myCanvas");                    
+                    canvas = document.getElementById("myCanvas");
                     ctx = canvas.getContext("2d");
                     canvas.width = newData.width;
                     canvas.height = newData.height;
@@ -202,8 +221,14 @@
                     playerHeight = tileSize;
                     playerWidth = tileSize;
 
+                    //Grid
+                    gridHeight = canvas.height / tileSize
+                    gridWdith = canvas.width / tileSize
+
                     function draw() {
+                        ctx.beginPath();
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.closePath();
                         drawGrid();
                         drawPlayer();
 
@@ -223,7 +248,6 @@
                                             }
                                             if (element2["type"] == "player") {
                                                 drawPlayer(countX * tileSize, countY * tileSize)
-                                                console.log(element2);
                                             }
                                         }
                                     }
@@ -259,7 +283,7 @@
 
 
                 }
-                
+
                 //Gives returns a instence of position with the X and Y position of player with given username
                 function userPosition(username) {
                     pos = new Position(0, 0);
@@ -273,8 +297,8 @@
                                     const element2 = element1[square];
                                     if (element2 != null) {
                                         if (element2["name"] == username) {
-                                            pos.setX = countX;
-                                            pos.setY = countY;
+                                            pos.setX(countX);
+                                            pos.setY(countY);
                                         }
                                     }
                                 }
@@ -285,64 +309,77 @@
                     }
                     return pos;
                 }
+
+
                 //Tar in input från klienten var den vill sin spelare ska röra sig
                 //KOD SKA TESTAS
                 $("body").on("keypress", function (event) {
-                    console.log("Handler for `keypress` called.");
-                    let this_player_id = null
-                    let username = $("#this_user").text();
-                    console.log(player1);
-                    console.log(player2);
-                    console.log(username);
-                    console.log(player1.length);
-                    console.log(player2.length);
-                    console.log(username.length);
+                    if (waitUpdate()) {
+                        console.log("Handler for `keypress` called.");
+                        let this_player_id = null
+                        let username = $("#this_user").text();
+                        console.log(player1);
+                        console.log(player2);
+                        console.log(username);
+                        console.log(player1.length);
+                        console.log(player2.length);
+                        console.log(username.length);
 
-                    if (username == player1) {
-                        this_player_id = 0
-                        console.log("Spelare 1");
+                        if (username == player1) {
+                            this_player_id = 0
+                            console.log("Spelare 1");
+                        }
+                        else if (username == player2) {
+                            this_player_id = 1
+                            console.log("Spelare 2")
+                        }
+                        let move = null
+                        let key = (event.keyCode ?
+                            event.keyCode :
+                            event.which);
+                        let character = String.fromCharCode(key)
+                        usernamePosition = new Position;
+                        usernamePosition = userPosition(username);
+                        console.log(character)
+
+                        if (character == "d" && usernamePosition.getX() < gridWdith) {
+                            move = 'right'
+                            console.log("Höger")
+                            console.log("Spelare: " + this_player_id)
+                        }
+                        else if (character == "a" && usernamePosition.getX() > 0) {
+                            move = 'left';
+                            console.log("Vänster")
+                            console.log("Spelare: " + this_player_id)
+                        }
+                        if (character == "w" && usernamePosition.getY() > 0) {
+                            move = 'up'
+                            console.log("Upp")
+                            console.log("Spelare: " + this_player_id)
+                        }
+                        else if (character == "s" && usernamePosition.getY() < gridHeight) {
+                            move = 'down'
+                            console.log("Ner")
+                            console.log("Spelare: " + this_player_id)
+                        } else {
+                            console.log("Error, player going out of bounds")
+                        }
+
+                        console.log(usernamePosition)
+                        console.log("X: " + usernamePosition.getX())
+                        console.log("Y: " + usernamePosition.getY())
+                        console.log("Grid x: " + gridWdith)
+                        console.log("Grid y: " + gridHeight)
+
+                        socket.emit('player_move', {
+                            room: room_id,
+                            player_id: this_player_id,
+                            move: move
+                        })
                     }
-                    else if (username == player2) {
-                        this_player_id = 1
-                        console.log("Spelare 2")
-                    }
-                    let move = null
-                    let key = (event.keyCode ?
-                        event.keyCode :
-                        event.which);
-                    let character = String.fromCharCode(key)
-                    console.log(character)
-                    
-                    usernamePosition = userPosition(username);
-                    
-                    if (character == "d" || character == "ArrowRight" && usernamePosition.getX < canvas.width-1) {
-                        move = 'right'
-                        console.log("Höger")
-                        console.log("Spelare: " + this_player_id)
-                    }
-                    else if (character == "a" || character == "ArrowLeft" && usernamePosition.getX > 0) {
-                        move = 'left';
-                        console.log("Vänster")
-                        console.log("Spelare: " + this_player_id)
-                    }
-                    if (character == "w" || character == "ArrowUp" && usernamePosition.getY > canvas.height-1) {
-                        move = 'up'
-                        console.log("Upp")
-                        console.log("Spelare: " + this_player_id)
-                    }
-                    else if (character == "s" || character == "ArrowDown" && usernamePosition.getY > 0) {
-                        move = 'down'
-                        console.log("Ner")
-                        console.log("Spelare: " + this_player_id)
-                    }else{
-                        console.log("Error, player going out of bounds")
-                    }
-                    socket.emit('player_move', {
-                        room: room_id,
-                        player_id: this_player_id,
-                        move: move
-                    })
+
                 });
+
                 const leave = () => {
                     console.log("Lämna")
                     console.log("Lämna")
@@ -359,7 +396,7 @@
                 socket.on('navigate_to', (path) => {
                     window.location.href = path
                 })
-                setInterval(updatePage, 500)
+                setInterval(updatePage, 100)
             }
         })
 
