@@ -97,7 +97,7 @@
                 var wallHeight = tileSize;
                 var wallWidth = tileSize;
                 var wallArray = [];
-
+                
                 //Monster
                 var monsterHeight = tileSize;
                 var monsterWidth = tileSize;
@@ -106,6 +106,8 @@
                 //Player
                 var playerHeight = tileSize;
                 var playerWidth = tileSize;
+                var playerArray = [];
+
 
                 //Grid
                 var gridHeight = canvas.height / tileSize
@@ -113,10 +115,10 @@
 
                 var wait = false;
                 function waitUpdate() {
-                    if (wait == false){
+                    if (wait == false) {
                         wait = true;
                         return true
-                    }else{
+                    } else {
                         return false
                     }
                 }
@@ -200,6 +202,7 @@
                     //newData
                     cancelWait()
                     newData = data
+                    updateEntityPosition();
                     //canvas
                     canvas = document.getElementById("myCanvas");
                     ctx = canvas.getContext("2d");
@@ -210,12 +213,9 @@
                     //Wall
                     wallHeight = tileSize;
                     wallWidth = tileSize;
-                    wallArray = [];
-
                     //Monster
                     monsterHeight = tileSize;
                     monsterWidth = tileSize;
-                    monsterArray = [];
 
                     //Player
                     playerHeight = tileSize;
@@ -244,10 +244,10 @@
                                             if (element2["type"] == "wall") {
                                                 //This is what wall is
                                                 //console.log("Wall:" + element2 + "X:" + countX + "Y:" + countY);
-                                                drawWall(countX * tileSize, countY * tileSize);
+                                                drawWall(countX*tileSize, countY*tileSize);
                                             }
                                             if (element2["type"] == "player") {
-                                                drawPlayer(countX * tileSize, countY * tileSize)
+                                                drawPlayer(countX*tileSize, countY*tileSize)
                                             }
                                         }
                                     }
@@ -284,6 +284,118 @@
 
                 }
 
+                //Adds all walls to the array;
+                function updateEntityPosition() {
+                    wallArray = [];
+                    monsterArray = [];
+                    playerArray = [];
+                    var countX = 0;
+                    for (const colum in newData.field_map) {
+                        if (Object.hasOwnProperty.call(newData.field_map, colum)) {
+                            const element1 = newData.field_map[colum];
+                            var countY = 0;
+                            for (const square in element1) {
+                                if (Object.hasOwnProperty.call(element1, square)) {
+                                    const element2 = element1[square];
+                                    if (element2 != null) {
+                                        if (element2["type"] == "wall") {
+                                            wallArray.push(new Position(countX, countY));
+                                        }
+                                        //if (element2["type"] == "monster") {
+                                        //    monsterArray.push(new Position(countX, countY));
+                                        //}
+                                        if (element2["type"] == "player") {
+                                            playerArray.push(new Position(countX, countY));
+                                        }
+                                    }
+                                }
+                                countY++;
+                            }
+                        }
+                        countX++;
+                    }
+                }
+
+                //Takes a position and checks if moveable
+                //Direction indicates where to move (right)
+                function checkForEntity(position, direction) {
+                    entityNotThere = true;
+                    console.log(playerArray)
+                    console.log(wallArray)
+                    switch (direction) {
+                        case "right":
+                            for (let i = 0; i < wallArray.length; i++) {
+                                if (position.getX()+1 == wallArray[i].getX() && position.getY() == wallArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            //for (let i = 0; i < monsterArray.length; i++) {
+                                //if (position.getX()+1 == monsterArray[i].getX() && position.getY() == monsterArray[i].getY()) {
+                                //    entityNotThere = false;
+                                //}
+                            //}
+                            for (let i = 0; i < playerArray.length; i++) {
+                                if (position.getX()+1 == playerArray[i].getX() && position.getY() == playerArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            break;
+                        case "left":
+                            for (let i = 0; i < wallArray.length; i++) {
+                                if (position.getX()-1 == wallArray[i].getX() && position.getY() == wallArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            //for (let i = 0; i < monsterArray.length; i++) {
+                                //if (position.getX()-1 == monsterArray[i].getX() && position.getY() == monsterArray[i].getY()) {
+                                //    entityNotThere = false;
+                                //}
+                            //}
+                            for (let i = 0; i < playerArray.length; i++) {
+                                if (position.getX()-1 == playerArray[i].getX() && position.getY() == playerArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            break;
+                        case "up":
+                            for (let i = 0; i < wallArray.length; i++) {
+                                if (position.getX() == wallArray[i].getX() && position.getY()-1 == wallArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            //for (let i = 0; i < monsterArray.length; i++) {
+                                //if (position.getX() == monsterArray[i].getX() && position.getY()-1 == monsterArray[i].getY()) {
+                                //    entityNotThere = false;
+                            //}
+                            for (let i = 0; i < playerArray.length; i++) {
+                                if (position.getX() == playerArray[i].getX() && position.getY()-1 == playerArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            break;
+                        case "down":
+                            for (let i = 0; i < wallArray.length; i++) {
+                                if (position.getX() == wallArray[i].getX() && position.getY()+1 == wallArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            //for (let i = 0; i < monsterArray.length; i++) {        
+                                //if (position.getX() == monsterArray[i].getX() && position.getY()+1 == monsterArray[i].getY()) {
+                                //    entityNotThere = false;
+                                //}
+                            //}
+                            for (let i = 0; i < playerArray.length; i++) {
+                                if (position.getX() == playerArray[i].getX() && position.getY()+1 == playerArray[i].getY()) {
+                                    entityNotThere = false;
+                                }
+                            }
+                            break;
+                        default:
+                            console.log("EnitityNotThere: " + entityNotThere)
+                    }
+                    return entityNotThere;
+                }
+
                 //Gives returns a instence of position with the X and Y position of player with given username
                 function userPosition(username) {
                     pos = new Position(0, 0);
@@ -309,7 +421,6 @@
                     }
                     return pos;
                 }
-
 
                 //Tar in input från klienten var den vill sin spelare ska röra sig
                 //KOD SKA TESTAS
@@ -342,22 +453,22 @@
                         usernamePosition = userPosition(username);
                         console.log(character)
 
-                        if (character == "d" && usernamePosition.getX() < gridWdith) {
+                        if (character == "d" && usernamePosition.getX() < gridWdith && checkForEntity(usernamePosition, "right")) {
                             move = 'right'
                             console.log("Höger")
                             console.log("Spelare: " + this_player_id)
                         }
-                        else if (character == "a" && usernamePosition.getX() > 0) {
+                        else if (character == "a" && usernamePosition.getX() > 0 && checkForEntity(usernamePosition, "left")) {
                             move = 'left';
                             console.log("Vänster")
                             console.log("Spelare: " + this_player_id)
                         }
-                        if (character == "w" && usernamePosition.getY() > 0) {
+                        if (character == "w" && usernamePosition.getY() > 0 && checkForEntity(usernamePosition, "up")) {
                             move = 'up'
                             console.log("Upp")
                             console.log("Spelare: " + this_player_id)
                         }
-                        else if (character == "s" && usernamePosition.getY() < gridHeight) {
+                        else if (character == "s" && usernamePosition.getY() < gridHeight && checkForEntity(usernamePosition, "down")) {
                             move = 'down'
                             console.log("Ner")
                             console.log("Spelare: " + this_player_id)
