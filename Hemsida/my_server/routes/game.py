@@ -6,6 +6,23 @@ from my_server.routes.objects import Game, Player, Field
 import random
 from datetime import datetime
 
+import threading
+
+monster_start = {}
+
+def startit():
+  t = threading.Timer(0.2, startit)
+  t.start()
+  monster_start['thread'] = t
+  print("Tråd")
+  print("Tråd")
+  print("Tråd")
+  print("Tråd")
+  print("Tråd")
+  print("Tråd")
+  print("Tråd")
+  monster_move(monster_start['room'])
+
 
 #should not be here later on
 tile_size = 20
@@ -81,7 +98,11 @@ def play_game_join(room_id = None):
 
 @socket.on("connect")
 def handle_connect():
-    print("Client connected")
+    print("Client connected!")
+
+@socket.on('disconnect')
+def handle_disconnect():
+    print("Client disconnected!")
 
 @socket.on('join')
 def handle_join_room(data):
@@ -99,6 +120,9 @@ def handle_join_room(data):
     # if ongoing_games[data['room']].:
     #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
+        #startit(data['room'])
+        monster_start['room'] = data
+        startit()
         emit('message_from_server', {
             'message': f'start_game',
             'game': ongoing_games[data['room']].get_game_info(),
@@ -126,6 +150,7 @@ def on_leave(data):
     ongoing_games.pop(data['room'], None)
     print(ongoing_games.pop(data['room'], None))
     print(ongoing_games)
+    monster_start['thread'].cancel()
     #send_message_to_room({
     #    'heading': 'Info',
     #    'message': f'User {data["username"]} has left the room.',
@@ -148,12 +173,12 @@ def get_clients_in_room(data):
 def update_game(data):
     print("Update_game, update_canvas")
     print("Ass hair")
-    print('Is game ongoing:')
-    print(ongoing_games)
-    print('What is data:')
-    print(data)
-    print('What does game.fieldmap contain')
-    print(ongoing_games[data['room']].field_map)
+   # print('Is game ongoing:')
+    #print(ongoing_games)
+    #print('What is data:')
+    #print(data)
+   # print('What does game.fieldmap contain')
+    #print(ongoing_games[data['room']].field_map)
     print("Ass hair")
     print("Ass hair")
    
@@ -221,7 +246,6 @@ def player_move(data):
             print("Ajabaja, kan inte röra dig dära lillen")
     #ongoing_games[data['room']].field_map = positions
 
-@socket.on('monster_move')
 def monster_move(data):
 
     game = ongoing_games[data['room']]
@@ -244,31 +268,44 @@ def monster_move(data):
         #Left
         if movementChoose == 1:
             #Check if movement available
-            if positions[int(x - 1)][(int(y))] == None:
-                positions[int(x - 1)][(int(y))] = dict_monster
-                positions[int(x)][(int(y))] = None
-                monster.positionX -= 1
+            try:
+                if positions[int(x - 1)][(int(y))] == None:
+                    positions[int(x - 1)][(int(y))] = dict_monster
+                    positions[int(x)][(int(y))] = None
+                    monster.positionX -= 1
+            except:
+                print("Ajabaja, kan inte röra dig dära lillen")
+
         #Right
         elif movementChoose == 2:
             #Check if movement available
-            if positions[int(x + 1)][(int(y))] == None:
-                positions[int(x + 1)][(int(y))] = dict_monster
-                positions[int(x)][(int(y))] = None
-                monster.positionX += 1
+            try:
+                if positions[int(x + 1)][(int(y))] == None:
+                    positions[int(x + 1)][(int(y))] = dict_monster
+                    positions[int(x)][(int(y))] = None
+                    monster.positionX += 1
+            except:
+                print("Ajabaja, kan inte röra dig dära lillen")
         #Up
         elif movementChoose == 3:
             #Check if movement available
-            if positions[int(x)][(int(y - 1))] == None:
-                positions[int(x)][(int(y - 1))] = dict_monster
-                positions[int(x)][(int(y))] = None
-                monster.positionY -= 1
+            try:
+                if positions[int(x)][(int(y - 1))] == None:
+                    positions[int(x)][(int(y - 1))] = dict_monster
+                    positions[int(x)][(int(y))] = None
+                    monster.positionY -= 1
+            except:
+                print("Ajabaja, kan inte röra dig dära lillen")
         #Down
         elif movementChoose == 4:
             #Check if movement available
-            if positions[int(x)][(int(y + 1))] == None:
-                positions[int(x)][(int(y + 1))] = dict_monster
-                positions[int(x)][(int(y))] = None
-                monster.positionY += 1
+            try:
+                if positions[int(x)][(int(y + 1))] == None:
+                    positions[int(x)][(int(y + 1))] = dict_monster
+                    positions[int(x)][(int(y))] = None
+                    monster.positionY += 1
+            except:
+                print("Ajabaja, kan inte röra dig dära lillen")
 
 
 

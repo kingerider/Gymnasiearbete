@@ -171,7 +171,14 @@
                     ctx.closePath();
                 }
 
+                /*socket.emit("start_monster", {
+                    room: room_id
+                })*/
+                
+
                 const updatePage = () => {
+
+                    //allowMonsterMove = true
                     //do socket requests that request info
                     //update the page based on the received info
 
@@ -179,9 +186,9 @@
                     //    room: room_id
                     //})
 
-                    socket.emit('monster_move', {
+                    /*socket.emit('monster_move', {
                         room: room_id
-                    })
+                    })*/
 
                     socket.emit('update_canvas', {
                         room: room_id
@@ -495,6 +502,7 @@
                 })
                 socket.on('navigate_to', (path) => {
                     window.location.href = path
+                    socket.disconnect()
                 })
                 setInterval(updatePage, 500)
             }
