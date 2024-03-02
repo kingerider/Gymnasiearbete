@@ -239,20 +239,10 @@ def monster_move(data):
 
         #movementChoose 1 = left , 2 , 3 , 4
         movementChoose = 0
-        print(monster)
-        print(monster)
-        print(monster)
-        print(monster.positionX)
-        print(monster.positionX)
-        print(monster.positionX)
-        print(monster.positionX)
-        print(monster.positionY)
-        print(monster.positionY)
-        print(monster.positionY)
-        print(monster.positionY)
-
         x = monster.positionX
         y = monster.positionY
+        dict_monster = dict(type="enemy")
+
         #how close is player, if player is within 5 tiles don't do random action
         #if(5*tileSize > (playerX - monsterArray[j].getX()) and -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
         #movementChoose = 1;
@@ -264,26 +254,30 @@ def monster_move(data):
         if movementChoose == 1:
             #Check if movement available
             if positions[int(x - 1)][(int(y))] == None:
-                positions[int(x - 1)][(int(y))] = monster
+                positions[int(x - 1)][(int(y))] = dict_monster
                 positions[int(x)][(int(y))] = None
+                monster.positionX -= 1
         #Right
         elif movementChoose == 2:
             #Check if movement available
             if positions[int(x + 1)][(int(y))] == None:
-                positions[int(x + 1)][(int(y))] = monster
+                positions[int(x + 1)][(int(y))] = dict_monster
                 positions[int(x)][(int(y))] = None
+                monster.positionX += 1
         #Up
         elif movementChoose == 3:
             #Check if movement available
             if positions[int(x)][(int(y - 1))] == None:
-                positions[int(x)][(int(y - 1))] = monster
+                positions[int(x)][(int(y - 1))] = dict_monster
                 positions[int(x)][(int(y))] = None
+                monster.positionY -= 1
         #Down
         elif movementChoose == 4:
             #Check if movement available
             if positions[int(x)][(int(y + 1))] == None:
-                positions[int(x)][(int(y + 1))] = monster
+                positions[int(x)][(int(y + 1))] = dict_monster
                 positions[int(x)][(int(y))] = None
+                monster.positionY += 1
 
 
 
