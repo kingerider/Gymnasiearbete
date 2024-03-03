@@ -4,13 +4,27 @@
     height: 600px;
 }
 
-canvas{
+#myCanvas{
     border: 5px solid;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
+}
+
+#player1hearts {
+    border: 1px solid;
+    position: absolute;
+    left: 50%;
+    padding: 2px;
+}
+
+#player2hearts {
+    border: 1px solid;
+    position: absolute;
+    left: 50%;
+    padding: 2px;
 }
 
 .game_card:hover {
