@@ -11,17 +11,10 @@ import threading
 monster_start = {}
 
 def startit():
-  t = threading.Timer(0.2, startit)
-  t.start()
-  monster_start['thread'] = t
-  print("Tråd")
-  print("Tråd")
-  print("Tråd")
-  print("Tråd")
-  print("Tråd")
-  print("Tråd")
-  print("Tråd")
-  monster_move(monster_start['room'])
+    t = threading.Timer(0.2, startit)
+    t.start()
+    monster_start['thread'] = t
+    monster_move(monster_start['room'])
 
 
 #should not be here later on
