@@ -45,10 +45,16 @@ $(document).ready(() => {
         //playerhearts
         let player1hearts = document.createElement("canvas")
         player1hearts.id = "player1hearts"
+        player1hearts.width = 80;
+        player1hearts.height = 20;
+        
+
         let player2hearts = document.createElement("canvas")
         player2hearts.id = "player2hearts"
-        //$("body").append(player1hearts)
-        //$("body").append(player2hearts)
+        player2hearts.width = 80;
+        player2hearts.height = 20;
+        $("body").append(player1hearts)
+        $("body").append(player2hearts)
 
         //New canvas
         let canvas = document.createElement("canvas")
@@ -84,7 +90,12 @@ $(document).ready(() => {
         var playerHeight = tileSize;
         var playerWidth = tileSize;
         var playerArray = [];
-
+        
+        //hearts
+        var heartHeight = tileSize
+        var heartWidth = tileSize
+        var heart1object = null;
+        var heart2object = null;
 
         //Grid
         var gridHeight = canvas.height / tileSize
@@ -129,12 +140,23 @@ $(document).ready(() => {
         function drawHearts() {
             //dimensioner: w 300 h 50
             player1hearts = document.getElementById("player1hearts")
+            player2hearts = document.getElementById("player2hearts")
             var ctxnew = player1hearts.getContext("2d");
-            ctxnew.beginPath()
-            ctxnew.moveTo(50, 12.5)
-
-            ctxnew.stroke()
-            ctxnew.closePath()
+            for (var i = 0; i < heart1object.health; i++) {
+                ctxnew.beginPath()
+                ctxnew.rect(i*heartWidth, 0, heartWidth, heartHeight)
+                ctxnew.fillStyle = "#ff0000";
+                ctxnew.fill()
+                ctxnew.closePath()
+            }
+            ctxnew = player2hearts.getContext("2d");
+            for (var i = 0; i < heart2object.health; i++) {
+                ctxnew.beginPath()
+                ctxnew.rect(i*heartWidth, 0, heartWidth, heartHeight)
+                ctxnew.fillStyle = "#ff0000";
+                ctxnew.fill()
+                ctxnew.closePath()
+            }
         }
 
         //Wall
@@ -205,6 +227,12 @@ $(document).ready(() => {
             canvas.width = newData.width;
             canvas.height = newData.height;
             tileSize = newData.tile_size;
+
+            //hearts
+            player1hearts.style.top = "50%" - player1hearts.height
+            player1hearts.style.left = "50%" - canvas.width/2
+            player2hearts.style.top = "50%" - player2hearts.height
+            player2hearts.style.left = "50%" + canvas.width - player2hearts.width
 
             //Wall
             wallHeight = tileSize;
@@ -301,6 +329,11 @@ $(document).ready(() => {
                                     monsterArray.push(new Position(countX, countY));
                                 }
                                 if (element2["type"] == "player") {
+                                    if (element2["name"] == player1/*$("#this_user").text()*/){
+                                        heart1object = element2;
+                                    } else {
+                                        heart2object = element2;  
+                                    }
                                     playerArray.push(new Position(countX, countY));
                                 }
                             }
