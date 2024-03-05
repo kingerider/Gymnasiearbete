@@ -311,7 +311,7 @@ $(document).ready(() => {
                 countX++;
             }
         }
-
+        
         //Takes a position and checks if moveable
         //Direction indicates where to move (right)
         function checkForEntity(position, direction) {
@@ -498,6 +498,6 @@ $(document).ready(() => {
             window.location.href = path
             socket.disconnect()
         })
-        setInterval(updatePage, 500)
+        setInterval(updatePage, 100)
     }
 })

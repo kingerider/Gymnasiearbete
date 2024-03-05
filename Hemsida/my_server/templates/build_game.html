@@ -20,18 +20,18 @@
 
         window.location.href = `/save_level/build/${$("#saveTitle").val()}/${$("#savePlayer_health").val()}/${$("#saveDescription").val()}`
     })
-    function setWall(){
+    function setWall() {
         button = document.getElementById("wall");
-        button.disabled = true;  
+        button.disabled = true;
         button = document.getElementById("monster");
-        button.disabled = false;   
-        
+        button.disabled = false;
+
     }
-    function setMonster(){
+    function setMonster() {
         button = document.getElementById("wall");
-        button.disabled = false;  
+        button.disabled = false;
         button = document.getElementById("monster");
-        button.disabled = true;  
+        button.disabled = true;
     }
 </script>
 <div class="col-sm">
@@ -54,7 +54,7 @@
     </div>
 </div>
 <div class="col-sm" style="height: 500px;">
-    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <canvas id="myCanvas" width="800" height="400" oncontextmenu="event.preventDefault();"></canvas>
 </div>
 <input type="hidden" value="" id="inputtitle">
 <button type="button" class="btn btn-primary m-5" id="saveLevel">Spara bana</button>
@@ -64,8 +64,8 @@
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         var tileSize = 20;
-        var canvasHeight = canvas.height/tileSize
-        var canvasWidth = canvas.width/tileSize
+        var canvasHeight = canvas.height / tileSize
+        var canvasWidth = canvas.width / tileSize
 
         //Player
         var playerHeight = tileSize;
@@ -149,42 +149,91 @@
             }
 
         }
-        
+
         //Draw objects
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawGrid();
             for (let i = 0; i < wallArray.length; i++) {
-                console.log(wallArray)
-                drawWall(wallArray[i].getX()*tileSize, wallArray[i].getY()*tileSize);
+                drawWall(wallArray[i].getX() * tileSize, wallArray[i].getY() * tileSize);
             }
             for (let i = 0; i < monsterArray.length; i++) {
-                console.log(monsterArray)
-                drawMonster(monsterArray[i].getX()*tileSize, monsterArray[i].getY()*tileSize);
+                drawMonster(monsterArray[i].getX() * tileSize, monsterArray[i].getY() * tileSize);
             }
         }
         var interval = setInterval(draw, 60);
 
         addEventListener("mouseup", (event) => {
+
+            //Mouse position locator on canvas
             var rect = canvas.getBoundingClientRect();
-            var x = event.clientX - rect.left + (canvas.width - parseInt(getComputedStyle(canvas).getPropertyValue("width"), 10))/2; //Sets origo in canvas corner
-            var y = event.clientY - rect.top + (canvas.height - parseInt(getComputedStyle(canvas).getPropertyValue("height"), 10))/2;
-            
-            canvasClickX = parseInt(x/tileSize)
-            canvasClickY = parseInt(y/tileSize)
-            
-            if (document.getElementById("wall").disabled == true){
-                if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
-                    wallArray.push(new Position(canvasClickX, canvasClickY));
-                }
-            }else{
-                if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
-                    monsterArray.push(new Position(canvasClickX, canvasClickY));
-                }
+            var x = event.clientX - rect.left + (canvas.width - parseInt(getComputedStyle(canvas).getPropertyValue("width"), 10)) / 2; //Sets origo in canvas corner
+            var y = event.clientY - rect.top + (canvas.height - parseInt(getComputedStyle(canvas).getPropertyValue("height"), 10)) / 2;
+
+            canvasClickX = parseInt(x / tileSize)
+            canvasClickY = parseInt(y / tileSize)
+
+            switch (event.button) {
+                case 0:
+                    //Left click add wall or monster
+                    console.log("Left button clicked.");
+                    if (canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight) {
+                        if (document.getElementById("wall").disabled == true) {
+                            wallArray.push(new Position(canvasClickX, canvasClickY));
+
+                        } else {
+                            monsterArray.push(new Position(canvasClickX, canvasClickY));
+
+                        }
+                    }
+                    break;
+                case 1:
+                    console.log("Middle button clicked.");
+                    
+                    break;
+                case 2:
+                    //Left click add wall or monster
+                    console.log("Right button clicked.");
+                    console.log(canvasClickX);
+                    console.log(canvasClickY)
+                    if (canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight) {  
+                        if (document.getElementById("wall").disabled == true) {
+                            console.log("Hello")   
+                            for (var i = 0; i < wallArray.length; i++) {
+                                console.log("Looping")
+                                console.log(wallArray[i].getX()) //is not a function
+                                console.log(wallArray[i].getY())
+                                console.log(canvasClickX)
+                                console.log(canvasClickY)
+                                if(wallArray[i].getX() == canvasClickX && wallArray[i].getY() == canvasClickY){
+                                    console.log("Found")
+                                    wallArray.splice(i, 1); // 2nd parameter removes only that item and not more?
+                                    
+                                }
+                            }
+                        } else {
+                            console.log("Hello")   
+                            for (var i = 0; i < monsterArray.length; i++) {
+                                console.log("Looping")
+                                console.log(monsterArray[i].getX()) //is not a function
+                                console.log(monsterArray[i].getY())
+                                console.log(canvasClickX)
+                                console.log(canvasClickY)
+                                if(monsterArray[i].getX() == canvasClickX && monsterArray[i].getY() == canvasClickY){
+                                    console.log("Found")
+                                    monsterArray.splice(i, 1); // 2nd parameter removes only that item and not more?   
+                                }
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    log.textContent = `Unknown button code: ${e.button}`;
             }
+
         });
-       
-        
+
+
 
     });
 
