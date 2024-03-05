@@ -20,7 +20,7 @@ def startit():
 #should not be here later on
 tile_size = 20
 canvasw = 800
-canvash = 400
+canvash = 440
 
 def set_room_id():
     list_of_roomid = list(ongoing_games.keys())

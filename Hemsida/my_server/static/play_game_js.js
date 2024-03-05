@@ -43,18 +43,18 @@ $(document).ready(() => {
 
 
         //playerhearts
-        let player1hearts = document.createElement("canvas")
-        player1hearts.id = "player1hearts"
-        player1hearts.width = 80;
-        player1hearts.height = 20;
+        // let player1hearts = document.createElement("canvas")
+        // player1hearts.id = "player1hearts"
+        // player1hearts.width = 80;
+        // player1hearts.height = 20;
         
 
-        let player2hearts = document.createElement("canvas")
-        player2hearts.id = "player2hearts"
-        player2hearts.width = 80;
-        player2hearts.height = 20;
-        $("body").append(player1hearts)
-        $("body").append(player2hearts)
+        // let player2hearts = document.createElement("canvas")
+        // player2hearts.id = "player2hearts"
+        // player2hearts.width = 80;
+        // player2hearts.height = 20;
+        // $("body").append(player1hearts)
+        // $("body").append(player2hearts)
 
         //New canvas
         let canvas = document.createElement("canvas")
@@ -120,7 +120,7 @@ $(document).ready(() => {
             ctx.stroke();
             for (var i = 0; i <= canvas.width; i += tileSize) {
                 ctx.beginPath();
-                ctx.moveTo(i, 0);
+                ctx.moveTo(i, 40);
                 ctx.lineTo(i, canvas.height);
                 ctx.stroke();
                 ctx.closePath();
@@ -128,34 +128,44 @@ $(document).ready(() => {
 
             for (var i = 0; i <= canvas.height; i += tileSize) {
                 ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(canvas.width, i);
+                ctx.moveTo(0, i + 40);
+                ctx.lineTo(canvas.width, i + 40);
                 ctx.stroke();
                 ctx.closePath();
             }
 
         }
 
+        //text
+        function drawText() {
+            var x = canvas.width/2
+            ctx.font = '30pt Calibri';
+            ctx.textAlign = 'center'
+            ctx.fillStyle = 'black'
+            ctx.fillText(`${player1} vs ${player2}`, x, tileSize);
+        }
+
         //hearts
         function drawHearts() {
             //dimensioner: w 300 h 50
-            player1hearts = document.getElementById("player1hearts")
-            player2hearts = document.getElementById("player2hearts")
-            var ctxnew = player1hearts.getContext("2d");
+            console.log("draw hearts")
+            console.log("draw hearts")
+            console.log("draw hearts")
             for (var i = 0; i < heart1object.health; i++) {
-                ctxnew.beginPath()
-                ctxnew.rect(i*heartWidth, 0, heartWidth, heartHeight)
-                ctxnew.fillStyle = "#ff0000";
-                ctxnew.fill()
-                ctxnew.closePath()
+                console.log("Draw heart 1: " + i)
+                ctx.beginPath()
+                ctx.rect(i*(heartWidth + 5), tileSize, heartWidth, heartHeight)
+                ctx.fillStyle = "#ff0000";
+                ctx.fill()
+                ctx.closePath()
             }
-            ctxnew = player2hearts.getContext("2d");
-            for (var i = 0; i < heart2object.health; i++) {
-                ctxnew.beginPath()
-                ctxnew.rect(i*heartWidth, 0, heartWidth, heartHeight)
-                ctxnew.fillStyle = "#ff0000";
-                ctxnew.fill()
-                ctxnew.closePath()
+            for (var i = 1; i <= heart2object.health; i++) {
+                console.log("Draw heart 2: " + i)
+                ctx.beginPath()
+                ctx.rect(canvas.width - i*(heartWidth + 5), tileSize, heartWidth, heartHeight)
+                ctx.fillStyle = "#ff0000";
+                ctx.fill()
+                ctx.closePath()
             }
         }
 
@@ -229,10 +239,10 @@ $(document).ready(() => {
             tileSize = newData.tile_size;
 
             //hearts
-            player1hearts.style.top = "50%" - player1hearts.height
-            player1hearts.style.left = "50%" - canvas.width/2
-            player2hearts.style.top = "50%" - player2hearts.height
-            player2hearts.style.left = "50%" + canvas.width - player2hearts.width
+            // player1hearts.style.top = "50%" - player1hearts.height
+            // player1hearts.style.left = "50%" - canvas.width/2
+            // player2hearts.style.top = "50%" - player2hearts.height
+            // player2hearts.style.left = "50%" + canvas.width - player2hearts.width
 
             //Wall
             wallHeight = tileSize;
@@ -259,7 +269,7 @@ $(document).ready(() => {
                 for (const colum in newData.field_map) {
                     if (Object.hasOwnProperty.call(newData.field_map, colum)) {
                         const element1 = newData.field_map[colum];
-                        var countY = 0;
+                        var countY = 2;
                         for (const square in element1) {
                             if (Object.hasOwnProperty.call(element1, square)) {
                                 const element2 = element1[square];
@@ -282,6 +292,8 @@ $(document).ready(() => {
                     }
                     countX++;
                 }
+                drawHearts();
+                drawText();
             }
             draw();
         })
