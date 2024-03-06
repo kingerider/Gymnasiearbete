@@ -69,7 +69,7 @@ def play_game_create(level_id = None):
         return redirect(url_for('play_game_join', room_id = game.room_id))
     abort(401)
 
-clients = []
+# clients = []
 
 #Skickar spelaren till playgame och tar med game
 @app.route('/play_game/join/<room_id>')
@@ -153,11 +153,11 @@ def on_leave(data):
     #clients.remove(request.namespace)
     emit('navigate_to', f'/memberarea')
     
-@socket.on('clientlist')
-def get_clients_in_room(data):
-    #clients = socket.server.manager.rooms[data['room']]
-    clients = socket.server.manager.get_participants(data['room'])
-    print('clients:' + clients)
+# @socket.on('clientlist')
+# def get_clients_in_room(data):
+#     #clients = socket.server.manager.rooms[data['room']]
+#     clients = socket.server.manager.get_participants(data['room'])
+#     print('clients:' + clients)
     
     #return {'clients': clients}
 
@@ -244,6 +244,7 @@ def monster_move(data):
     game = ongoing_games[data['room']]
     monsters = game.field.enemies
     positions = game.field_map
+    players = game.players
 
     for monster in monsters:
 
@@ -266,6 +267,11 @@ def monster_move(data):
                     positions[int(x - 1)][(int(y))] = dict_monster
                     positions[int(x)][(int(y))] = None
                     monster.positionX -= 1
+                elif positions[int(x - 1)][(int(y))]['type'] == 'player':
+                    for player in players:
+                        if player.name == positions[int(x - 1)][(int(y))]['name']:
+                            player.damage_taken()
+                            print(f'{player.name} tog skada')
             except:
                 print("Ajabaja, kan inte röra dig dära lillen")
 
@@ -277,6 +283,11 @@ def monster_move(data):
                     positions[int(x + 1)][(int(y))] = dict_monster
                     positions[int(x)][(int(y))] = None
                     monster.positionX += 1
+                elif positions[int(x + 1)][(int(y))]['type'] == 'player':
+                    for player in players:
+                        if player.name == positions[int(x + 1)][(int(y))]['name']:
+                            player.damage_taken()
+                            print(f'{player.name} tog skada')
             except:
                 print("Ajabaja, kan inte röra dig dära lillen")
         #Up
@@ -287,6 +298,11 @@ def monster_move(data):
                     positions[int(x)][(int(y - 1))] = dict_monster
                     positions[int(x)][(int(y))] = None
                     monster.positionY -= 1
+                elif positions[int(x)][(int(y - 1))]['type'] == 'player':
+                    for player in players:
+                        if player.name == positions[int(x)][(int(y - 1))]['name']:
+                            player.damage_taken()
+                            print(f'{player.name} tog skada')
             except:
                 print("Ajabaja, kan inte röra dig dära lillen")
         #Down
@@ -297,6 +313,11 @@ def monster_move(data):
                     positions[int(x)][(int(y + 1))] = dict_monster
                     positions[int(x)][(int(y))] = None
                     monster.positionY += 1
+                elif positions[int(x)][(int(y + 1))]['type'] == 'player':
+                    for player in players:
+                        if player.name == positions[int(x)][(int(y + 1))]['name']:
+                            player.damage_taken()
+                            print(f'{player.name} tog skada')
             except:
                 print("Ajabaja, kan inte röra dig dära lillen")
 

@@ -93,11 +93,8 @@ class Player(Entity):
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
     
-    def damage_taken(self, game):
+    def damage_taken(self):
         self.health -= 1
-        if self.health == 0:
-            game.end_game()
-        return self.health
 
 class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY):
