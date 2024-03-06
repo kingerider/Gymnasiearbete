@@ -92,8 +92,8 @@ $(document).ready(() => {
         var playerArray = [];
         
         //hearts
-        var heartHeight = tileSize
-        var heartWidth = tileSize
+        var heartHeight = tileSize;
+        var heartWidth = tileSize;
         var heart1object = null;
         var heart2object = null;
 
@@ -139,10 +139,10 @@ $(document).ready(() => {
         //text
         function drawText() {
             var x = canvas.width/2
-            ctx.font = '30pt Calibri';
+            ctx.font = `${tileSize}pt Calibri`;
             ctx.textAlign = 'center'
             ctx.fillStyle = 'black'
-            ctx.fillText(`${player1} vs ${player2}`, x, tileSize);
+            ctx.fillText(`${player1} vs ${player2}`, x, (2*tileSize)/2);
         }
 
         //hearts
@@ -153,8 +153,11 @@ $(document).ready(() => {
             console.log("draw hearts")
             for (var i = 0; i < heart1object.health; i++) {
                 console.log("Draw heart 1: " + i)
+                console.log("heartWidth: " + heartWidth)
+                console.log("heartHeight: " + heartHeight)
                 ctx.beginPath()
-                ctx.rect(i*(heartWidth + 5), tileSize, heartWidth, heartHeight)
+                //ctx.rect(i*(heartWidth), 0, heartWidth, heartHeight,);
+                ctx.rect(i*(heartWidth + 5), (2*tileSize)/2, heartWidth, heartHeight)
                 ctx.fillStyle = "#ff0000";
                 ctx.fill()
                 ctx.closePath()
@@ -162,7 +165,11 @@ $(document).ready(() => {
             for (var i = 1; i <= heart2object.health; i++) {
                 console.log("Draw heart 2: " + i)
                 ctx.beginPath()
-                ctx.rect(canvas.width - i*(heartWidth + 5), tileSize, heartWidth, heartHeight)
+                if (i == 1) {
+                    ctx.rect(canvas.width - i*(heartWidth), (2*tileSize)/2, heartWidth, heartHeight)
+                } else {
+                    ctx.rect(canvas.width - (i*heartWidth) - 5, (2*tileSize)/2, heartWidth, heartHeight)
+                }
                 ctx.fillStyle = "#ff0000";
                 ctx.fill()
                 ctx.closePath()
@@ -254,6 +261,10 @@ $(document).ready(() => {
             //Player
             playerHeight = tileSize;
             playerWidth = tileSize;
+
+            //Heart
+            heartHeight = tileSize;
+            heartWidth = tileSize;
 
             //Grid
             gridHeight = canvas.height / tileSize;
@@ -359,6 +370,7 @@ $(document).ready(() => {
         
         //Takes a position and checks if moveable
         //Direction indicates where to move (right)
+
         function checkForEntity(position, direction) {
             entityNotThere = true;
             console.log(playerArray)
