@@ -42,16 +42,20 @@ def ajax_search_level():
         'levels': levels
     })
 
-@app.route('/ajax-save-level')
-def ajax_save_level():
+@app.route('/ajax-create-level')
+def ajax_create_level():
     data = request.get_json()
+    print(data)
+    print(data['title'])
+    print(data['discription'])
+    print(data['playerPositions'])
     conn = create_connection()
     cur = conn.cursor()
-    levels = cur.execute("SELECT * FROM level WHERE title LIKE ?", (data['input'],)).fetchall()
+    #levels = cur.execute("INSERT INTO level WHERE title LIKE ?", (data['title'], data['discription'],)).fetchall()
     conn.close()
-    print(levels)
+    #print(levels)
     return json.dumps({
         'msg': 'levels gathered',
         'success': True,
-        'levels': levels
+        'levels': data
     })
