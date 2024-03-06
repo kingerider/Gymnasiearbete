@@ -41,3 +41,17 @@ def ajax_search_level():
         'success': True,
         'levels': levels
     })
+
+@app.route('/ajax-save-level')
+def ajax_save_level():
+    data = request.get_json()
+    conn = create_connection()
+    cur = conn.cursor()
+    levels = cur.execute("SELECT * FROM level WHERE title LIKE ?", (data['input'],)).fetchall()
+    conn.close()
+    print(levels)
+    return json.dumps({
+        'msg': 'levels gathered',
+        'success': True,
+        'levels': levels
+    })
