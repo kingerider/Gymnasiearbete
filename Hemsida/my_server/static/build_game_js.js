@@ -45,8 +45,8 @@ $(document).ready(() => {
     var playerWidth = tileSize;
     var playerArray = [];
     console.log(canvasWidth)
-    playerArray.push(new Position(1 * (canvasWidth * 0.1) - 1, 1 * (canvasHeight * 0.5)));
-    playerArray.push(new Position(1 * (canvasWidth * 0.90), 1 * (canvasHeight * 0.5)));
+    playerArray.push(new Position(parseInt(canvasWidth)/8, parseInt(canvasHeight)/2));
+    playerArray.push(new Position(parseInt(canvasWidth) - parseInt(canvasWidth)/8, parseInt(canvasHeight)/2));
 
     //Wall
     var wallHeight = tileSize;
@@ -207,14 +207,38 @@ $(document).ready(() => {
 
     });
     $("#createLevel").click(() => {
+        playerXArray = []
+        playerYArray = []
+        monsterXArray = []
+        monsterYArray = []
+        wallXArray = []
+        wallYArray = []
+
+        for (let index = 0; index < playerArray.length; index++) {
+            playerXArray.push(playerArray[index].getX());
+            playerYArray.push(playerArray[index].getY());
+        }
+        for (let index = 0; index < monsterArray.length; index++) {
+            monsterXArray.push(monsterArray[index].getX());
+            monsterYArray.push(monsterArray[index].getY());
+        }
+        for (let index = 0; index < wallArray.length; index++) {
+            wallXArray.push(wallArray[index].getX());
+            wallYArray.push(wallArray[index].getY());
+            
+        }
+
         const data = {
             title: $("#createTitle").val(),
             description: $("#createDescription").val(),
-            playerPositions: playerArray,
-            monsterPositions: monsterArray,
-            wallPositions: wallArray
-
+            playerXPositions: playerXArray, //is not in use
+            playerYPositions: playerYArray, //is not in use
+            monsterXPositions: monsterXArray,
+            monsterYPositions: monsterYArray,
+            wallXPositions: wallXArray,
+            wallPositions: wallYArray
         }
+        
         console.log("Hello")
         console.log(data)
         $.ajax({
@@ -227,13 +251,9 @@ $(document).ready(() => {
             dataType: "json",
             success: (data) => {
                 if (data.success) {
-                    $.each(data.levels, (index, value) => {
-                        $(".card-deck").append("hahahah")
-                    });
+                    console.log("success")
                 }
                 //alert(JSON.stringify(data))
-                let div = `<div class='card-body'><h5 class='card-text'>${data.title}</h5><p>${data.content}</p><p>skapad av: ${data.author}</p></div>`;
-                $("#tom").append(div);
             }
         });
     })
