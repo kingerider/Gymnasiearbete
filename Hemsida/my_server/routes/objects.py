@@ -12,6 +12,7 @@ class Game:
         self.name = name
         self.awaiting_players = True
         self.players = []
+        self.projectiles = [None, None]
         self.field = None
         self.field_map = [] #[][]
 
@@ -124,6 +125,15 @@ class Item(Entity):
         self.positionX = posX
         self.positionY = posY
         self.type = type
+
+class Projectile(Entity):
+    def __init__(self, posX, posY, dir, id):
+        super().__init__(posX, posY)
+        self.direction = dir
+        self.player_id = id
+    
+    def object_to_dict(self):
+        return dict(type = 'projectile', player_id = self.player_id, direction = self.direction)
 
 class Field:
     def __init__(self, id, health):

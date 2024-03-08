@@ -97,6 +97,11 @@ $(document).ready(() => {
         var heart1object = null;
         var heart2object = null;
 
+        //projectile
+        var projectileHeight = tileSize;
+        var projectileWidth = tileSize;
+        var projectileArray = [];
+
         //Grid
         var gridHeight = canvas.height / tileSize
         var gridWdith = canvas.width / tileSize
@@ -204,6 +209,15 @@ $(document).ready(() => {
             ctx.closePath();
         }
 
+        //Projectile
+        function drawProjectile(projectileX, projectileY) {
+            ctx.beginPath();
+            ctx.rect(projectileX, projectileY, projectileWidth, projectileHeight);
+            ctx.fillStyle = "#383e42";
+            ctx.fill();
+            ctx.closePath();
+        }
+
         /*socket.emit("start_monster", {
             room: room_id
         })*/
@@ -266,6 +280,10 @@ $(document).ready(() => {
             heartHeight = tileSize;
             heartWidth = tileSize;
 
+            //Projectile
+            projectileHeight = tileSize;
+            projectileWidth = tileSize;
+
             //Grid
             gridHeight = canvas.height / tileSize;
             gridWdith = canvas.width / tileSize;
@@ -295,6 +313,9 @@ $(document).ready(() => {
                                     }
                                     if (element2["type"] == "player") {
                                         drawPlayer(countX * tileSize, countY * tileSize)
+                                    }
+                                    if (element2["type"] == "projectile") {
+                                        drawProjectile(countX * tileSize, countY * tileSize)
                                     }
                                 }
                             }
@@ -358,6 +379,13 @@ $(document).ready(() => {
                                         heart2object = element2;  
                                     }
                                     playerArray.push(new Position(countX, countY));
+                                }
+                                if (element2["type"] == "projectile") {
+                                    if (element2["player_id"] == 0) {
+                                        projectileArray.push(new Position(countX, countY))
+                                    } else if(element2["player_id"] == 1) {
+                                        projectileArray.push(new Position(countX, countY)) 
+                                    }
                                 }
                             }
                         }
@@ -537,6 +565,41 @@ $(document).ready(() => {
             }
 
         });
+
+        //Shoot_projectile
+        $("body").on("keypress", function (event) {
+            if (event.keyCode == 32) { //spacebar
+                console.log("Handler for `keypress` called.");
+                let this_player_id = null
+                let username = $("#this_user").text();
+                if (username == player1) {
+                    this_player_id = 0
+                    console.log("Spelare 1");
+                }
+                else if (username == player2) {
+                    this_player_id = 1
+                    console.log("Spelare 2")
+                }
+
+                socket.emit('shoot_projectile', {
+                    room: room_id,
+                    player_id: this_player_id
+                })
+            }
+            
+
+            
+            
+            // usernamePosition = new Position;
+            // usernamePosition = userPosition(username);
+            console.log(character)
+            
+        })
+
+        // addEventListener("mouseup", (event) => {
+
+        // })
+
 
         const leave = () => {
             console.log("Lämna")

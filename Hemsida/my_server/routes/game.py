@@ -2,19 +2,20 @@ from my_server import app, socket
 from flask import render_template, redirect, url_for, abort, flash, session, request
 from flask_socketio import emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
-from my_server.routes.objects import Game, Player, Field
+from my_server.routes.objects import Game, Player, Field, Projectile
 import random
 from datetime import datetime
 
 import threading
 
-monster_start = {}
+thread_start = {}
 
 def startit():
     t = threading.Timer(0.2, startit)
     t.start()
-    monster_start['thread'] = t
-    monster_move(monster_start['room'])
+    thread_start['thread'] = t
+    monster_move(thread_start['room'])
+    projectile_move(thread_start['room'])
 
 
 #should not be here later on
@@ -114,7 +115,7 @@ def handle_join_room(data):
     #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
         #startit(data['room'])
-        monster_start['room'] = data
+        thread_start['room'] = data
         startit()
         emit('message_from_server', {
             'message': f'start_game',
@@ -143,7 +144,7 @@ def on_leave(data):
     ongoing_games.pop(data['room'], None)
     print(ongoing_games.pop(data['room'], None))
     print(ongoing_games)
-    monster_start['thread'].cancel()
+    thread_start['thread'].cancel()
     #send_message_to_room({
     #    'heading': 'Info',
     #    'message': f'User {data["username"]} has left the room.',
@@ -193,6 +194,7 @@ def player_move(data):
     if data['move'] == 'right':
         try:
             moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            moved_player.direction = data['move']
             x = moved_player.positionX
             y = moved_player.positionY
             dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
@@ -205,6 +207,7 @@ def player_move(data):
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX - 1, game.players[data['player_id']].positionY)
         try:
             moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            moved_player.direction = data['move']
             x = moved_player.positionX
             y = moved_player.positionY
             dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
@@ -217,6 +220,7 @@ def player_move(data):
         #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY - 1)
         try:
             moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            moved_player.direction = data['move']
             x = moved_player.positionX
             y = moved_player.positionY
             dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
@@ -229,6 +233,7 @@ def player_move(data):
         try:
             #game.players[data['player_id']].moveTo(game.players[data['player_id']].positionX, game.players[data['player_id']].positionY + 1)
             moved_player = game.players[data['player_id']]#.moveTo(game.players[data['player_id']].positionX + 1, game.players[data['player_id']].positionY)
+            moved_player.direction = data['move']
             x = moved_player.positionX
             y = moved_player.positionY
             dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
@@ -322,7 +327,78 @@ def monster_move(data):
                 print("Ajabaja, kan inte röra dig dära lillen")
 
 
+@socket.on('shoot_projectile')
+def shoot_projectile(data): 
+    game = ongoing_games[data['room']]
+    positions = game.field_map
+    player = game.players[data['player_id']]
+    game.projectiles[data['player_id']] = Projectile(int(player.positionX), int(player.positionY), player.direction, data['player_id'])
+    new_projectile = game.projectiles[data['player_id']]
+    x = new_projectile.positionX
+    y = new_projectile.positionY
+    if new_projectile.direction == 'right':
+        try:
+            positions[int(x + 1)][int(y)] = new_projectile.object_to_dict()
+            new_projectile.positionX += 1
+        except:
+            print("Vad gör du, skjuter du tomrummet?!")
+    elif new_projectile.direction == 'left':
+        try:
+            positions[int(x - 1)][int(y)] = new_projectile.object_to_dict()
+            new_projectile.positionX -= 1
+        except:
+            print("Vad gör du, skjuter du tomrummet?!")
+    elif new_projectile.direction == 'up':
+        try:
+            positions[int(x)][int(y - 1)] = new_projectile.object_to_dict()
+            new_projectile.positionY -= 1
+        except:
+            print("Vad gör du, skjuter du tomrummet?!")
+    elif new_projectile.direction == 'down':
+        try:
+            positions[int(x)][int(y + 1)] = new_projectile.object_to_dict()
+            new_projectile.positionY += 1
+        except:
+            print("Vad gör du, skjuter du tomrummet?!")
 
+def projectile_move(data):
+    game = ongoing_games[data['room']]
+    positions = game.field_map
+    players = game.players
+    projectiles = game.projectiles
+    for projectile in projectiles:
+        if projectile != None:
+            x = int(projectile.positionX)
+            y = int(projectile.positionY)
+            if projectile.direction == 'right':
+                try:
+                    positions[int(x + 1)][int(y)] = projectile.object_to_dict()
+                    positions[int(x)][int(y)] = None
+                    projectile.positionX += 1
+                except:
+                    print("Vad gör du, hur tänker du egentligen?!")
+            elif projectile.direction == 'left':
+                try:
+                    positions[int(x - 1)][int(y)] = projectile.object_to_dict()
+                    positions[int(x)][int(y)] = None
+                    projectile.positionX -= 1
+                except:
+                    print("Vad gör du, hur tänker du egentligen?!")
+            elif projectile.direction == 'up':
+                try:
+                    positions[int(x)][int(y - 1)] = projectile.object_to_dict()
+                    positions[int(x)][int(y)] = None
+                    projectile.positionY -= 1
+                except:
+                    print("Vad gör du, hur tänker du egentligen?!")
+            elif projectile.direction == 'up':
+                try:
+                    positions[int(x)][int(y + 1)] = projectile.object_to_dict()
+                    positions[int(x)][int(y)] = None
+                    projectile.positionY += 1
+                except:
+                    print("Vad gör du, hur tänker du egentligen?!")
+    
 #@socket.on('send_message_to_room')
 #def send_message_to_room(data):
 #    emit('message_from_server', {
