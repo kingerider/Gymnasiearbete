@@ -1,41 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}edit{% endblock %}
+{% block title %}Game Builder{% endblock %}
 
-{% block headline %}{% endblock %}
+{% block headline %}
+<p class="text-white">Game Builder</p>
+{% endblock %}
 
 {% block content %}
-<input type="hidden" id="saveTitle" value="">
-<input type="hidden" id="savePlayer_health" value="">
-<input type="hidden" id="saveDescription" value="">
-<script>
-    var titlevalue = () => {
-        return $("#lbltitle").val()
-    }
-    $("#saveLevel").click(() => {
-        $("#saveTitle").val(titlevalue())
-        $("#savePlayer_health").val()
-        $("#saveDescription").val()
-
-
-        window.location.href = `/save_level/build/${$("#saveTitle").val()}/${$("#savePlayer_health").val()}/${$("#saveDescription").val()}`
-    })
-    function setWall(){
-        button = document.getElementById("wall");
-        button.disabled = true;  
-        button = document.getElementById("monster");
-        button.disabled = false;   
-        
-    }
-    function setMonster(){
-        button = document.getElementById("wall");
-        button.disabled = false;  
-        button = document.getElementById("monster");
-        button.disabled = true;  
-    }
-</script>
+<script src="{{url_for('static', filename='build_game_js.js')}}"></script>
 <div class="col-sm">
-    <p>Title: <input type="text" id="lbltitle"></p>
+    <div id="info"><p>Add a wall or monster to canvas my clicking a btn below, then left click a square on the canavss to place it. Too undo Right click with mouse</p></div>
     <div>
         <button id="wall" onclick="setWall()" disabled>Wall</button>
         <button id="monster" onclick="setMonster()">Monster</button>
@@ -54,139 +28,14 @@
     </div>
 </div>
 <div class="col-sm" style="height: 500px;">
-    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <canvas id="myCanvas" width="800" height="400" oncontextmenu="event.preventDefault();"></canvas>
 </div>
-<input type="hidden" value="" id="inputtitle">
-<button type="button" class="btn btn-primary m-5" id="saveLevel">Spara bana</button>
-<script>
-    $(document).ready(() => {
-        //Canvas
-        var canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext("2d");
-        var tileSize = 20;
-        var canvasHeight = canvas.height/tileSize
-        var canvasWidth = canvas.width/tileSize
-
-        //Player
-        var playerHeight = tileSize;
-        var playerWidth = tileSize;
-        var playerArray = [];
-
-        //Wall
-        var wallHeight = tileSize;
-        var wallWidth = tileSize;
-        var wallArray = [];
-
-        //Monster
-        var monsterHeight = tileSize;
-        var monsterWidth = tileSize;
-        var monsterArray = [];
-
-        //Position class for objects
-        class Position {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-            }
-            getX() {
-                return this.x;
-            }
-            getY() {
-                return this.y;
-            }
-            setX(x) {
-                this.x = x;
-            }
-            setY(y) {
-                this.y = y;
-            }
-        }
-
-        //Player
-        function drawPlayer(playerX, playerY) {
-            ctx.beginPath();
-            ctx.rect(playerX, playerY, playerWidth, playerHeight);
-            ctx.fillStyle = "#046cd4";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        //Wall
-        function drawWall(wallX, wallY) {
-            ctx.beginPath();
-            ctx.rect(wallX, wallY, wallWidth, wallHeight,);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        //Monster
-        function drawMonster(monsterX, monsterY) {
-            ctx.beginPath();
-            ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
-            ctx.fillStyle = "#04d49d";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        //Grid
-        function drawGrid() {
-            ctx.strokeStyle = '#cccccc';
-            ctx.stroke();
-            for (var i = 0; i <= canvas.width; i += tileSize) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, canvas.height);
-                ctx.stroke();
-                ctx.closePath();
-            }
-
-            for (var i = 0; i <= canvas.height; i += tileSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(canvas.width, i);
-                ctx.stroke();
-            }
-
-        }
-        
-        //Draw objects
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawGrid();
-            for (let i = 0; i < wallArray.length; i++) {
-                console.log(wallArray)
-                drawWall(wallArray[i].getX()*tileSize, wallArray[i].getY()*tileSize);
-            }
-            for (let i = 0; i < monsterArray.length; i++) {
-                console.log(monsterArray)
-                drawMonster(monsterArray[i].getX()*tileSize, monsterArray[i].getY()*tileSize);
-            }
-        }
-        var interval = setInterval(draw, 60);
-
-        addEventListener("mouseup", (event) => {
-            var rect = canvas.getBoundingClientRect();
-            var x = event.clientX - rect.left + (canvas.width - parseInt(getComputedStyle(canvas).getPropertyValue("width"), 10))/2; //Sets origo in canvas corner
-            var y = event.clientY - rect.top + (canvas.height - parseInt(getComputedStyle(canvas).getPropertyValue("height"), 10))/2;
-            
-            canvasClickX = parseInt(x/tileSize)
-            canvasClickY = parseInt(y/tileSize)
-            
-            if (document.getElementById("wall").disabled == true){
-                if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
-                    wallArray.push(new Position(canvasClickX, canvasClickY));
-                }
-            }else{
-                if(canvasClickX >= 0 && canvasClickY >= 0 && canvasClickX < canvasWidth && canvasClickY < canvasHeight){
-                    monsterArray.push(new Position(canvasClickX, canvasClickY));
-                }
-            }
-        });
-       
-        
-
-    });
-
-</script>
+<input type="hidden" value="" id="Error">
+<div>
+    <label for="fname">Title:</label><br>
+    <input type="text" name="createTitle" id="createTitle">
+    <label for="lname">Description:</label><br>
+    <textarea name="createDescription" id="createDescription" cols="30" rows="10"></textarea>
+    <input type="submit" value="Skapa bana" class="btn btn-primary m-5" id="createLevel">
+</div>
 {% endblock %}

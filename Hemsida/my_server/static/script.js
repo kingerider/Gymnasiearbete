@@ -89,6 +89,40 @@ $(document).ready(() => {
             }
         });
     })
+
+    $("#savelevel").click(() => {
+        const data = {
+            title: $("#saveTitle").val(),
+            description: $("#saveDescription").val(),
+            
+
+        }   
+
+        console.log(data)
+        $.ajax({
+            method: 'POST',
+            url: "/ajax-search-level",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: (data) => {
+                if (data.success) {
+                    $.each(data.levels, (index, value) => { 
+                         $(".card-deck").append("hahahah")
+                    });
+                }
+                //alert(JSON.stringify(data))
+                let div = `<div class='card-body'><h5 class='card-text'>${data.title}</h5><p>${data.content}</p><p>skapad av: ${data.author}</p></div>`;
+                $("#tom").append(div);     
+            }
+        });
+    })
+
+
+
+
     //Socket code ---------
 
     // socket.on('navigate_to', (path) => {

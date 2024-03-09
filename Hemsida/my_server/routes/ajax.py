@@ -28,7 +28,7 @@ def ajax_get_positions():
             'success': False
         })
 
-@app.route('/ajax-search-level')
+@app.route('/ajax-search-level', methods = ['POST'])
 def ajax_search_level():
     data = request.get_json()
     conn = create_connection()
@@ -40,4 +40,28 @@ def ajax_search_level():
         'msg': 'levels gathered',
         'success': True,
         'levels': levels
+    })
+
+@app.route('/ajax-create-level', methods = ['POST'])
+def ajax_create_level():
+    data = request.get_json()
+    print("Hello")
+    print(data)
+    print(data['title'])
+    print(data['discription'])
+    conn = create_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO level (title, discription) VALUES (?, ?)", (data['title'], data['discription'],))
+    for i in range(len(data['wallXPositions'])):
+        cur.execute("INSERT INTO wall (x_coordinate, y_coordinate) VALUES (?, ?)", (data['wallXPositions'], data['wallXPositions'],))
+    for i in range(len(data['monsterXPositions'])):
+        cur.execute("INSERT INTO monster (x_coordinate, y_coordinate) VALUES (?, ?)", (data['monsterXPositions'], data['monsterXPositions'],))
+    
+
+    conn.close()
+    #print(levels)
+    return json.dumps({
+        'msg': 'levels gathered',
+        'success': True,
+        'levels': data
     })
