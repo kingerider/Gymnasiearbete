@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<script src="{{url_for('static', filename='build_game_js.js')}}"></script>
+<script src="{{url_for('static', filename='edit_game_js.js')}}"></script>
 <div class="col-sm">
     <h3 id="info_h3">Info</h3>
     <div id="info_p"><p class="text-justify">Add a wall or monster to canvas my clicking a btn below, then left click a square on the canavss to place it. Too undo Right click with mouse</p></div>
@@ -39,10 +39,11 @@
 <p id="message_td" class="alert alert-info" role="alert" style="display: none;"></p>
 <div>
     <label for="fname">Titel:</label><br>
-    <input type="text" name="create_title" id="create_title">
+    <input type="text" name="edit_title" id="edit_title"><br>
     <label for="lname">Beskrivning:</label><br>
-    <textarea name="create_description" id="create_description" cols="30" rows="10"></textarea>
-    <input type="submit" value="Skapa bana" class="btn btn-primary m-5" id="create_level">
+    <textarea name="edit_description" id="edit_description" cols="30" rows="10"></textarea>
+    <input type="submit" value="updatera bana" class="btn btn-primary m-5" id="edit_level">
 </div>
-<div id="this_user" class=".d-{none}">{{ session['username'] }}</div>
+<div id="this_level" style="display: none;">{{level_id}}</div>
+<div id="this_user" style="display: none;">{{ session['username'] }}</div>
 {% endblock %}

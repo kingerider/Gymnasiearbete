@@ -458,20 +458,4 @@ def build_game():
 
 @app.route('/edit_game/<level_id>')
 def edit_game(level_id = None):
-    return render_template('edit_game.html', id = level_id)
-
-@app.route('/save_level/<status>/<title>/<player_health>/<description>')
-def save_level(status = None, title = None, player_health = None, description = None):
-    now = datetime.now()
-    date = now.strftime('%Y-%m-%d %H h')
-    conn = create_connection()
-    cur = conn.cursor()
-    if status == 'build':
-        cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (session['id'], title, player_health, description, date))
-        conn.commit()
-    elif status == 'edit':
-        cur.execute("UPDATE level SET title = ?, player_health = ?, description = ?, date = ?", (title, player_health, description, date))
-        conn.commit()
-    conn.close()
-    flash("Banan har sparats", 'success')
-    return redirect(url_for('list_levels'))
+    return render_template('edit_game.html', level_id = level_id)

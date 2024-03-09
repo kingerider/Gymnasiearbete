@@ -45,7 +45,7 @@ def ajax_search_level():
     })
 
 @app.route('/ajax-create-level', methods = ['POST'])
-def ajax_create_level():
+def ajax_edit_level():
     data = request.get_json()
     print("data:")
     print(data)
@@ -53,28 +53,81 @@ def ajax_create_level():
     cur = conn.cursor()
     now = datetime.now()
     formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
-    print("now:")
-    print(now)
-    print("formated:")
-    print(formatted_date)
-    print("username:")
-    print(data['username'])
-    print("Done")
     username_id = cur.execute("SELECT id FROM user WHERE username LIKE ?", (data['username'],)).fetchone()[0]
     cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
-    print(level_id)
-    print("range")
-    print(len(data['wallX_Positions']))
+  
     for i in range(len(data['wallX_Positions'])): #len(data[x]) is as long as len(data[y])
         cur.execute("INSERT INTO wall (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (level_id, data['wallX_Positions'][i], data['wallY_Positions'][i],))
     for i in range(len(data['monsterX_Positions'])): 
         cur.execute("INSERT INTO enemy (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (level_id, data['monsterX_Positions'][i], data['monsterY_Positions'][i],))
+    
+    conn.commit()
+    conn.close()
+
+    return json.dumps({
+        'msg': 'level added',
+        'success': True,
+        'levels': data
+    })
+
+@app.route('/ajax-edit-level', methods = ['POST'])
+def ajax_create_level():
+    data = request.get_json()
+    print("data:")
+    print(data)
+    conn = create_connection()
+    cur = conn.cursor()
+    now = datetime.now()
+
+    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+    cur.execute("UPDATE level SET title == ?, player_health == ?, description == ?, date == ? WHERE id == ?", (data['title'], 3, data['description'], formatted_date, data['level_id'], ))
+    level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
+
+
+    cur.execute("DELETE FROM wall WHERE level_id == ?", (data['level_id'],))
+    cur.execute("DELETE FROM enemy WHERE level_id == ?", (data['level_id'],))
+
+    for i in range(len(data['wallX_Positions'])): #len(data[x]) is as long as len(data[y])
+        cur.execute("INSERT INTO wall (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (data['level_id'], data['wallX_Positions'][i], data['wallY_Positions'][i],))
+    for i in range(len(data['monsterX_Positions'])): 
+        cur.execute("INSERT INTO enemy (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (data['level_id'], data['monsterX_Positions'][i], data['monsterY_Positions'][i],))
+    
+    #conn.commit() #CHANGE THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSAFBIAFU
+    conn.close()
+
+    return json.dumps({
+        'msg': 'level edited',
+        'success': True,
+    })
+
+@app.route('/ajax-get-data-level', methods = ['POST'])
+def ajax_get_data_level():
+    data = request.get_json()
+    print("data:")
+    print(data)
+    conn = create_connection()
+    cur = conn.cursor()    
+    wall_x = cur.execute("SELECT x_coordinate FROM wall WHERE level_id == ?", (data['level_id'], )).fetchall()
+    wall_x = [x[0] for x in wall_x]
+    wall_y = cur.execute("SELECT y_coordinate FROM wall WHERE level_id == ?", (data['level_id'], )).fetchall()
+    wall_y = [y[0] for y in wall_y]
+    monster_x = cur.execute("SELECT x_coordinate FROM enemy WHERE level_id == ?", (data['level_id'], )).fetchall()
+    monster_x = [x[0] for x in monster_x]
+    monster_y = cur.execute("SELECT y_coordinate FROM enemy WHERE level_id == ?", (data['level_id'], )).fetchall()
+    monster_y = [y[0] for y in monster_y]
+    title = cur.execute("SELECT title FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
+    description = cur.execute("SELECT description FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
     conn.commit()
     conn.close()
     #print(levels)
     return json.dumps({
-        'msg': 'levels gathered',
+        'msg': 'sql data',
         'success': True,
-        'levels': data
+        'wallX': wall_x,
+        'wallY': wall_y,
+        'monsterX': monster_x,
+        'monsterY': monster_y,
+        'title': title,
+        'description': description
     })

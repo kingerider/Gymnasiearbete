@@ -58,6 +58,41 @@ $(document).ready(() => {
     var monsterWidth = tileSize;
     var monsterArray = [];
 
+    const dataLevel = {
+        level_id: $("#this_level").text()
+    }
+    //console.log(data)
+    $.ajax({
+        method: 'POST',
+        url: "/ajax-get-data-level",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataLevel),
+        dataType: "json",
+        success: (data) => {
+            if (data.success) {
+                console.log("success");
+                console.log(data);
+                setVariables(data);
+
+            }
+            //alert(JSON.stringify(data))
+        }
+    });
+
+    function setVariables(data){
+        for (let index = 0; index < data['wallX'].length; index++) {
+            wallArray.push(new Position(data['wallX'][index], data['wallY'][index]));
+        }
+        for (let index = 0; index < data['monsterX'].length; index++) {
+            monsterArray.push(new Position(data['monsterX'][index], data['monsterY'][index]));
+        }
+        $("#edit_title").val(data['title'])
+        $("#edit_description").val(data['description'])
+
+    }
+
     //Player
     function drawPlayer(playerX, playerY) {
         ctx.beginPath();
@@ -211,8 +246,8 @@ $(document).ready(() => {
 
 
     });
-    $("#create_level").click(() => {
-        if ($("#create_description").val() != "" && $("#create_title").val() != "") {
+    $("#edit_level").click(() => {
+        if ($("#edit_description").val() != "" && $("#edit_title").val() != "") {
 
             playerXArray = []
             playerYArray = []
@@ -236,9 +271,9 @@ $(document).ready(() => {
             }
 
             const data = {
-                title: $("#create_title").val(),
-                description: $("#create_description").val(),
-                username: $("#this_user").text(),
+                title: $("#edit_title").val(),
+                description: $("#edit_description").val(),
+                level_id: $("#this_level").text(),
                 playerX_Positions: playerXArray, //is not in use
                 playerY_Positions: playerYArray, //is not in use
                 monsterX_Positions: monsterXArray,
@@ -247,10 +282,10 @@ $(document).ready(() => {
                 wallY_Positions: wallYArray
             }
 
-            //console.log(data)
+            console.log(data)
             $.ajax({
                 method: 'POST',
-                url: "/ajax-create-level",
+                url: "/ajax-edit-level",
                 headers: {
                     "Content-Type": "application/json"
                 },
