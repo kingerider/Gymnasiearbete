@@ -23,7 +23,7 @@ def startit():
     
 
 def startbullet():
-    t = threading.Timer(0.1, startbullet)
+    t = threading.Timer(0.05, startbullet)
     t.start()
     for key in thread_start.keys():
         if ongoing_games[key].projectiles[0] != None or ongoing_games[key].projectiles[1] != None:
@@ -153,7 +153,7 @@ def on_leave(data):
     print(ongoing_games.pop(data['room'], None))
     print(ongoing_games)
     thread_start[data['room']]['threadmonster'].cancel()
-    thread_start[data['room']]['threadbullet'].cancel()
+    #thread_start[data['room']]['threadbullet'].cancel()
     #send_message_to_room({
     #    'heading': 'Info',
     #    'message': f'User {data["username"]} has left the room.',
