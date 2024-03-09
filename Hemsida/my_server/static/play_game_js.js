@@ -596,9 +596,34 @@ $(document).ready(() => {
             
         })
 
-        // addEventListener("mouseup", (event) => {
-
-        // })
+        addEventListener("mouseup", (event) => {
+            switch (event.button) {
+                case 0:
+                    console.log("Du klickade på vänsterklick, SKJUT")
+                    let this_player_id = null
+                    let username = $("#this_user").text();
+                    if (username == player1) {
+                        this_player_id = 0
+                        console.log("Spelare 1");
+                    }
+                    else if (username == player2) {
+                        this_player_id = 1
+                        console.log("Spelare 2")
+                    }
+                    socket.emit('shoot_projectile', {
+                        room: room_id,
+                        player_id: this_player_id
+                    })
+                    break;
+                case 1:
+                    console.log("okej mitten...")
+                    break;
+                case 2:
+                    console.log("okej höger...")
+                default:
+                    console.log("okej hörru...")
+            }
+        })
 
 
         const leave = () => {
