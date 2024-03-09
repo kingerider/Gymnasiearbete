@@ -74,7 +74,7 @@ class Game:
 
 class Entity:
     def __init__(self, posX, posY):
-        self.positionX = posX,
+        self.positionX = posX
         self.positionY = posY
     
     def set_x(self, posX):
@@ -95,7 +95,8 @@ class Player(Entity):
         self.set_position(newPosX, newPosY)
     
     def damage_taken(self):
-        self.health -= 1
+        if self.health >= 1:
+            self.health -= 1
 
 class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY):

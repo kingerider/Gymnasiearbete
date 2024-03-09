@@ -8,14 +8,27 @@ from datetime import datetime
 
 import threading
 
+ongoing_games = {
+    #'room_-1': test_game 
+}
+
 thread_start = {}
 
 def startit():
     t = threading.Timer(0.2, startit)
     t.start()
-    thread_start['thread'] = t
-    monster_move(thread_start['room'])
-    projectile_move(thread_start['room'])
+    for key in thread_start.keys():
+        thread_start[key] = {'threadmonster': t, 'room': key}
+        monster_move(thread_start[key])
+    
+
+def startbullet():
+    t = threading.Timer(0.1, startbullet)
+    t.start()
+    for key in thread_start.keys():
+        if ongoing_games[key].projectiles[0] != None or ongoing_games[key].projectiles[1] != None:
+            thread_start[key]['threadbullet'] = t
+            projectile_move(thread_start[key])
 
 
 #should not be here later on
@@ -43,11 +56,6 @@ def set_room_id():
 #test_field.load_from_database()
 #test_game.add_field(test_field)
 #conn.close()
-
-
-ongoing_games = {
-    #'room_-1': test_game 
-}
 
 #kollar alla id på varje spel och lägger till max + 1 som nytt id, får tillbaka 0 om listan är tom
 
@@ -115,7 +123,7 @@ def handle_join_room(data):
     #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
         #startit(data['room'])
-        thread_start['room'] = data
+        thread_start[data['room']] = {}
         startit()
         emit('message_from_server', {
             'message': f'start_game',
@@ -144,7 +152,8 @@ def on_leave(data):
     ongoing_games.pop(data['room'], None)
     print(ongoing_games.pop(data['room'], None))
     print(ongoing_games)
-    thread_start['thread'].cancel()
+    thread_start[data['room']]['threadmonster'].cancel()
+    thread_start[data['room']]['threadbullet'].cancel()
     #send_message_to_room({
     #    'heading': 'Info',
     #    'message': f'User {data["username"]} has left the room.',
@@ -165,16 +174,16 @@ def on_leave(data):
 #Hämtar data från servern för att sidan ska kunna uppdatera
 @socket.on('update_canvas')
 def update_game(data):
-    print("Update_game, update_canvas")
-    print("Ass hair")
-   # print('Is game ongoing:')
-    #print(ongoing_games)
-    #print('What is data:')
-    #print(data)
-   # print('What does game.fieldmap contain')
-    #print(ongoing_games[data['room']].field_map)
-    print("Ass hair")
-    print("Ass hair")
+#     print("Update_game, update_canvas")
+#     print("Ass hair")
+#    # print('Is game ongoing:')
+#     #print(ongoing_games)
+#     #print('What is data:')
+#     #print(data)
+#    # print('What does game.fieldmap contain')
+#     #print(ongoing_games[data['room']].field_map)
+#     print("Ass hair")
+#     print("Ass hair")
    
     game = ongoing_games[data['room']]
 
@@ -330,74 +339,95 @@ def monster_move(data):
 @socket.on('shoot_projectile')
 def shoot_projectile(data): 
     game = ongoing_games[data['room']]
-    positions = game.field_map
-    player = game.players[data['player_id']]
-    game.projectiles[data['player_id']] = Projectile(int(player.positionX), int(player.positionY), player.direction, data['player_id'])
-    new_projectile = game.projectiles[data['player_id']]
-    x = new_projectile.positionX
-    y = new_projectile.positionY
-    if new_projectile.direction == 'right':
-        try:
-            positions[int(x + 1)][int(y)] = new_projectile.object_to_dict()
-            new_projectile.positionX += 1
-        except:
-            print("Vad gör du, skjuter du tomrummet?!")
-    elif new_projectile.direction == 'left':
-        try:
-            positions[int(x - 1)][int(y)] = new_projectile.object_to_dict()
-            new_projectile.positionX -= 1
-        except:
-            print("Vad gör du, skjuter du tomrummet?!")
-    elif new_projectile.direction == 'up':
-        try:
-            positions[int(x)][int(y - 1)] = new_projectile.object_to_dict()
-            new_projectile.positionY -= 1
-        except:
-            print("Vad gör du, skjuter du tomrummet?!")
-    elif new_projectile.direction == 'down':
-        try:
-            positions[int(x)][int(y + 1)] = new_projectile.object_to_dict()
-            new_projectile.positionY += 1
-        except:
-            print("Vad gör du, skjuter du tomrummet?!")
+    if game.projectiles[data['player_id']] == None:
+        positions = game.field_map
+        player = game.players[data['player_id']]
+        game.projectiles[data['player_id']] = Projectile(player.positionX, player.positionY, player.direction, data['player_id'])
+        new_projectile = game.projectiles[data['player_id']]
+        x = new_projectile.positionX
+        y = new_projectile.positionY
+        print (x)
+        print (y)
+        print(new_projectile.object_to_dict())
+        print(game.projectiles)
+        if new_projectile.direction == 'right':
+            # try:
+                positions[int(x) + 1][(int(y))] = new_projectile.object_to_dict()
+                new_projectile.positionX += 1
+                startbullet()
+            # except:
+            #     print("Vad gör du, skjuter du tomrummet?!")
+        elif new_projectile.direction == 'left':
+            # try:
+                positions[int(x) - 1][(int(y))] = new_projectile.object_to_dict()
+                new_projectile.positionX -= 1
+                startbullet()
+            # except:
+            #     print("Vad gör du, skjuter du tomrummet?!")
+        elif new_projectile.direction == 'up':
+            # try:
+                positions[int(x)][(int(y) - 1)] = new_projectile.object_to_dict()
+                new_projectile.positionY -= 1
+                startbullet()
+            # except:
+            #     print("Vad gör du, skjuter du tomrummet?!")
+        elif new_projectile.direction == 'down':
+            # try:
+                positions[int(x)][(int(y) + 1)] = new_projectile.object_to_dict()
+                new_projectile.positionY += 1
+                startbullet()
+            # except:
+            #     print("Vad gör du, skjuter du tomrummet?!")
 
 def projectile_move(data):
     game = ongoing_games[data['room']]
     positions = game.field_map
-    players = game.players
+    #players = game.players
     projectiles = game.projectiles
     for projectile in projectiles:
         if projectile != None:
-            x = int(projectile.positionX)
-            y = int(projectile.positionY)
+            x = projectile.positionX
+            y = projectile.positionY
             if projectile.direction == 'right':
                 try:
-                    positions[int(x + 1)][int(y)] = projectile.object_to_dict()
-                    positions[int(x)][int(y)] = None
+                    positions[int(x + 1)][(int(y))] = projectile.object_to_dict()
+                    positions[int(x)][(int(y))] = None
                     projectile.positionX += 1
                 except:
                     print("Vad gör du, hur tänker du egentligen?!")
+                    thread_start[data['room']]['threadbullet'].cancel()
+                    projectiles[projectiles.index(projectile)] = None
+                    print(game.projectiles)
             elif projectile.direction == 'left':
                 try:
-                    positions[int(x - 1)][int(y)] = projectile.object_to_dict()
-                    positions[int(x)][int(y)] = None
+                    positions[int(x - 1)][(int(y))] = projectile.object_to_dict()
+                    positions[int(x)][(int(y))] = None
                     projectile.positionX -= 1
                 except:
                     print("Vad gör du, hur tänker du egentligen?!")
+                    thread_start[data['room']]['threadbullet'].cancel()
+                    projectiles[projectiles.index(projectile)] = None
+                    print(game.projectiles)
             elif projectile.direction == 'up':
                 try:
-                    positions[int(x)][int(y - 1)] = projectile.object_to_dict()
-                    positions[int(x)][int(y)] = None
+                    positions[int(x)][(int(y - 1))] = projectile.object_to_dict()
+                    positions[int(x)][(int(y))] = None
                     projectile.positionY -= 1
                 except:
                     print("Vad gör du, hur tänker du egentligen?!")
+                    thread_start[data['room']]['threadbullet'].cancel()
+                    projectiles[projectiles.index(projectile)] = None
+                    print(game.projectiles)
             elif projectile.direction == 'up':
                 try:
                     positions[int(x)][int(y + 1)] = projectile.object_to_dict()
-                    positions[int(x)][int(y)] = None
+                    positions[int(x)][(int(y))] = None
                     projectile.positionY += 1
                 except:
                     print("Vad gör du, hur tänker du egentligen?!")
+                    thread_start[data['room']]['threadbullet'].cancel()
+                    projectiles[projectiles.index(projectile)] = None
+                    print(game.projectiles)
     
 #@socket.on('send_message_to_room')
 #def send_message_to_room(data):

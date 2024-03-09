@@ -568,31 +568,31 @@ $(document).ready(() => {
 
         //Shoot_projectile
         $("body").on("keypress", function (event) {
-            if (event.keyCode == 32) { //spacebar
-                console.log("Handler for `keypress` called.");
-                let this_player_id = null
-                let username = $("#this_user").text();
-                if (username == player1) {
-                    this_player_id = 0
-                    console.log("Spelare 1");
-                }
-                else if (username == player2) {
-                    this_player_id = 1
-                    console.log("Spelare 2")
-                }
+            // if (waitUpdate()) {
+                if (event.keyCode == 32) { //spacebar
+                    console.log("Handler for `keypress` called.");
+                    let this_player_id = null
+                    let username = $("#this_user").text();
+                    if (username == player1) {
+                        this_player_id = 0
+                        console.log("Spelare 1");
+                    }
+                    else if (username == player2) {
+                        this_player_id = 1
+                        console.log("Spelare 2")
+                    }
 
-                socket.emit('shoot_projectile', {
-                    room: room_id,
-                    player_id: this_player_id
-                })
-            }
-            
-
+                    socket.emit('shoot_projectile', {
+                        room: room_id,
+                        player_id: this_player_id
+                    })
+                }
+            // }
             
             
             // usernamePosition = new Position;
             // usernamePosition = userPosition(username);
-            console.log(character)
+            //console.log(character)
             
         })
 
