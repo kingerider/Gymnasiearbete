@@ -206,7 +206,7 @@ $(document).ready(() => {
 
 
     });
-    $("#createLevel").click(() => {
+    $("#create_level").click(() => {
         playerXArray = []
         playerYArray = []
         monsterXArray = []
@@ -229,18 +229,18 @@ $(document).ready(() => {
         }
 
         const data = {
-            title: $("#createTitle").val(),
-            description: $("#createDescription").val(),
-            playerXPositions: playerXArray, //is not in use
-            playerYPositions: playerYArray, //is not in use
-            monsterXPositions: monsterXArray,
-            monsterYPositions: monsterYArray,
-            wallXPositions: wallXArray,
-            wallPositions: wallYArray
+            title: $("#create_title").val(),
+            description: $("#create_description").val(),
+            username: $("#this_user").text(),
+            playerX_Positions: playerXArray, //is not in use
+            playerY_Positions: playerYArray, //is not in use
+            monsterX_Positions: monsterXArray,
+            monsterY_Positions: monsterYArray,
+            wallX_Positions: wallXArray,
+            wallY_Positions: wallYArray
         }
         
-        console.log("Hello")
-        console.log(data)
+        //console.log(data)
         $.ajax({
             method: 'POST',
             url: "/ajax-create-level",

@@ -33,9 +33,10 @@
 <input type="hidden" value="" id="Error">
 <div>
     <label for="fname">Title:</label><br>
-    <input type="text" name="createTitle" id="createTitle">
+    <input type="text" name="create_title" id="create_title">
     <label for="lname">Description:</label><br>
-    <textarea name="createDescription" id="createDescription" cols="30" rows="10"></textarea>
-    <input type="submit" value="Skapa bana" class="btn btn-primary m-5" id="createLevel">
+    <textarea name="create_description" id="create_description" cols="30" rows="10"></textarea>
+    <input type="submit" value="Skapa bana" class="btn btn-primary m-5" id="create_level">
 </div>
+<div id="this_user" style="display: none;">{{ session['username'] }}</div>
 {% endblock %}

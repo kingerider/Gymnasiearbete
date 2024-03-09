@@ -3,6 +3,8 @@ from flask import request
 import json
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.game import ongoing_games
+from datetime import datetime
+
 
 @app.route('/ajax_get_positions', methods = ['POST'])
 def ajax_get_positions():
@@ -45,19 +47,30 @@ def ajax_search_level():
 @app.route('/ajax-create-level', methods = ['POST'])
 def ajax_create_level():
     data = request.get_json()
-    print("Hello")
+    print("data:")
     print(data)
-    print(data['title'])
-    print(data['discription'])
     conn = create_connection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO level (title, discription) VALUES (?, ?)", (data['title'], data['discription'],))
-    for i in range(len(data['wallXPositions'])):
-        cur.execute("INSERT INTO wall (x_coordinate, y_coordinate) VALUES (?, ?)", (data['wallXPositions'], data['wallXPositions'],))
-    for i in range(len(data['monsterXPositions'])):
-        cur.execute("INSERT INTO monster (x_coordinate, y_coordinate) VALUES (?, ?)", (data['monsterXPositions'], data['monsterXPositions'],))
-    
-
+    now = datetime.now()
+    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+    print("now:")
+    print(now)
+    print("formated:")
+    print(formatted_date)
+    print("username:")
+    print(data['username'])
+    print("Done")
+    username_id = cur.execute("SELECT id FROM user WHERE username LIKE ?", (data['username'],)).fetchone()[0]
+    cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date))
+    level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
+    print(level_id)
+    print("range")
+    print(len(data['wallX_Positions']))
+    for i in range(len(data['wallX_Positions'])): #len(data[x]) is as long as len(data[y])
+        cur.execute("INSERT INTO wall (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (level_id, data['wallX_Positions'][i], data['wallY_Positions'][i],))
+    for i in range(len(data['monsterX_Positions'])): 
+        cur.execute("INSERT INTO enemy (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (level_id, data['monsterX_Positions'][i], data['monsterY_Positions'][i],))
+    conn.commit()
     conn.close()
     #print(levels)
     return json.dumps({
