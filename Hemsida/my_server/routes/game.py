@@ -408,7 +408,32 @@ def list_levels():
 
 @app.route('/build_game')
 def build_game():
-    return render_template('build_game.html')
+    conn = create_connection()
+    cur = conn.cursor()    
+    total_levels = cur.execute("SELECT COUNT(id) FROM level WHERE creator_id == ?", ((session['id']), )).fetchone()[0]
+    conn.close()
+    print("Hello")
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+    print(total_levels)
+
+    maps_you_can_create = 3
+
+    if total_levels >= maps_you_can_create: #You can only create two maps
+        flash(f"Hello {session['username']}, you can only create {maps_you_can_create} maps because of server overload", "info")
+        return redirect(url_for('profile'))
+    else:
+        return render_template('build_game.html')
 
 @app.route('/edit_game/<level_id>')
 def edit_game(level_id = None):
