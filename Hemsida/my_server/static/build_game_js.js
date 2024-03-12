@@ -13,6 +13,7 @@ function setMonster() {
 }
 
 $(document).ready(() => {
+
     //Position class for objects
     class Position {
         constructor(x, y) {
@@ -258,8 +259,13 @@ $(document).ready(() => {
                 dataType: "json",
                 success: (data) => {
                     if (data.success) {
-                        console.log("success")
+                        var base_url = window.location.origin;
+                        window.location = (base_url + "/profile")
+                    }else {
+                        $("#message_td").css('display', 'block')
+                        $("#message_td").text('Something went wrong')
                     }
+
                     //alert(JSON.stringify(data))
                 }
             });

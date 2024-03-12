@@ -68,7 +68,6 @@ def ajax_edit_level():
     return json.dumps({
         'msg': 'level added',
         'success': True,
-        'levels': data
     })
 
 @app.route('/ajax-edit-level', methods = ['POST'])
