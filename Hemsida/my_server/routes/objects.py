@@ -88,8 +88,7 @@ class Player(Entity):
         self.name = name
         self.health = health
         self.direction = direction
-        self.positionX = posX
-        self.positionY = posY
+        super().__init__(posX, posY)
 
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
@@ -103,8 +102,7 @@ class Enemy(Entity):
         self.id = id
         self.level_id = level_id
         self.direction = None
-        self.positionX = posX
-        self.positionY = posY
+        super().__init__(posX, posY)
 
     def change_direction(self, str):
         self.direction = str
@@ -116,15 +114,13 @@ class Wall(Entity):
     def __init__(self, id, level_id, posX, posY):
         self.id = id
         self.level_id = level_id
-        self.positionX = posX
-        self.positionY = posY
+        super().__init__(posX, posY)
 
 class Item(Entity):
     def __init__(self, id, level_id, posX, posY, type):
         self.id = id
         self.level_id = level_id
-        self.positionX = posX
-        self.positionY = posY
+        super().__init__(posX, posY)
         self.type = type
 
 class Projectile(Entity):
