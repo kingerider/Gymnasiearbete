@@ -114,7 +114,7 @@ class Enemy(Entity):
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
 
-    def monster_move(data):
+    def monster_move(self, data):
 
         game = ongoing_games[data['room']]
         monsters = game.field.enemies
