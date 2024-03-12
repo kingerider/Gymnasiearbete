@@ -1,4 +1,7 @@
 from my_server.routes.dbhandler import create_connection
+from my_server.routes.game import ongoing_games, player_taken_damage
+import random
+import threading
 
 canvasw = 800
 canvash = 400
@@ -102,6 +105,7 @@ class Enemy(Entity):
         self.id = id
         self.level_id = level_id
         self.direction = None
+        # self.t = threading.Timer(0.2)
         super().__init__(posX, posY)
 
     def change_direction(self, str):
@@ -109,6 +113,93 @@ class Enemy(Entity):
 
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
+
+    def monster_move(data):
+
+        game = ongoing_games[data['room']]
+        monsters = game.field.enemies
+        positions = game.field_map
+        players = game.players
+
+        for monster in monsters:
+
+            movementChoose = 0
+            x = monster.positionX
+            y = monster.positionY
+            dict_monster = dict(type="enemy")
+            #how close is player, if player is within 5 tiles don't do random action
+            #if(5*tileSize > (playerX - monsterArray[j].getX()) and -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
+            #movementChoose = 1;
+            if(False):
+                pass
+            else:
+                movementChoose = random.randint(1, 4)
+            #Left
+            if movementChoose == 1:
+                #Check if movement available
+                try:
+                    if positions[int(x - 1)][(int(y))] == None:
+                        positions[int(x - 1)][(int(y))] = dict_monster
+                        positions[int(x)][(int(y))] = None
+                        monster.positionX -= 1
+                    elif positions[int(x - 1)][(int(y))]['type'] == 'player':
+                        player_taken_damage(players, positions, x, y)
+                        # for player in players:
+                        #     if player.name == positions[int(x - 1)][(int(y))]['name']:
+                        #         player.damage_taken()
+                        #         print(f'{player.name} tog skada')
+                except:
+                    print("Ajabaja, kan inte röra dig dära lillen")
+
+            #Right
+            elif movementChoose == 2:
+                #Check if movement available
+                try:
+                    if positions[int(x + 1)][(int(y))] == None:
+                        positions[int(x + 1)][(int(y))] = dict_monster
+                        positions[int(x)][(int(y))] = None
+                        monster.positionX += 1
+                    elif positions[int(x + 1)][(int(y))]['type'] == 'player':
+                        player_taken_damage(players, positions, x, y)
+                        # for player in players:
+                        #     if player.name == positions[int(x + 1)][(int(y))]['name']:
+                        #         player.damage_taken()
+                        #         print(f'{player.name} tog skada')
+                except:
+                    print("Ajabaja, kan inte röra dig dära lillen")
+            #Up
+            elif movementChoose == 3:
+                #Check if movement available
+                try:
+                    if positions[int(x)][(int(y - 1))] == None:
+                        positions[int(x)][(int(y - 1))] = dict_monster
+                        positions[int(x)][(int(y))] = None
+                        monster.positionY -= 1
+                    elif positions[int(x)][(int(y - 1))]['type'] == 'player':
+                        player_taken_damage(players, positions, x, y)
+                        # for player in players:
+                        #     if player.name == positions[int(x)][(int(y - 1))]['name']:
+                        #         player.damage_taken()
+                        #         print(f'{player.name} tog skada')
+                except:
+                    print("Ajabaja, kan inte röra dig dära lillen")
+            #Down
+            elif movementChoose == 4:
+                #Check if movement available
+                try:
+                    if positions[int(x)][(int(y + 1))] == None:
+                        positions[int(x)][(int(y + 1))] = dict_monster
+                        positions[int(x)][(int(y))] = None
+                        monster.positionY += 1
+                    elif positions[int(x)][(int(y + 1))]['type'] == 'player':
+                        player_taken_damage(players, positions, x, y)
+                        # for player in players:
+                        #     if player.name == positions[int(x)][(int(y + 1))]['name']:
+                        #         player.damage_taken()
+                        #         print(f'{player.name} tog skada')
+                except:
+                    print("Ajabaja, kan inte röra dig dära lillen")
+    
 
 class Wall(Entity):
     def __init__(self, id, level_id, posX, posY):
