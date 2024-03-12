@@ -93,7 +93,7 @@ def ajax_create_level():
     for i in range(len(data['monsterX_Positions'])): 
         cur.execute("INSERT INTO enemy (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (data['level_id'], data['monsterX_Positions'][i], data['monsterY_Positions'][i],))
     
-    #conn.commit() #CHANGE THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSAFBIAFU
+    conn.commit() 
     conn.close()
 
     return json.dumps({
