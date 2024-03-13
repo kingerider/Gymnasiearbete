@@ -247,7 +247,7 @@ $(document).ready(() => {
             var image = new Image();
             image.onload = function () {
                 var x = 0, y = 0;
-                ctx.drawImage(image, x, y);  //aka, ctx2.drawImage(this, 0, 0);
+                ctx.drawImage(image, x, y, 10, 10);  //aka, ctx2.drawImage(this, 0, 0);
             }
             image.src = '../../static/img/jumbotron_bg.jpg';
             //Finally, start the loading process

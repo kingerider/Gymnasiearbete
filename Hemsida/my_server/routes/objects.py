@@ -1,8 +1,4 @@
 from my_server.routes.dbhandler import create_connection
-<<<<<<< HEAD
-=======
-
->>>>>>> a67c1d732c8f6acaa7af3ebe3b99d288f90bae10
 canvasw = 800
 canvash = 400
 tile_size = 20
@@ -86,10 +82,6 @@ class Entity:
     def set_y(self, posY):
         self.positionY = posY
 
-<<<<<<< HEAD
-=======
-
->>>>>>> a67c1d732c8f6acaa7af3ebe3b99d288f90bae10
 class Player(Entity): 
     def __init__(self, name, health, direction, posX, posY):
         self.name = name
@@ -132,22 +124,12 @@ class Item(Entity):
         super().__init__(posX, posY)
         self.type = type
 
-<<<<<<< HEAD
-class Projectile(Entity):
-    def __init__(self, posX, posY, dir, id):
-        super().__init__(posX, posY)
-        self.direction = dir
-        self.player_id = id
-=======
 #Erik Change
 
->>>>>>> a67c1d732c8f6acaa7af3ebe3b99d288f90bae10
     
     def object_to_dict(self):
         return dict(type = 'projectile', player_id = self.player_id, direction = self.direction)
 
-<<<<<<< HEAD
-=======
     def move(self, field_map):
         if self.direction == 'right':
             if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
@@ -171,7 +153,6 @@ class Projectile(Entity):
                 field_map[int(self.positionX)][(int(self.positionY)) - 1] = None
 
 
->>>>>>> a67c1d732c8f6acaa7af3ebe3b99d288f90bae10
 class Field:
     def __init__(self, id, health):
         self.id = id
