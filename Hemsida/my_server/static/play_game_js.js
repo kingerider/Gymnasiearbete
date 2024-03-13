@@ -106,6 +106,29 @@ $(document).ready(() => {
         var gridHeight = canvas.height / tileSize
         var gridWdith = canvas.width / tileSize
 
+
+        //Position class for objects
+        class Position {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+            getX() {
+                return this.x;
+            }
+            getY() {
+                return this.y;
+            }
+            setX(x) {
+                this.x = x;
+            }
+            setY(y) {
+                this.y = y;
+            }
+
+
+        }
+
         var wait = false;
         function waitUpdate() {
             if (wait == false) {
@@ -153,13 +176,13 @@ $(document).ready(() => {
         //hearts
         function drawHearts() {
             //dimensioner: w 300 h 50
-            console.log("draw hearts")
-            console.log("draw hearts")
-            console.log("draw hearts")
+            //console.log("draw hearts")
+            //console.log("draw hearts")
+            //console.log("draw hearts")
             for (var i = 0; i < heart1object.health; i++) {
-                console.log("Draw heart 1: " + i)
-                console.log("heartWidth: " + heartWidth)
-                console.log("heartHeight: " + heartHeight)
+                //console.log("Draw heart 1: " + i)
+                //console.log("heartWidth: " + heartWidth)
+                //console.log("heartHeight: " + heartHeight)
                 ctx.beginPath()
                 //ctx.rect(i*(heartWidth), 0, heartWidth, heartHeight,);
                 ctx.rect(i*(heartWidth + 5), (2*tileSize)/2, heartWidth, heartHeight)
@@ -168,7 +191,7 @@ $(document).ready(() => {
                 ctx.closePath()
             }
             for (var i = 1; i <= heart2object.health; i++) {
-                console.log("Draw heart 2: " + i)
+                //console.log("Draw heart 2: " + i)
                 ctx.beginPath()
                 if (i == 1) {
                     ctx.rect(canvas.width - i*(heartWidth), (2*tileSize)/2, heartWidth, heartHeight)
@@ -218,6 +241,26 @@ $(document).ready(() => {
             ctx.closePath();
         }
 
+        function youWin(){
+            console.log("YouWin")
+            ctx.beginPath();
+            var image = new Image(); // or document.createElement('img'); 
+            image.src = 'https://png.pngtree.com/png-clipart/20230812/original/pngtree-comic-speech-bubbles-with-text-you-win-picture-image_7880780.png'; // Finally, draw our image onto the canvas with a given x & y position.
+            var x = 0, y = 0;
+            ctx.drawImage(image, x, y);
+            ctx.closePath();
+        }
+
+        function youLose(){
+            console.log("YouLose")
+            ctx.beginPath();
+            var image = new Image(); // or document.createElement('img'); 
+            image.src = 'https://png.pngtree.com/png-clipart/20230812/original/pngtree-comic-speech-bubbles-with-text-you-win-picture-image_7880780.png'; // Finally, draw our image onto the canvas with a given x & y position.
+            var x = 0, y = 0;
+            ctx.drawImage(image, x, y);
+            ctx.closePath();
+        }
+
         /*socket.emit("start_monster", {
             room: room_id
         })*/
@@ -252,6 +295,10 @@ $(document).ready(() => {
             cancelWait();
             newData = data;
             updateEntityPosition();
+            endGame();
+            
+
+
             //canvas
             canvas = document.getElementById("myCanvas");
             ctx = canvas.getContext("2d");
@@ -330,26 +377,29 @@ $(document).ready(() => {
             draw();
         })
 
-        //Position class for objects
-        class Position {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-            }
-            getX() {
-                return this.x;
-            }
-            getY() {
-                return this.y;
-            }
-            setX(x) {
-                this.x = x;
-            }
-            setY(y) {
-                this.y = y;
-            }
+        function endGame(){
+            let username = $("#this_user").text();
+            console.log(heart1object.health)
+            if (player1 == username){
+                if (heart1object.health < 3) {
+                    clearInterval(updateInterval);
+                    youWin();
 
+                }else if (heart2object.health < 3) {
+                    clearInterval(updateInterval);
+                    youLose();
+                }
+            }else{
+                if (heart1object.health < 1) {
+                    clearInterval(updateInterval);
+                    youLose();
 
+                }else if (heart2object.health < 1) {
+                    clearInterval(updateInterval);
+                    youWin();
+                    
+                }
+            }
         }
 
         //Adds all walls to the array;
@@ -643,6 +693,6 @@ $(document).ready(() => {
             window.location.href = path
             socket.disconnect()
         })
-        setInterval(updatePage, 100)
+        let updateInterval = setInterval(updatePage, 100)
     }
 })
