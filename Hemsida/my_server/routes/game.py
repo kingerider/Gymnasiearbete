@@ -152,20 +152,12 @@ def handle_join_room(data):
 def on_leave(data):
     leave_room(data['room'])
     print(ongoing_games)
-    your_room = ''
-    templista = []
     for client in clients:
         if client['room'] == data['room'] and client['name'] == session['username']:
-            your_room = client['room']
             clients.remove(client)
-        else:
-            templista.append(client['room'])
-    
-    if your_room not in templista:
-        ongoing_games.pop(data['room'], None)
     # print(ongoing_games.pop(data['room'], None))
-        thread_start[data['room']]['threadmonster'].cancel()
     print(ongoing_games)
+    thread_start[data['room']]['threadmonster'].cancel()
     #thread_start[data['room']]['threadbullet'].cancel()
     #send_message_to_room({
     #    'heading': 'Info',
@@ -365,7 +357,7 @@ def shoot_projectile(data):
     if game.projectiles[data['player_id']] == None:
         positions = game.field_map
         player = game.players[data['player_id']]
-        game.projectiles[data['player_id']] = Projectile(player.positionX, player.positionY, player.direction, data['player_id'], game.field_map)
+        game.projectiles[data['player_id']] = Projectile(player.positionX, player.positionY, player.direction, data['player_id'])
         new_projectile = game.projectiles[data['player_id']]
         x = new_projectile.positionX
         y = new_projectile.positionY
@@ -422,10 +414,6 @@ def projectile_move(data):
                         thread_start[data['room']]['threadbullet'].cancel()
                         projectiles[projectiles.index(projectile)] = None
                         print(game.projectiles)
-                    else:
-                        thread_start[data['room']]['threadbullet'].cancel()
-                        projectiles[projectiles.index(projectile)] = None
-                        print(game.projectiles)
                 except:
                     print("Vad gör du, hur tänker du egentligen?!")
                     thread_start[data['room']]['threadbullet'].cancel()
@@ -439,10 +427,6 @@ def projectile_move(data):
                         projectile.positionX -= 1
                     elif positions[int(x - 1)][(int(y))]['type'] == 'player':
                         player_taken_damage(players, positions, x, y)
-                        thread_start[data['room']]['threadbullet'].cancel()
-                        projectiles[projectiles.index(projectile)] = None
-                        print(game.projectiles)
-                    else:
                         thread_start[data['room']]['threadbullet'].cancel()
                         projectiles[projectiles.index(projectile)] = None
                         print(game.projectiles)
@@ -462,10 +446,6 @@ def projectile_move(data):
                         thread_start[data['room']]['threadbullet'].cancel()
                         projectiles[projectiles.index(projectile)] = None
                         print(game.projectiles)
-                    else:
-                        thread_start[data['room']]['threadbullet'].cancel()
-                        projectiles[projectiles.index(projectile)] = None
-                        print(game.projectiles)
                 except:
                     print("Vad gör du, hur tänker du egentligen?!")
                     thread_start[data['room']]['threadbullet'].cancel()
@@ -479,10 +459,6 @@ def projectile_move(data):
                         projectile.positionY += 1
                     elif positions[int(x)][int(y + 1)]['type'] == 'player':
                         player_taken_damage(players, positions, x, y)
-                        thread_start[data['room']]['threadbullet'].cancel()
-                        projectiles[projectiles.index(projectile)] = None
-                        print(game.projectiles)
-                    else:
                         thread_start[data['room']]['threadbullet'].cancel()
                         projectiles[projectiles.index(projectile)] = None
                         print(game.projectiles)

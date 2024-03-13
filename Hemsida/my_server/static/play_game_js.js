@@ -244,10 +244,15 @@ $(document).ready(() => {
         function youWin(){
             console.log("YouWin")
             ctx.beginPath();
-            var image = new Image(); // or document.createElement('img'); 
-            image.src = 'https://png.pngtree.com/png-clipart/20230812/original/pngtree-comic-speech-bubbles-with-text-you-win-picture-image_7880780.png'; // Finally, draw our image onto the canvas with a given x & y position.
-            var x = 0, y = 0;
-            ctx.drawImage(image, x, y);
+            var image = new Image();
+            image.onload = function () {
+                var x = 0, y = 0;
+                ctx.drawImage(image, x, y);  //aka, ctx2.drawImage(this, 0, 0);
+            }
+            image.src = '../../static/img/jumbotron_bg.jpg';
+            //Finally, start the loading process
+            //var image = new Image(); // or document.createElement('img'); 
+            //image.src = "../../static/img/jumbotron_bg.jpg"; 
             ctx.closePath();
         }
 
@@ -257,7 +262,12 @@ $(document).ready(() => {
             var image = new Image(); // or document.createElement('img'); 
             image.src = 'https://png.pngtree.com/png-clipart/20230812/original/pngtree-comic-speech-bubbles-with-text-you-win-picture-image_7880780.png'; // Finally, draw our image onto the canvas with a given x & y position.
             var x = 0, y = 0;
-            ctx.drawImage(image, x, y);
+
+            ctx.drawImage(image,
+                0, 0,
+                0, 0,
+                0, 0,
+                0, 0);
             ctx.closePath();
         }
 
@@ -296,9 +306,7 @@ $(document).ready(() => {
             newData = data;
             updateEntityPosition();
             endGame();
-            
-
-
+            youWin();
             //canvas
             canvas = document.getElementById("myCanvas");
             ctx = canvas.getContext("2d");
