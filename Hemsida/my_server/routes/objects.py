@@ -1,5 +1,7 @@
 from my_server.routes.dbhandler import create_connection
-
+from my_server.routes.game import ongoing_games
+from threading import Thread
+import time
 canvasw = 800
 canvash = 400
 tile_size = 20
@@ -83,6 +85,15 @@ class Entity:
     def set_y(self, posY):
         self.positionY = posY
 
+class BulletThread(Thread):
+
+    def __init__(self, bullet):
+        Thread.__init__(self)
+        self.bullet = bullet
+    
+    def run(self):
+        self.bullet.move(ongoing_games)
+        time.sleep(1)
 class Player(Entity): 
     def __init__(self, name, health, direction, posX, posY):
         self.name = name
@@ -130,9 +141,34 @@ class Projectile(Entity):
         super().__init__(posX, posY)
         self.direction = dir
         self.player_id = id
+        self.thread = BulletThread(self)
+        self.thread.start()
     
     def object_to_dict(self):
         return dict(type = 'projectile', player_id = self.player_id, direction = self.direction)
+
+    def move(self, field_map):
+        if self.direction == 'right':
+            if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
+                self.set_x(int(self.positionX) + 1)
+                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'left':
+            if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
+                self.set_x(int(self.positionX) - 1)
+                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'up':
+            if field_map[int(self.positionX)][(int(self.positionY))] == None:
+                self.set_y(int(self.positionY) - 1)
+                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'down':
+            if field_map[int(self.positionX)][(int(self.positionY))] == None:
+                self.set_y(int(self.positionY) + 1)
+                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+
 
 class Field:
     def __init__(self, id, health):
