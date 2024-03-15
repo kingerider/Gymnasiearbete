@@ -126,32 +126,6 @@ class Item(Entity):
 
 #Erik Change
 
-    
-    def object_to_dict(self):
-        return dict(type = 'projectile', player_id = self.player_id, direction = self.direction)
-
-    def move(self, field_map):
-        if self.direction == 'right':
-            if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
-                self.set_x(int(self.positionX) + 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX) - 1][(int(self.positionY))] = None
-        elif self.direction == 'left':
-            if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
-                self.set_x(int(self.positionX) - 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX) + 1][(int(self.positionY))] = None
-        elif self.direction == 'up':
-            if field_map[int(self.positionX)][(int(self.positionY))] == None:
-                self.set_y(int(self.positionY) - 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX)][(int(self.positionY)) + 1] = None
-        elif self.direction == 'down':
-            if field_map[int(self.positionX)][(int(self.positionY))] == None:
-                self.set_y(int(self.positionY) + 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX)][(int(self.positionY)) - 1] = None
-
 
 class Field:
     def __init__(self, id, health):
