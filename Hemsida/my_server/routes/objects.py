@@ -44,10 +44,10 @@ class Game:
             #for y in range(0, self.field.tile_size):
                 #if self.field_map[x][y] != None:
                     #self.field_map[x][y] = None
-        dict_player1 = dict(type = "player", name = self.players[0].name, direction = self.players[0].direction, health = self.players[0].health)
-        dict_player2 = dict(type = "player", name = self.players[1].name, direction = self.players[1].direction, health = self.players[1].health)
-        self.field_map[int(self.players[0].positionX)][int(self.players[0].positionY)] = dict_player1
-        self.field_map[int(self.players[1].positionX)][int(self.players[1].positionY)] = dict_player2
+        # dict_player1 = dict(type = "player", name = self.players[0].name, direction = self.players[0].direction, health = self.players[0].health)
+        # dict_player2 = dict(type = "player", name = self.players[1].name, direction = self.players[1].direction, health = self.players[1].health)
+        self.field_map[int(self.players[0].positionX)][int(self.players[0].positionY)] = self.players[0].object_to_dict()
+        self.field_map[int(self.players[1].positionX)][int(self.players[1].positionY)] = self.players[1].object_to_dict()
 
     def add_player(self, player):
         self.players.append(player)
@@ -94,6 +94,9 @@ class Player(Entity):
 
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
+    
+    def object_to_dict(self):
+        return dict(type = "player", name = self.name, direction = self.direction, health = self.health)
     
     def damage_taken(self):
         if self.health >= 1:

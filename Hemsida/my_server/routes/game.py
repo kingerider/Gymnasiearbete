@@ -399,11 +399,19 @@ class Projectile(Entity):
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                 elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
-                    game.players[self.player_id].damage_taken()
-                    self.thread.stop()
-                    game.projectiles[self.player_id] = None
-                    field_map[int(self.positionX)][(int(self.positionY))] = None
-                    print(field_map)
+                    if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[0].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[1].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+
                 else:
                     self.thread.stop()
                     game.projectiles[self.player_id] = None
@@ -426,11 +434,18 @@ class Projectile(Entity):
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                 elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
-                    game.players[self.player_id].damage_taken()
-                    self.thread.stop()
-                    game.projectiles[self.player_id] = None
-                    field_map[int(self.positionX)][(int(self.positionY))] = None
-                    print(field_map)
+                    if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[0].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[1].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
                 else:
                     self.thread.stop()
                     game.projectiles[self.player_id] = None
@@ -453,11 +468,18 @@ class Projectile(Entity):
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                 elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
-                    game.players[self.player_id].damage_taken()
-                    self.thread.stop()
-                    game.projectiles[self.player_id] = None
-                    field_map[int(self.positionX)][(int(self.positionY))] = None
-                    print(field_map)
+                    if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[0].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[1].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
                 else:
                     self.thread.stop()
                     game.projectiles[self.player_id] = None
@@ -480,11 +502,18 @@ class Projectile(Entity):
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                 elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
-                    game.players[self.player_id].damage_taken()
-                    self.thread.stop()
-                    game.projectiles[self.player_id] = None
-                    field_map[int(self.positionX)][(int(self.positionY))] = None
-                    print(field_map)
+                    if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[0].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[1].damage_taken()
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
                 else:
                     self.thread.stop()
                     game.projectiles[self.player_id] = None
