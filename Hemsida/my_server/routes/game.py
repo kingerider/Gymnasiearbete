@@ -14,15 +14,6 @@ ongoing_games = {
     #'room_-1': test_game 
 }
 
-class BulletThread(Thread):
-
-    def __init__(self, bullet):
-        Thread.__init__(self)
-        self.bullet = bullet
-    
-    def run(self):
-        self.bullet.move(ongoing_games[self.bullet.room_id].field_map)
-        time.sleep(1)
 
 thread_start = {}
 
@@ -60,39 +51,6 @@ def set_room_id():
     
     return f'room_{max + 1}'
 
-class Projectile(Entity):
-    def __init__(self, posX, posY, dir, id, ri):
-        super().__init__(posX, posY)
-        self.direction = dir
-        self.player_id = id
-        self.room_id = ri
-        self.thread = BulletThread(self)
-        self.thread.start()
-        
-    def object_to_dict(self):
-        return dict(type = 'projectile', player_id = self.player_id, direction = self.direction)
-
-    def move(self, field_map):
-        if self.direction == 'right':
-            if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
-                self.set_x(int(self.positionX) + 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX) - 1][(int(self.positionY))] = None
-        elif self.direction == 'left':
-            if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
-                self.set_x(int(self.positionX) - 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX) + 1][(int(self.positionY))] = None
-        elif self.direction == 'up':
-            if field_map[int(self.positionX)][(int(self.positionY))] == None:
-                self.set_y(int(self.positionY) - 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX)][(int(self.positionY)) + 1] = None
-        elif self.direction == 'down':
-            if field_map[int(self.positionX)][(int(self.positionY))] == None:
-                self.set_y(int(self.positionY) + 1)
-                field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                field_map[int(self.positionX)][(int(self.positionY)) - 1] = None
 
 #conn = create_connection()
 #cur = conn.cursor()
@@ -397,13 +355,186 @@ def monster_move(data):
                 except:
                     print("Ajabaja, kan inte röra dig dära lillen")
 
+class BulletThread(Thread):
+
+    def __init__(self, bullet):
+        Thread.__init__(self)
+        self._stop_event = threading.Event()
+        self.bullet = bullet
+    
+    def stop(self):
+        self._stop_event.set()
+
+    def run(self):
+        while not self._stop_event.is_set():
+            self.bullet.move(ongoing_games[self.bullet.room_id])
+            time.sleep(0.1)
+
+
+
+class Projectile(Entity):
+    def __init__(self, posX, posY, dir, id, ri):
+        super().__init__(posX, posY)
+        self.direction = dir
+        self.player_id = id
+        self.room_id = ri
+        self.thread = BulletThread(self)
+        self.thread.start()
+        
+    def object_to_dict(self):
+        return dict(type = 'projectile', player_id = self.player_id, direction = self.direction)
+
+    def move(self, game):
+        field_map = game.field_map
+        if self.direction == 'right':
+            try:
+                if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
+                    try:
+                        self.set_x(int(self.positionX) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) - 1][(int(self.positionY))] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
+                    game.players[self.player_id].damage_taken()
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'left':
+            try:
+                if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
+                    try:
+                        self.set_x(int(self.positionX) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) + 1][(int(self.positionY))] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
+                    game.players[self.player_id].damage_taken()
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'up':
+            try:
+                if field_map[int(self.positionX)][(int(self.positionY) -1)] == None:
+                    try:
+                        self.set_y(int(self.positionY) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY)) + 1] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
+                    game.players[self.player_id].damage_taken()
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'down':
+            try:
+                if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
+                    try:
+                        self.set_y(int(self.positionY) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY)) - 1] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
+                    game.players[self.player_id].damage_taken()
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+
 @socket.on('shoot_projectile')
 def shoot_projectile(data): 
     game = ongoing_games[data['room']]
     if game.projectiles[data['player_id']] == None:
         positions = game.field_map
         player = game.players[data['player_id']]
-        game.projectiles[data['player_id']] = Projectile(player.positionX, player.positionY, player.direction, data['player_id'], data['room'])
+        if player.direction == 'right':
+            try:
+                if positions[int(player.positionX) + 1][(int(player.positionY))] == None:
+                    game.projectiles[data['player_id']] = Projectile(int(player.positionX) + 1, int(player.positionY), player.direction, data['player_id'], data['room'])
+                elif positions[int(player.positionX) + 1][(int(player.positionY))]['type'] == 'player':
+                    game.players[data['player_id']].damage_taken()
+            except:
+                print('Du kan inte skjuta där!')
+        elif player.direction == 'left':
+            try:
+                if positions[int(player.positionX) - 1][(int(player.positionY))] == None:
+                    game.projectiles[data['player_id']] = Projectile(int(player.positionX) - 1, int(player.positionY), player.direction, data['player_id'], data['room'])
+                elif positions[int(player.positionX) - 1][(int(player.positionY))]['type'] == 'player':
+                    game.players[data['player_id']].damage_taken()
+            except:
+                print('Du kan inte skjuta där!')
+        elif player.direction == 'up':
+            try:
+                if positions[int(player.positionX)][(int(player.positionY) - 1)] == None:
+                    game.projectiles[data['player_id']] = Projectile(int(player.positionX), int(player.positionY) - 1, player.direction, data['player_id'], data['room'])
+                elif positions[int(player.positionX)][(int(player.positionY) - 1)]['type'] == 'player':
+                    game.players[data['player_id']].damage_taken()
+            except:
+                print('Du kan inte skjuta där!')
+        elif player.direction == 'down':
+            try:
+                if positions[int(player.positionX)][(int(player.positionY) + 1)] == None:
+                    game.projectiles[data['player_id']] = Projectile(int(player.positionX), int(player.positionY) + 1, player.direction, data['player_id'], data['room'])
+                elif positions[int(player.positionX)][(int(player.positionY) + 1)]['type'] == 'player':
+                    game.players[data['player_id']].damage_taken()
+            except:
+                print('Du kan inte skjuta där!')
+            
+
         # new_projectile = game.projectiles[data['player_id']]
         # x = new_projectile.positionX
         # y = new_projectile.positionY

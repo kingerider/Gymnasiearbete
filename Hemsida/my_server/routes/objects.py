@@ -1,4 +1,7 @@
 from my_server.routes.dbhandler import create_connection
+from threading import Thread
+import threading
+import time
 canvasw = 800
 canvash = 400
 tile_size = 20
@@ -96,6 +99,20 @@ class Player(Entity):
         if self.health >= 1:
             self.health -= 1
 
+class EnemyThread(Thread):
+    def __init__(self, enemy):
+        Thread.__init__(self)
+        self._stop_event = threading.Event()
+        self.enemy = enemy
+    
+    def stop(self):
+        self._stop_event.set()
+
+    def run(self):
+        while not self._stop_event.is_set():
+            #self.bullet.move(ongoing_games[self.bullet.room_id])
+            time.sleep(0.1)
+
 class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY):
         self.id = id
@@ -108,8 +125,6 @@ class Enemy(Entity):
 
     def moveTo(self, newPosX, newPosY):
         self.set_position(newPosX, newPosY)
-
-    
 
 class Wall(Entity):
     def __init__(self, id, level_id, posX, posY):
