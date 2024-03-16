@@ -242,14 +242,15 @@ $(document).ready(() => {
         }
 
         function youWin(){
+            clearInterval(updateInterval);
             console.log("YouWin")
             ctx.beginPath();
             var image = new Image();
             image.onload = function () {
                 var x = 0, y = 0;
-                ctx.drawImage(image, x, y, 10, 10);  //aka, ctx2.drawImage(this, 0, 0);
+                ctx.drawImage(image, x, y, 300, 90);  //aka, ctx2.drawImage(this, 0, 0);
             }
-            image.src = '../../static/img/jumbotron_bg.jpg';
+            image.src = '../../static/img/YouWinBig.png';
             //Finally, start the loading process
             //var image = new Image(); // or document.createElement('img'); 
             //image.src = "../../static/img/jumbotron_bg.jpg"; 
@@ -257,17 +258,18 @@ $(document).ready(() => {
         }
 
         function youLose(){
+            clearInterval(updateInterval);
             console.log("YouLose")
             ctx.beginPath();
-            var image = new Image(); // or document.createElement('img'); 
-            image.src = 'https://png.pngtree.com/png-clipart/20230812/original/pngtree-comic-speech-bubbles-with-text-you-win-picture-image_7880780.png'; // Finally, draw our image onto the canvas with a given x & y position.
-            var x = 0, y = 0;
-
-            ctx.drawImage(image,
-                0, 0,
-                0, 0,
-                0, 0,
-                0, 0);
+            var image = new Image();
+            image.onload = function () {
+                var x = 0, y = 0;
+                ctx.drawImage(image, x, y, 300, 90);  //aka, ctx2.drawImage(this, 0, 0);
+            }
+            image.src = '../../static/img/YouLoseBig.png';
+            //Finally, start the loading process
+            //var image = new Image(); // or document.createElement('img'); 
+            //image.src = "../../static/img/jumbotron_bg.jpg"; 
             ctx.closePath();
         }
 
@@ -306,7 +308,6 @@ $(document).ready(() => {
             newData = data;
             updateEntityPosition();
             endGame();
-            youWin();
             //canvas
             canvas = document.getElementById("myCanvas");
             ctx = canvas.getContext("2d");
@@ -390,20 +391,16 @@ $(document).ready(() => {
             console.log(heart1object.health)
             if (player1 == username){
                 if (heart1object.health < 3) {
-                    clearInterval(updateInterval);
                     youWin();
 
                 }else if (heart2object.health < 3) {
-                    clearInterval(updateInterval);
                     youLose();
                 }
             }else{
-                if (heart1object.health < 1) {
-                    clearInterval(updateInterval);
+                if (heart1object.health < 3) {
                     youLose();
 
-                }else if (heart2object.health < 1) {
-                    clearInterval(updateInterval);
+                }else if (heart2object.health < 3) {
                     youWin();
                     
                 }
