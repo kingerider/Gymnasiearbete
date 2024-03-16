@@ -267,6 +267,7 @@ def player_taken_damage(players, positions, x, y):
     for player in players:
         if player.name == positions[int(x + 1)][(int(y))]['name']:
             player.damage_taken()
+            positions[int(x+1)][(int(y))] = player.object_to_dict()
             print(f'{player.name} tog skada')
 
 def monster_move(data):
@@ -401,12 +402,18 @@ class Projectile(Entity):
                 elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
                     if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[0].damage_taken()
+                        field_map[game.players[0].positionX][game.players[0].positionY] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                     elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[1].damage_taken()
+                        field_map[game.players[1].positionX][game.players[1].positionY] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
@@ -436,12 +443,18 @@ class Projectile(Entity):
                 elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
                     if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[0].damage_taken()
+                        field_map[game.players[0].positionX][game.players[0].positionY] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                     elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[1].damage_taken()
+                        field_map[game.players[1].positionX][game.players[1].positionY] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
@@ -470,12 +483,18 @@ class Projectile(Entity):
                 elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
                     if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[0].damage_taken()
+                        field_map[game.players[0].positionX][game.players[0].positionY] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                     elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[1].damage_taken()
+                        field_map[game.players[1].positionX][game.players[1].positionY] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
@@ -504,12 +523,18 @@ class Projectile(Entity):
                 elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
                     if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[0].damage_taken()
+                        field_map[game.players[0].positionX][game.players[0].positionY] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
                         print(field_map)
                     elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
                         game.players[1].damage_taken()
+                        field_map[game.players[1].positionX][game.players[1].positionY] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
                         self.thread.stop()
                         game.projectiles[self.player_id] = None
                         field_map[int(self.positionX)][(int(self.positionY))] = None
