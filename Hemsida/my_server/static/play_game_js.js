@@ -264,8 +264,9 @@ $(document).ready(() => {
             ctx.beginPath();
             var image = new Image();
             image.onload = function () {
-                var x = 0, y = 0;
-                ctx.drawImage(image, x, y, 300, 90);  //aka, ctx2.drawImage(this, 0, 0);
+                var imgW = 300, imgH = 90;
+                var x = canvas.width/2 - imgW/2, y = canvas.height/2 - imgH/2;
+                ctx.drawImage(image, x, y, imgW, imgH);  //aka, ctx2.drawImage(this, 0, 0);
             }
             image.src = '../../static/img/YouLoseBig.png';
             //Finally, start the loading process
