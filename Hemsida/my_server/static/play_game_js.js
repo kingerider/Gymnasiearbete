@@ -392,17 +392,17 @@ $(document).ready(() => {
             console.log(heart1object.health)
             if (player1 == username){
                 if (heart1object.health < 3) {
-                    youWin();
+                    youLose();
 
                 }else if (heart2object.health < 3) {
-                    youLose();
+                    youWin();
                 }
             }else{
                 if (heart1object.health < 3) {
-                    youLose();
+                    youWin();
 
                 }else if (heart2object.health < 3) {
-                    youWin();
+                    youLose();
                     
                 }
             }
