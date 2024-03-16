@@ -2,6 +2,7 @@ from my_server.routes.dbhandler import create_connection
 from threading import Thread
 import threading
 import time
+import random
 canvasw = 800
 canvash = 400
 tile_size = 20
@@ -64,15 +65,15 @@ class Game:
         print(dict_game)
         return dict_game
     
-    def start_game(self):
-        if self.awaiting_players == False:
-            return True
-        return False
+    # def start_game(self):
+    #     if self.awaiting_players == False:
+    #         return True
+    #     return False
     
-    def end_game(self):
-        self.players = []
-        self.awaiting_players = True
-        return self.start_game()
+    # def end_game(self):
+    #     self.players = []
+    #     self.awaiting_players = True
+    #     return self.start_game()
 
 class Entity:
     def __init__(self, posX, posY):
@@ -113,15 +114,22 @@ class EnemyThread(Thread):
 
     def run(self):
         while not self._stop_event.is_set():
-            #self.bullet.move(ongoing_games[self.bullet.room_id])
+            # self.bullet.move()
             time.sleep(0.1)
 
 class Enemy(Entity):
-    def __init__(self, id, level_id, posX, posY):
+    def __init__(self, id, level_id, posX, posY, dir):
+        super().__init__(posX, posY)
         self.id = id
         self.level_id = level_id
-        self.direction = None
-        super().__init__(posX, posY)
+        self.direction = dir
+        self.thread = EnemyThread(self)
+    
+    def start_thread(self):
+        self.thread.start()
+
+    def move(self):
+        pass
 
     def change_direction(self, str):
         self.direction = str
@@ -165,12 +173,13 @@ class Field:
     def load_from_database(self):
         conn = create_connection()
         cur = conn.cursor()
+        directions = ['right', 'left', 'up', 'down']
         fetched_walls = cur.execute("SELECT * FROM wall WHERE level_id = ?", (self.id, )).fetchall()
         for wall in fetched_walls:
             self.walls.append(Wall(wall[0], wall[1], wall[2], wall[3]))
         fetched_enemies = cur.execute("SELECT * FROM enemy WHERE level_id = ?", (self.id, )).fetchall()
         for enemy in fetched_enemies:
-            self.enemies.append(Enemy(enemy[0], enemy[1], enemy[2], enemy[3]))
+            self.enemies.append(Enemy(enemy[0], enemy[1], enemy[2], enemy[3], directions[random.randint(0, 3)]))
         fetched_items = cur.execute("SELECT * FROM item WHERE level_id = ?", (self.id, )).fetchall()
         for item in fetched_items:
             self.items.append(Item(item[0], item[1], item[2], item[3], item[4]))
