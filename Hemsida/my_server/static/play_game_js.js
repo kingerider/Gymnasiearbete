@@ -34,12 +34,12 @@ $(document).ready(() => {
         let newData = null
 
         //Players
-        let newHead1 = document.createElement("h1")
-        newHead1.innerText = "Player: " + player1
-        let newHead2 = document.createElement("h1")
-        newHead2.innerText = "Player: " + player2
-        $("body").append(newHead1)
-        $("body").append(newHead2)
+        //let newHead1 = document.createElement("h1")
+        //newHead1.innerText = "Player: " + player1
+        //let newHead2 = document.createElement("h1")
+        //newHead2.innerText = "Player: " + player2
+        //$("body").append(newHead1)
+        //$("body").append(newHead2)
 
 
         //playerhearts
