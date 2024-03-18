@@ -785,6 +785,7 @@ def list_levels():
     conn = create_connection()
     cur = conn.cursor()
     levels = cur.execute("SELECT * FROM level").fetchall()
+    conn.close()
     return render_template('list_level.html', levels = levels)
 
 @app.route('/build_game')

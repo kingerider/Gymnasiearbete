@@ -1,5 +1,4 @@
 from my_server.routes.dbhandler import create_connection
-from my_server.routes.game import player_taken_damage, ongoing_games
 from threading import Thread
 import threading
 import time
