@@ -133,6 +133,27 @@ def handle_join_room(data):
         # threading.Thread(target=monster_move, args=(data, )).start()
         startit()
         game = ongoing_games[data['room']]
+
+        #Level play count++
+        conn = create_connection()
+        cur = conn.cursor()
+        play_count = cur.execute("SELECT play_count FROM level WHERE id == ?", (game.id,)).fetchone()[0]
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+
+        print(play_count)
+        play_count = int(play_count+1)
+        print(play_count)
+        cur.execute("UPDATE level SET play_count = ? WHERE id == ?", (play_count+1, game.id, ))
+        conn.commit()
+        conn.close()
+
         for monster in game.field.enemies:
             monster.start_thread()
         emit('message_from_server', {
