@@ -54,8 +54,10 @@ def ajax_edit_level():
     now = datetime.now()
     formatted_date = now.strftime('%Y-%m-%d')
     username_id = cur.execute("SELECT id FROM user WHERE username LIKE ?", (data['username'],)).fetchone()[0]
-    cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date))
+    # cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date))
+    cur.execute("INSERT INTO level (creator_id, title, player_health, description, date, play_count) VALUES (?, ?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date, 0))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
+    
   
     for i in range(len(data['wallX_Positions'])): #len(data[x]) is as long as len(data[y])
         cur.execute("INSERT INTO wall (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (level_id, data['wallX_Positions'][i], data['wallY_Positions'][i],))
