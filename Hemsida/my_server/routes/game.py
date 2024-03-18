@@ -2,10 +2,9 @@ from my_server import app, socket
 from flask import render_template, redirect, url_for, abort, flash, session, request
 from flask_socketio import emit, join_room, leave_room
 from my_server.routes.dbhandler import create_connection
-from my_server.routes.objects import Game, Player, Field, Entity
+from my_server.routes.objects import Game, Player, Entity
 import random
 from datetime import datetime
-
 import threading
 from threading import Thread
 import time
@@ -14,15 +13,210 @@ ongoing_games = {
     #'room_-1': test_game 
 }
 
+class EnemyThread(Thread):
+    def __init__(self, enemy):
+        Thread.__init__(self)
+        self._stop_event = threading.Event()
+        self.enemy = enemy
+        self.directions = ['right', 'left', 'up', 'down']
+    
+    def stop(self):
+        self._stop_event.set()
 
-thread_start = {}
+    def run(self):
+        while not self._stop_event.is_set():
+            self.enemy.move(ongoing_games[self.enemy.room_id])
+            time.sleep(0.1)
 
-def startit():
-    t = threading.Timer(0.2, startit)
-    t.start()
-    for key in thread_start.keys():
-        thread_start[key] = {'threadmonster': t, 'room': key}
-        monster_move(thread_start[key])
+class Enemy(Entity):
+    def __init__(self, id, level_id, posX, posY, dir, room_id):
+        super().__init__(posX, posY)
+        self.id = id
+        self.level_id = level_id
+        self.room_id = room_id
+        self.direction = dir
+        self.thread = EnemyThread(self)
+    
+    def start_thread(self):
+        self.thread.start()
+    
+    def object_to_dict():
+        return dict(type="enemy")
+
+    def move(self, game):
+        field_map = game.field_map
+        dir = self.thread.directions[random.randint(0, 3)]
+        try:
+            if self.direction == 'right':
+                print('Höger Ja')
+                self.direction = dir
+                if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
+                        self.set_x(int(self.positionX) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) - 1][(int(self.positionY))] = None
+                elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
+                    x = int(self.positionX) + 1
+                    y = int(self.positionY)
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX) + 1, (int(self.positionY)))
+            elif self.direction == 'left':
+                print('Vänster Ja')
+                self.direction = dir
+                if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
+                        self.set_x(int(self.positionX) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) + 1][(int(self.positionY))] = None
+                elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
+                    x = int(self.positionX) - 1
+                    y = int(self.positionY)
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX) - 1, (int(self.positionY)))
+            elif self.direction == 'up':
+                print('Upp ja')
+                self.direction = dir
+                if field_map[int(self.positionX)][(int(self.positionY) - 1)] == None:
+                        self.set_y(int(self.positionY) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY) + 1)] = None
+                elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
+                    x = int(self.positionX)
+                    y = int(self.positionY) - 1
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) - 1))
+            elif self.direction == 'down':
+                print('Ner Ja')
+                self.direction = dir
+                if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
+                        self.set_y(int(self.positionY) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY) - 1)] = None
+                elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
+                    x = int(self.positionX)
+                    y = int(self.positionY) + 1
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) + 1))
+        except:
+            pass
+            
+        
+
+    def change_direction(self, str):
+        self.direction = str
+
+    def moveTo(self, newPosX, newPosY):
+        self.set_position(newPosX, newPosY)
+
+class Wall(Entity):
+    def __init__(self, id, level_id, posX, posY):
+        self.id = id
+        self.level_id = level_id
+        super().__init__(posX, posY)
+
+class Item(Entity):
+    def __init__(self, id, level_id, posX, posY, type):
+        self.id = id
+        self.level_id = level_id
+        super().__init__(posX, posY)
+        self.type = type
+
+#Erik Change
+
+
+class Field:
+    def __init__(self, id, health, room_id):
+        self.id = id
+        self.room_id = room_id
+        self.health = health
+        self.walls = []
+        self.enemies = []
+        self.items = []
+
+        #self.field = [][]
+        #self.field[0][5] = Monster()
+        #self.field[0][6] = None
+        #self.field[5][6] = Wall()
+
+        #Flytta monster ned ett steg.
+        #self.field[1][5] = self.field[0][5]
+        #self.field[0][5] = None
+    
+    def load_from_database(self):
+        conn = create_connection()
+        cur = conn.cursor()
+        directions = ['right', 'left', 'up', 'down']
+        fetched_walls = cur.execute("SELECT * FROM wall WHERE level_id = ?", (self.id, )).fetchall()
+        for wall in fetched_walls:
+            self.walls.append(Wall(wall[0], wall[1], wall[2], wall[3]))
+        fetched_enemies = cur.execute("SELECT * FROM enemy WHERE level_id = ?", (self.id, )).fetchall()
+        for enemy in fetched_enemies:
+            self.enemies.append(Enemy(enemy[0], enemy[1], enemy[2], enemy[3], directions[random.randint(0, 3)], self.room_id))
+        fetched_items = cur.execute("SELECT * FROM item WHERE level_id = ?", (self.id, )).fetchall()
+        for item in fetched_items:
+            self.items.append(Item(item[0], item[1], item[2], item[3], item[4]))
+        conn.close()
+
+    def get_monster_pos(self):
+        list_of_positions = []
+        for enemy in self.enemies:
+            list_of_positions.append({
+                'x': enemy.positionX,
+                'y': enemy.positionY
+            })
+        return list_of_positions
+    
+    def start_monsters(self):
+        for enemy in self.enemies:
+            enemy.start_thread()
+    
+    def stop_monsters(self):
+        for enemy in self.enemies:
+            enemy.thread.stop()
+    
+    def get_wall_pos(self):
+        list_of_positions = []
+        for wall in self.walls:
+            list_of_positions.append({
+                'x': wall.positionX,
+                'y': wall.positionY
+            })
+        return list_of_positions
+    
+    def get_item_pos(self):
+        list_of_positions = []
+        for item in self.items:
+            list_of_positions.append({
+                'x': item.positionX,
+                'y': item.positionY
+            })
+        return list_of_positions
+
+
+# def startit():
+#     t = threading.Timer(0.2, startit)
+#     t.start()
+#     for key in thread_start.keys():
+#         thread_start[key] = {'threadmonster': t, 'room': key}
+#         monster_move(thread_start[key])
     
 
 # def startbullet():
@@ -129,10 +323,9 @@ def handle_join_room(data):
     #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
         #startit(data['room'])
-        thread_start[data['room']] = {}
         # threading.Thread(target=monster_move, args=(data, )).start()
-        startit()
-        # ongoing_games[data['room']].field.start_monsters()
+        # startit()
+        ongoing_games[data['room']].field.start_monsters()
         emit('message_from_server', {
             'message': f'start_game',
             'game': ongoing_games[data['room']].get_game_info(),
@@ -162,7 +355,8 @@ def on_leave(data):
             clients.remove(client)
     # print(ongoing_games.pop(data['room'], None))
     print(ongoing_games)
-    thread_start[data['room']]['threadmonster'].cancel()
+    # thread_start[data['room']]['threadmonster'].cancel()
+    ongoing_games[data['room']].field.stop_monsters()
     #thread_start[data['room']]['threadbullet'].cancel()
     #send_message_to_room({
     #    'heading': 'Info',
@@ -264,123 +458,95 @@ def player_move(data):
     #ongoing_games[data['room']].field_map = positions
 
 
-def player_taken_damage(players, positions, x, y):
-    for player in players:
-        if player.name == positions[int(x)][(int(y))]['name']:
-            player.damage_taken()
-            positions[int(x)][(int(y))] = player.object_to_dict()
-            print(f'{player.name} tog skada')
 
 
 
 
+# def monster_move(data):
 
+#         game = ongoing_games[data['room']]
+#         monsters = game.field.enemies
+#         positions = game.field_map
+#         players = game.players
 
+#         for monster in monsters:
 
+#             movementChoose = 0
+#             x = monster.positionX
+#             y = monster.positionY
+#             dict_monster = dict(type="enemy")
+#             #how close is player, if player is within 5 tiles don't do random action
+#             #if(5*tileSize > (playerX - monsterArray[j].getX()) and -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
+#             #movementChoose = 1;
+#             if(False):
+#                 pass
+#             else:
+#                 movementChoose = random.randint(1, 4)
+#             #Left
+#             if movementChoose == 1:
+#                 #Check if movement available
+#                 try:
+#                     if positions[int(x - 1)][(int(y))] == None:
+#                         positions[int(x - 1)][(int(y))] = dict_monster
+#                         positions[int(x)][(int(y))] = None
+#                         monster.positionX -= 1
+#                     elif positions[int(x - 1)][(int(y))]['type'] == 'player':
+#                         player_taken_damage(players, positions, x, y)
+#                         # for player in players:
+#                         #     if player.name == positions[int(x - 1)][(int(y))]['name']:
+#                         #         player.damage_taken()
+#                         #         print(f'{player.name} tog skada')
+#                 except:
+#                     print("Ajabaja, kan inte röra dig dära lillen")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def monster_move(data):
-
-        game = ongoing_games[data['room']]
-        monsters = game.field.enemies
-        positions = game.field_map
-        players = game.players
-
-        for monster in monsters:
-
-            movementChoose = 0
-            x = monster.positionX
-            y = monster.positionY
-            dict_monster = dict(type="enemy")
-            #how close is player, if player is within 5 tiles don't do random action
-            #if(5*tileSize > (playerX - monsterArray[j].getX()) and -5*tileSize < (playerX - monsterArray[j].getX()) && 5*tileSize > (playerY - monsterArray[j].getY()) && -5*tileSize < (playerY - monsterArray[j].getY())){
-            #movementChoose = 1;
-            if(False):
-                pass
-            else:
-                movementChoose = random.randint(1, 4)
-            #Left
-            if movementChoose == 1:
-                #Check if movement available
-                try:
-                    if positions[int(x - 1)][(int(y))] == None:
-                        positions[int(x - 1)][(int(y))] = dict_monster
-                        positions[int(x)][(int(y))] = None
-                        monster.positionX -= 1
-                    elif positions[int(x - 1)][(int(y))]['type'] == 'player':
-                        player_taken_damage(players, positions, x, y)
-                        # for player in players:
-                        #     if player.name == positions[int(x - 1)][(int(y))]['name']:
-                        #         player.damage_taken()
-                        #         print(f'{player.name} tog skada')
-                except:
-                    print("Ajabaja, kan inte röra dig dära lillen")
-
-            #Right
-            elif movementChoose == 2:
-                #Check if movement available
-                try:
-                    if positions[int(x + 1)][(int(y))] == None:
-                        positions[int(x + 1)][(int(y))] = dict_monster
-                        positions[int(x)][(int(y))] = None
-                        monster.positionX += 1
-                    elif positions[int(x + 1)][(int(y))]['type'] == 'player':
-                        player_taken_damage(players, positions, x, y)
-                        # for player in players:
-                        #     if player.name == positions[int(x + 1)][(int(y))]['name']:
-                        #         player.damage_taken()
-                        #         print(f'{player.name} tog skada')
-                except:
-                    print("Ajabaja, kan inte röra dig dära lillen")
-            #Up
-            elif movementChoose == 3:
-                #Check if movement available
-                try:
-                    if positions[int(x)][(int(y - 1))] == None:
-                        positions[int(x)][(int(y - 1))] = dict_monster
-                        positions[int(x)][(int(y))] = None
-                        monster.positionY -= 1
-                    elif positions[int(x)][(int(y - 1))]['type'] == 'player':
-                        player_taken_damage(players, positions, x, y)
-                        # for player in players:
-                        #     if player.name == positions[int(x)][(int(y - 1))]['name']:
-                        #         player.damage_taken()
-                        #         print(f'{player.name} tog skada')
-                except:
-                    print("Ajabaja, kan inte röra dig dära lillen")
-            #Down
-            elif movementChoose == 4:
-                #Check if movement available
-                try:
-                    if positions[int(x)][(int(y + 1))] == None:
-                        positions[int(x)][(int(y + 1))] = dict_monster
-                        positions[int(x)][(int(y))] = None
-                        monster.positionY += 1
-                    elif positions[int(x)][(int(y + 1))]['type'] == 'player':
-                        player_taken_damage(players, positions, x, y)
-                        # for player in players:
-                        #     if player.name == positions[int(x)][(int(y + 1))]['name']:
-                        #         player.damage_taken()
-                        #         print(f'{player.name} tog skada')
-                except:
-                    print("Ajabaja, kan inte röra dig dära lillen")
+#             #Right
+#             elif movementChoose == 2:
+#                 #Check if movement available
+#                 try:
+#                     if positions[int(x + 1)][(int(y))] == None:
+#                         positions[int(x + 1)][(int(y))] = dict_monster
+#                         positions[int(x)][(int(y))] = None
+#                         monster.positionX += 1
+#                     elif positions[int(x + 1)][(int(y))]['type'] == 'player':
+#                         player_taken_damage(players, positions, x, y)
+#                         # for player in players:
+#                         #     if player.name == positions[int(x + 1)][(int(y))]['name']:
+#                         #         player.damage_taken()
+#                         #         print(f'{player.name} tog skada')
+#                 except:
+#                     print("Ajabaja, kan inte röra dig dära lillen")
+#             #Up
+#             elif movementChoose == 3:
+#                 #Check if movement available
+#                 try:
+#                     if positions[int(x)][(int(y - 1))] == None:
+#                         positions[int(x)][(int(y - 1))] = dict_monster
+#                         positions[int(x)][(int(y))] = None
+#                         monster.positionY -= 1
+#                     elif positions[int(x)][(int(y - 1))]['type'] == 'player':
+#                         player_taken_damage(players, positions, x, y)
+#                         # for player in players:
+#                         #     if player.name == positions[int(x)][(int(y - 1))]['name']:
+#                         #         player.damage_taken()
+#                         #         print(f'{player.name} tog skada')
+#                 except:
+#                     print("Ajabaja, kan inte röra dig dära lillen")
+#             #Down
+#             elif movementChoose == 4:
+#                 #Check if movement available
+#                 try:
+#                     if positions[int(x)][(int(y + 1))] == None:
+#                         positions[int(x)][(int(y + 1))] = dict_monster
+#                         positions[int(x)][(int(y))] = None
+#                         monster.positionY += 1
+#                     elif positions[int(x)][(int(y + 1))]['type'] == 'player':
+#                         player_taken_damage(players, positions, x, y)
+#                         # for player in players:
+#                         #     if player.name == positions[int(x)][(int(y + 1))]['name']:
+#                         #         player.damage_taken()
+#                         #         print(f'{player.name} tog skada')
+#                 except:
+#                     print("Ajabaja, kan inte röra dig dära lillen")
 
 class BulletThread(Thread):
 
@@ -396,8 +562,6 @@ class BulletThread(Thread):
         while not self._stop_event.is_set():
             self.bullet.move(ongoing_games[self.bullet.room_id])
             time.sleep(0.1)
-
-
 
 class Projectile(Entity):
     def __init__(self, posX, posY, dir, id, ri):
