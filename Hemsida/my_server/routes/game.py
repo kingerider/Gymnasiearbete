@@ -70,9 +70,9 @@ def play_game_create(level_id = None):
         conn = create_connection()
         cur = conn.cursor()
         level = cur.execute("SELECT title, player_health FROM level WHERE id = ?", (level_id, )).fetchone()
-        field = Field(level_id, level[1])
-        field.load_from_database()
         game = Game(level_id, level[0], set_room_id())
+        field = Field(level_id, level[1], game.room_id)
+        field.load_from_database()
         game.add_field(field)
         print(ongoing_games)
         ongoing_games[game.room_id] = game
@@ -132,9 +132,7 @@ def handle_join_room(data):
         thread_start[data['room']] = {}
         # threading.Thread(target=monster_move, args=(data, )).start()
         startit()
-        game = ongoing_games[data['room']]
-        for monster in game.field.enemies:
-            monster.start_thread()
+        # ongoing_games[data['room']].field.start_monsters()
         emit('message_from_server', {
             'message': f'start_game',
             'game': ongoing_games[data['room']].get_game_info(),
@@ -268,9 +266,9 @@ def player_move(data):
 
 def player_taken_damage(players, positions, x, y):
     for player in players:
-        if player.name == positions[int(x + 1)][(int(y))]['name']:
+        if player.name == positions[int(x)][(int(y))]['name']:
             player.damage_taken()
-            positions[int(x+1)][(int(y))] = player.object_to_dict()
+            positions[int(x)][(int(y))] = player.object_to_dict()
             print(f'{player.name} tog skada')
 
 
