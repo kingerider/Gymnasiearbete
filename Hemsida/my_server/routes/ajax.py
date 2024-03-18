@@ -52,7 +52,7 @@ def ajax_edit_level():
     conn = create_connection()
     cur = conn.cursor()
     now = datetime.now()
-    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_date = now.strftime('%Y-%m-%d')
     username_id = cur.execute("SELECT id FROM user WHERE username LIKE ?", (data['username'],)).fetchone()[0]
     cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
@@ -79,7 +79,7 @@ def ajax_create_level():
     cur = conn.cursor()
     now = datetime.now()
 
-    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_date = now.strftime('%Y-%m-%d')
     cur.execute("UPDATE level SET title == ?, player_health == ?, description == ?, date == ? WHERE id == ?", (data['title'], 3, data['description'], formatted_date, data['level_id'], ))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
 
