@@ -25,6 +25,10 @@ $(document).ready(() => {
     })
 
     var start = (start_game) => {
+
+        var audio = new Audio('../../static/sound/themeSound.mp3');
+        audio.play();
+
         //if room = 1;
         let room_id = player.room
 
@@ -627,6 +631,8 @@ $(document).ready(() => {
         $("body").on("keypress", function (event) {
             // if (waitUpdate()) {
                 if (event.keyCode == 32) { //spacebar
+                    var audio = new Audio('../../static/sound/laserSound.mp3');
+                    audio.play();
                     console.log("Handler for `keypress` called.");
                     let this_player_id = null
                     let username = $("#this_user").text();
