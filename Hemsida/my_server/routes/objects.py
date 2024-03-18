@@ -1,3 +1,8 @@
+from my_server.routes.dbhandler import create_connection
+from threading import Thread
+import threading
+import time
+import random
 canvasw = 800
 canvash = 400
 tile_size = 20
@@ -97,3 +102,164 @@ class Player(Entity):
     def damage_taken(self):
         if self.health >= 1:
             self.health -= 1
+
+class EnemyThread(Thread):
+    def __init__(self, enemy):
+        Thread.__init__(self)
+        self._stop_event = threading.Event()
+        self.enemy = enemy
+        self.directions = ['right', 'left', 'up', 'down']
+    
+    def stop(self):
+        self._stop_event.set()
+
+    def run(self):
+        while not self._stop_event.is_set():
+            self.bullet.move(ongoing_games[self.enemy.room_id])
+            time.sleep(0.1)
+
+class Enemy(Entity):
+    def __init__(self, id, level_id, posX, posY, dir, room_id):
+        super().__init__(posX, posY)
+        self.id = id
+        self.level_id = level_id
+        self.room_id = room_id
+        self.direction = dir
+        self.thread = EnemyThread(self)
+    
+    def start_thread(self):
+        self.thread.start()
+    
+    def object_to_dict():
+        return dict(type="enemy")
+
+    def move(self, game):
+        field_map = game.field_map
+        dir = self.thread.directions[random.randint(0, 3)]
+        try:
+            if self.direction == 'right':
+                self.direction = dir
+                if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
+                        self.set_x(int(self.positionX) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) - 1][(int(self.positionY))] = None
+                elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
+                    player_taken_damage(game.players, field_map, int(self.positionX) + 1, (int(self.positionY)))
+            elif self.direction == 'left':
+                self.direction = dir
+                if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
+                        self.set_x(int(self.positionX) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) + 1][(int(self.positionY))] = None
+                elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
+                    player_taken_damage(game.players, field_map, int(self.positionX) - 1, (int(self.positionY)))
+            elif self.direction == 'up':
+                self.direction = dir
+                if field_map[int(self.positionX)][(int(self.positionY) - 1)] == None:
+                        self.set_y(int(self.positionY) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY) + 1)] = None
+                elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
+                    player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) - 1))
+            elif self.direction == 'down':
+                self.direction = dir
+                if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
+                        self.set_y(int(self.positionY) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY) - 1)] = None
+                elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
+                    player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) + 1))
+        except:
+            print("Aja Aja Baja")
+            
+        
+
+    def change_direction(self, str):
+        self.direction = str
+
+    def moveTo(self, newPosX, newPosY):
+        self.set_position(newPosX, newPosY)
+
+class Wall(Entity):
+    def __init__(self, id, level_id, posX, posY):
+        self.id = id
+        self.level_id = level_id
+        super().__init__(posX, posY)
+
+class Item(Entity):
+    def __init__(self, id, level_id, posX, posY, type):
+        self.id = id
+        self.level_id = level_id
+        super().__init__(posX, posY)
+        self.type = type
+
+#Erik Change
+
+
+class Field:
+    def __init__(self, id, health, room_id):
+        self.id = id
+        self.room_id = room_id
+        self.health = health
+        self.walls = []
+        self.enemies = []
+        self.items = []
+
+        #self.field = [][]
+        #self.field[0][5] = Monster()
+        #self.field[0][6] = None
+        #self.field[5][6] = Wall()
+
+        #Flytta monster ned ett steg.
+        #self.field[1][5] = self.field[0][5]
+        #self.field[0][5] = None
+    
+    def load_from_database(self):
+        conn = create_connection()
+        cur = conn.cursor()
+        directions = ['right', 'left', 'up', 'down']
+        fetched_walls = cur.execute("SELECT * FROM wall WHERE level_id = ?", (self.id, )).fetchall()
+        for wall in fetched_walls:
+            self.walls.append(Wall(wall[0], wall[1], wall[2], wall[3]))
+        fetched_enemies = cur.execute("SELECT * FROM enemy WHERE level_id = ?", (self.id, )).fetchall()
+        for enemy in fetched_enemies:
+            self.enemies.append(Enemy(enemy[0], enemy[1], enemy[2], enemy[3], directions[random.randint(0, 3)], self.room_id))
+        fetched_items = cur.execute("SELECT * FROM item WHERE level_id = ?", (self.id, )).fetchall()
+        for item in fetched_items:
+            self.items.append(Item(item[0], item[1], item[2], item[3], item[4]))
+        conn.close()
+
+    def get_monster_pos(self):
+        list_of_positions = []
+        for enemy in self.enemies:
+            list_of_positions.append({
+                'x': enemy.positionX,
+                'y': enemy.positionY
+            })
+        return list_of_positions
+    
+    def start_monsters(self):
+        for enemy in self.enemies:
+            enemy.start_thread()
+    
+    def stop_monsters(self):
+        for enemy in self.enemies:
+            enemy.thread.stop()
+    
+    def get_wall_pos(self):
+        list_of_positions = []
+        for wall in self.walls:
+            list_of_positions.append({
+                'x': wall.positionX,
+                'y': wall.positionY
+            })
+        return list_of_positions
+    
+    def get_item_pos(self):
+        list_of_positions = []
+        for item in self.items:
+            list_of_positions.append({
+                'x': item.positionX,
+                'y': item.positionY
+            })
+        return list_of_positions
