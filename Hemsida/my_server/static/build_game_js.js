@@ -161,7 +161,7 @@ $(document).ready(() => {
                         if (document.getElementById("wall").disabled == true) {
                             wallArray.push(new Position(canvasClickX, canvasClickY));
                         } else {
-                            if (monsterArray.length < 5) {
+                            if (monsterArray.length < 6) {
                                 monsterArray.push(new Position(canvasClickX, canvasClickY));
                             } else {
                                 $("#message_m").css('display', 'block')
