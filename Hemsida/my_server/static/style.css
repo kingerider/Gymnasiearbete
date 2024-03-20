@@ -30,3 +30,9 @@
 .game_card:hover {
     opacity: 0.7;
 }
+
+/*Footer align block*/
+.block50procent{
+    text-align: left;
+    margin-left: 30%;
+}
