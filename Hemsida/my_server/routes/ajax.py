@@ -6,29 +6,29 @@ from my_server.routes.game import ongoing_games
 from datetime import datetime
 
 
-@app.route('/ajax_get_positions', methods = ['POST'])
-def ajax_get_positions():
-    data = request.get_json()
-    game = ongoing_games[data['id']]
-    walls = game.field.get_wall_pos()
-    monsters = game.field.get_monster_pos()
-    items = game.field.get_item_pos()
-    print(f'Walls: {walls}')
-    print(f'Monsters: {monsters}')
-    print(f'Items: {items}')
-    try:
-        return json.dumps({
-            'msg': 'Positions recieved',
-            'success': True,
-            'walls': walls,
-            'monsters': monsters,
-            'items': items
-        })
-    except:
-        return json.dumps({
-            'msg': 'Something went wrong',
-            'success': False
-        })
+# @app.route('/ajax_get_positions', methods = ['POST'])
+# def ajax_get_positions():
+#     data = request.get_json()
+#     game = ongoing_games[data['id']]
+#     walls = game.field.get_wall_pos()
+#     monsters = game.field.get_monster_pos()
+#     items = game.field.get_item_pos()
+#     print(f'Walls: {walls}')
+#     print(f'Monsters: {monsters}')
+#     print(f'Items: {items}')
+#     try:
+#         return json.dumps({
+#             'msg': 'Positions recieved',
+#             'success': True,
+#             'walls': walls,
+#             'monsters': monsters,
+#             'items': items
+#         })
+#     except:
+#         return json.dumps({
+#             'msg': 'Something went wrong',
+#             'success': False
+#         })
 
 @app.route('/ajax-search-level', methods = ['POST'])
 def ajax_search_level():
