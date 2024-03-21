@@ -1,63 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %}titel{% endblock %}
+{% block title %}Memberarea{% endblock %}
 
-{% block headline %}Välkommen{% endblock %}
+{% block headline %}Welcome{% endblock %}
 
 {% block content %}
-    <h2>Du är inloggad</h2>
-    <div class="card-deck">
-        <div class="card">
-          <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
+<h3>Most populare levels</h3>
+<div class="card-deck">
+  {% for level in levels_play_count %}
+  <div class="card">
+    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+      <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title text-dark">{{level[2]}}</h5>
+        <p class="card-text text-dark">{{level[4]}}</p>
+        <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
       </div>
-      <br>
-      <div class="card-deck">
-        <div class="card">
-          <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+<br>
+<h3>Newest Levels</h3>
+<div class="card-deck">
+  {% for level in levels_date %}
+  <div class="card">
+    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+      <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title text-dark">{{level[2]}}</h5>
+        <p class="card-text text-dark">{{level[4]}}</p>
+        <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
       </div>
-      <br>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+<br>
 {% endblock %}
