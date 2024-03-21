@@ -1,6 +1,7 @@
 .jumbotron{
-    background-image: url("img/jumbotron_bg.jpg");
+    background-image: url("img/AngrySofisticus.jpg");
     background-size: cover;
+    background-position: center;
     height: 600px;
 }
 
@@ -31,11 +32,25 @@
     opacity: 0.7;
 }
 
-/*Footer align block*/
-.block50procent{
-    text-align: left;
-    margin-left: 30%;
+/*Footer Social Links*/
+.social-links a{
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+	background-color: rgba(255,255,255,0.2);
+	margin:0 10px 10px 0;
+	text-align: center;
+	line-height: 40px;
+	border-radius: 50%;
+	color: #ffffff;
+	transition: all 0.5s ease;
 }
+.social-links a:hover{
+	color: black;
+	background-color: #ffffff;
+}
+
+
 .scrollable-div {
     height: 500px; /* set a fixed height for the div */
     overflow-y: scroll; /* enable vertical scrollbar */

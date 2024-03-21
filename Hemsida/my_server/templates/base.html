@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='/favicon_io/favicon.ico') }}">
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -77,7 +78,7 @@
             </div>
         </div>
     </div>
-    <footer class="bg-dark text-center text-lg-start text-white">
+    <footer class="bg-dark text-left text-lg-start text-white">
         <!-- Grid container -->
         <div class="container p-4">
           <!--Grid row-->
@@ -86,14 +87,14 @@
             <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
               <h5 class="text-uppercase">Contacts</h5>
               <section>
-                <p class="block50procent">
+                <p>
                 Sofisticus AB <br>
                 Elektronvägen 1 <br>
                 141 49 Värmdö
                 </p>
               </section>
               <section>
-                <p class="block50procent">
+                <p>
                 Telefon: 0727414020 <br>
                 Swich: 123 640 76 88 <br>
                 E-post: erik.derelov@gmail.com</p>
@@ -104,41 +105,17 @@
     
             <!--Grid column-->
             <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <h5 class="text-uppercase">customer service</h5>
+              <h5 class="text-uppercase">Terms</h5>
     
               <ul class="list-unstyled">
                 <li>
-                  <a href="#!" class="text-white"><i class="fas fa-shipping-fast fa-fw fa-sm me-2"></i>Villkor</a>
+                  <a href="#!" class="text-white">Terms and conditions</a>
                 </li>
                 <li>
-                  <a href="#!" class="text-white"><i class="fas fa-backspace fa-fw fa-sm me-2"></i>Lorem</a>
+                  <a href="#!" class="text-white">Cookies</a>
                 </li>
                 <li>
-                  <a href="#!" class="text-white"><i class="far fa-file-alt fa-fw fa-sm me-2"></i>Lorem</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white"><i class="far fa-file-alt fa-fw fa-sm me-2"></i>Privacy policy</a>
-                </li>
-              </ul>
-            </div>
-            <!--Grid column-->
-    
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <h5 class="text-uppercase">Publishing house</h5>
-    
-              <ul class="list-unstyled">
-                <li>
-                  <a href="#!" class="text-white">The BookStore</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white">123 Street</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white">05765 NY</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white"><i class="fas fa-briefcase fa-fw fa-sm me-2"></i>Send us a book</a>
+                  <a href="#!" class="text-white">Privacy policy</a>
                 </li>
               </ul>
             </div>
@@ -150,13 +127,29 @@
     
               <ul class="list-unstyled">
                 <li>
-                  <a href="#!" class="text-white"><i class="fas fa-at fa-fw fa-sm me-2"></i>Help in purchasing</a>
+                  <a href="#!" class="text-white">Work at Sofisticus</a>
                 </li>
                 <li>
-                  <a href="#!" class="text-white"><i class="fas fa-shipping-fast fa-fw fa-sm me-2"></i>Check the order status</a>
+                  <a href="#!" class="text-white">Sofisticus future</a>
                 </li>
                 <li>
-                  <a href="#!" class="text-white"><i class="fas fa-envelope fa-fw fa-sm me-2"></i>Join the newsletter</a>
+                  <a href="#!" class="text-white">About us</a>
+                </li>
+              </ul>
+            </div>
+            <!--Grid column-->
+    
+            <!--Grid column-->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+              <h5 class="text-uppercase">Follow us</h5>
+              <ul class="list-unstyled">
+                <li>
+                  <div class="social-links">
+                    <a href="https://sv-se.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com/?lang=sv"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/uas/login-submit"><i class="fab fa-linkedin-in"></i></a>
+                  </div>
                 </li>
               </ul>
             </div>
