@@ -51,10 +51,15 @@ class Enemy(Entity):
                 print('Höger Ja')
                 self.direction = dir
                 if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
-                        self.set_x(int(self.positionX) + 1)
-                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                        field_map[int(self.positionX) - 1][(int(self.positionY))] = None
+                    print(f'före: {self.positionX}')
+                    self.set_x(int(self.positionX) + 1)
+                    print(f'efter: {self.positionX}')
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX) - 1][(int(self.positionY))] = None
+                    print("rör sig")
+                    print(field_map)
                 elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
+                    print("skadar")
                     x = int(self.positionX) + 1
                     y = int(self.positionY)
                     players = game.players
@@ -68,10 +73,12 @@ class Enemy(Entity):
                 print('Vänster Ja')
                 self.direction = dir
                 if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
-                        self.set_x(int(self.positionX) - 1)
-                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                        field_map[int(self.positionX) + 1][(int(self.positionY))] = None
+                    print("rör sig")
+                    self.set_x(int(self.positionX) - 1)
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX) + 1][(int(self.positionY))] = None
                 elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
+                    print("skadar")
                     x = int(self.positionX) - 1
                     y = int(self.positionY)
                     players = game.players
@@ -85,10 +92,12 @@ class Enemy(Entity):
                 print('Upp ja')
                 self.direction = dir
                 if field_map[int(self.positionX)][(int(self.positionY) - 1)] == None:
-                        self.set_y(int(self.positionY) - 1)
-                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                        field_map[int(self.positionX)][(int(self.positionY) + 1)] = None
+                    print("rör sig")
+                    self.set_y(int(self.positionY) - 1)
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX)][(int(self.positionY) + 1)] = None
                 elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
+                    print("skadar")
                     x = int(self.positionX)
                     y = int(self.positionY) - 1
                     players = game.players
@@ -102,10 +111,12 @@ class Enemy(Entity):
                 print('Ner Ja')
                 self.direction = dir
                 if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
-                        self.set_y(int(self.positionY) + 1)
-                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
-                        field_map[int(self.positionX)][(int(self.positionY) - 1)] = None
+                    print("rör sig")
+                    self.set_y(int(self.positionY) + 1)
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX)][(int(self.positionY) - 1)] = None
                 elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
+                    print("skadar")
                     x = int(self.positionX)
                     y = int(self.positionY) + 1
                     players = game.players
