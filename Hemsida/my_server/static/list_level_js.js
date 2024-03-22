@@ -22,9 +22,8 @@ function initializeCanvas(htmlId, levelId) {
 
     //Canvas
     var canvas = document.getElementById(htmlId);
-    console.log("Hello")
     var ctx = canvas.getContext("2d");
-    var tileSize = 5;
+    var tileSize = canvas.height/20
     var canvasHeight = canvas.height / tileSize
     var canvasWidth = canvas.width / tileSize
 
@@ -133,6 +132,9 @@ function initializeCanvas(htmlId, levelId) {
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawGrid();
+        console.log("Hellooo")
+        console.log(wallArray)
+        console.log(wallArray.length)
         for (let i = 0; i < wallArray.length; i++) {
             drawWall(wallArray[i].getX() * tileSize, wallArray[i].getY() * tileSize);
         }
@@ -143,5 +145,7 @@ function initializeCanvas(htmlId, levelId) {
             drawPlayer(playerArray[i].getX() * tileSize, playerArray[i].getY() * tileSize);
         }
     }
+    let updateInterval = setInterval(draw, 1000)
+
 }
 
