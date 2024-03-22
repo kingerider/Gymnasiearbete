@@ -5,23 +5,35 @@
 {% block headline %}Hello{% endblock %}
 
 {% block content %}
-
-
+<script src="{{url_for('static', filename='list_level_js.js')}}"></script>
 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="inputsearchlevel">
 <button class="btn btn-outline-info my-2 my-sm-0" id="btnsearchlevel">Search</button>
+<h3>Most populare levels</h3>
+  {% set count = 0 %}
+  {% for level in levels %}
+  <div class="card-deck">
 
-<div class="card-deck">
-      {% for level in levels %}
-        <div class="card">
-          <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
-            <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title text-dark">{{level[2]}}</h5>
-              <p class="card-text text-dark">{{level[4]}}</p>
-              <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
-            </div>
-          </a>
-        </div>
-      {% endfor %}
-</div>
+  <div class="card">
+    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+      <canvas id="levelId{{level[0]}}"></canvas>
+      <input type="hidden" value="{{level[0]}}" class="allId">
+      <div class="card-body">
+        <h5 class="card-title text-dark">{{level[2]}}</h5>
+        <p class="card-text text-dark">{{level[4]}}</p>
+        <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
+        <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
+      </div>
+    </a>
+  </div>
+  </div>
+
+  {% endfor %}
+<br>
+<script>
+  $(".allId").each(function() {
+    levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+    //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
+    initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
+  });
+</script>
 {% endblock %}
