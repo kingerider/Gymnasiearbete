@@ -1,5 +1,5 @@
 from my_server import app
-from flask import render_template, redirect, url_for, flash, request, session
+from flask import render_template, redirect, url_for, flash, session
 from my_server.routes.forms import SignUpForm
 from my_server.routes.dbhandler import create_connection
 from flask_bcrypt import Bcrypt
