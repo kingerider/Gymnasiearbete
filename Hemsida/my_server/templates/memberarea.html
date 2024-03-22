@@ -12,11 +12,13 @@
   {% for level in levels_play_count %}
   <div class="card">
     <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
-      <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
+      <canvas id="popLevelId{{level[0]}}"></canvas>
+      <input type="hidden" value="{{level[0]}}" class="popId">
       <div class="card-body">
         <h5 class="card-title text-dark">{{level[2]}}</h5>
         <p class="card-text text-dark">{{level[4]}}</p>
         <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
+        <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
       </div>
     </a>
   </div>
@@ -28,12 +30,13 @@
   {% for level in levels_date %}
   <div class="card">
     <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
-      <canvas id="levelId{{level[0]}}"></canvas>
-      <input type="hidden" value="{{level[0]}}" class="hello">
+      <canvas id="newLevelId{{level[0]}}"></canvas>
+      <input type="hidden" value="{{level[0]}}" class="newId">
       <div class="card-body">
         <h5 class="card-title text-dark">{{level[2]}}</h5>
         <p class="card-text text-dark">{{level[4]}}</p>
         <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
+        <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
       </div>
     </a>
   </div>
@@ -41,12 +44,15 @@
 </div>
 <br>
 <script>
-  $(".hello").each(function() {
-    levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+  $(".newId").each(function() {
+    levelID = "newLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
     //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
     initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
-
-
+  });
+  $(".popId").each(function() {
+    levelID = "popLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+    //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
+    initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
   });
 </script>
 {% endblock %}
