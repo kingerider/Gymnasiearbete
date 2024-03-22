@@ -362,8 +362,8 @@ def on_leave(data):
     for client in clients:
         if client['room'] == data['room'] and client['name'] == session['username']:
             clients.remove(client)
-            if clients.count(data['room']) == 0:
-                ongoing_games.pop(data['room'], None)
+            # if clients.count(data['room']) == 0:
+            #     ongoing_games.pop(data['room'], None)
             
         
     # print(ongoing_games.pop(data['room'], None))
