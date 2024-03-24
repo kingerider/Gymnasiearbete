@@ -57,7 +57,7 @@ class Enemy(Entity):
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX) - 1][(int(self.positionY))] = None
                     print("rör sig")
-                    print(field_map)
+                    print(f'field map: {field_map}')
                 elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
                     print("skadar")
                     x = int(self.positionX) + 1

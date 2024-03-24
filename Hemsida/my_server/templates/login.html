@@ -5,12 +5,18 @@
 {% block headline %}Logga in{% endblock %}
 
 {% block content %}
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        <p>{{ form.username.label }}<br>
-            {{ form.username }}</p>
-        <p>{{form.password.label}}<br>
-            {{form.password}}</p>
-        <p>{{ form.submit}}</p>
-    </form>
+    <div class="mx-auto text-center">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <p>{{ form.username.label }}<br>
+                {{ form.username }}</p>
+            <p>{{form.password.label}}<br>
+                {{form.password}}</p>
+            <p>{{ form.submit}}</p>
+    
+            <div class="text-center">
+                <p>Don't have an account? <a href="{{url_for('sign_up')}}">create account</a></p>
+            </div>
+        </form>
+    </div>
 {% endblock %}

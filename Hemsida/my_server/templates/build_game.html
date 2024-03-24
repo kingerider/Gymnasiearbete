@@ -2,9 +2,7 @@
 
 {% block title %}Game Builder{% endblock %}
 
-{% block headline %}
-<p class="text-white">Game Builder</p>
-{% endblock %}
+{% block headline %}Game Builder{% endblock %}
 
 {% block content %}
 <script src="{{url_for('static', filename='build_game_js.js')}}"></script>
@@ -38,11 +36,11 @@
 </div>
 <p id="message_td" class="alert alert-info" role="alert" style="display: none;"></p>
 <div>
-    <label for="fname">Titel:</label><br>
+    <label for="fname">Title:</label><br>
     <input type="text" name="create_title" id="create_title">
-    <label for="lname">Beskrivning:</label><br>
+    <label for="lname">Description:</label><br>
     <textarea name="create_description" id="create_description" cols="30" rows="10"></textarea>
-    <input type="submit" value="Skapa bana" class="btn btn-primary m-5" id="create_level">
+    <input type="submit" value="Create Level" class="btn btn-primary m-5" id="create_level">
 </div>
 <div id="this_user" style="display: none;">{{ session['username'] }}</div>
 {% endblock %}

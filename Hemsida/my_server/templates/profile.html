@@ -2,7 +2,7 @@
 
 {% block title %}profile{% endblock %}
 
-{% block headline %}Profil{% endblock %}
+{% block headline %}Profile{% endblock %}
 
 {% block content %}
 <div id="info">Hello {{session['username']}}, here in your profile your game maps will be displayed. If want to edit them simply click it and edit away. Also if you want to start a game click on the list game tab and search for your name and game title</div>
@@ -10,10 +10,10 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <p><strong>Användarnamn:</strong> {{user[1]}}</p>
-            <p><strong>Antal spelade spel:</strong> {{user[3]}}</p>
-            <p><strong>Vinster:</strong> {{user[4]}}</p>
-            <p><strong>Förluster:</strong> {{user[5]}}</p>
+            <p><strong>Username:</strong> {{user[1]}}</p>
+            <p><strong>Games played:</strong> {{user[3]}}</p>
+            <p><strong>Wins:</strong> {{user[4]}}</p>
+            <p><strong>Losses:</strong> {{user[5]}}</p>
         </div>
         <div class="col-sm">
             <h3>Your levels</h3>

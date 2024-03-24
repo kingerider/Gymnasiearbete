@@ -2,9 +2,7 @@
 
 {% block title %}Game Builder{% endblock %}
 
-{% block headline %}
-<p class="text-white">Game Builder</p>
-{% endblock %}
+{% block headline %}Game Builder{% endblock %}
 
 {% block content %}
 <script src="{{url_for('static', filename='edit_game_js.js')}}"></script>
@@ -38,9 +36,9 @@
 </div>
 <p id="message_td" class="alert alert-info" role="alert" style="display: none;"></p>
 <div>
-    <label for="fname">Titel:</label><br>
+    <label for="fname">Title:</label><br>
     <input type="text" name="edit_title" id="edit_title"><br>
-    <label for="lname">Beskrivning:</label><br>
+    <label for="lname">Description:</label><br>
     <textarea name="edit_description" id="edit_description" cols="30" rows="10"></textarea>
     <input type="submit" value="updatera bana" class="btn btn-primary m-5" id="edit_level">
 </div>

@@ -20,19 +20,22 @@ def login():
         password = form.password.data.encode('utf-8')
         conn = create_connection()
         cur = conn.cursor()
-        user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
-        time = cur.execute("SELECT datetime('now')").fetchone
-        print("hello: ")
-        print(time)
+        try:
+            user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
+            time = cur.execute("SELECT datetime('now')").fetchone
+            print("hello: ")
+            print(time)
 
-        if bcrypt.check_password_hash(user[2], password):
-            session['logged_in'] = True
-            session['username'] = user[1]
-            session['id'] = user[0]
-            flash(f"Välkommen {session['username']}", "success")
+            if bcrypt.check_password_hash(user[2], password):
+                session['logged_in'] = True
+                session['username'] = user[1]
+                session['id'] = user[0]
+                flash(f"Välkommen {session['username']}", "success")
+                conn.close()
+                return redirect(url_for('memberarea'))
             conn.close()
-            return redirect(url_for('memberarea'))
-        conn.close()
+        except:
+            flash("username not found", "warning")
     return render_template('login.html', form = form)
         
 @app.route('/logout')

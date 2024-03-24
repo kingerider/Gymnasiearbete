@@ -25,33 +25,33 @@
                 <!--logged in-->
                 {% if session['logged_in'] == True %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('memberarea')}}">Hem</a>
+                        <a class="nav-link" href="{{url_for('memberarea')}}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('logout')}}">Logga ut</a>
+                        <a class="nav-link" href="{{url_for('logout')}}">Log Out</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('build_game')}}">Bygga banor</a>
+                        <a class="nav-link" href="{{url_for('build_game')}}">Build Level</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('list_levels')}}">Lista existerande banor</a>
+                        <a class="nav-link" href="{{url_for('list_levels')}}">List levels</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('list_games')}}">Lista spel</a>
+                        <a class="nav-link" href="{{url_for('list_games')}}">List Games</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('profile')}}">Profil</a>
+                        <a class="nav-link" href="{{url_for('profile')}}">Profile</a>
                     </li>
                 <!--not logged in-->
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('index')}}">Hem</a>
+                        <a class="nav-link" href="{{url_for('index')}}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Logga in</a>
+                        <a class="nav-link" href="{{url_for('login')}}">Log In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('sign_up')}}">Skapa konto</a>
+                        <a class="nav-link" href="{{url_for('sign_up')}}">Create Account</a>
                     </li>
                 {% endif %}
               </ul>
