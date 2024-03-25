@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
         DataRequired(message='fältet får inte vara tomt')
 
     ])
-    submit = SubmitField('Logga in')
+    submit = SubmitField('Login')
 
 class SignUpForm(FlaskForm):
     username = StringField('Username', validators=[
@@ -26,4 +26,4 @@ class SignUpForm(FlaskForm):
         DataRequired(message='fältet får inte vara tomt'), 
         EqualTo('password', message='du skrev fel lösenord')
     ])
-    submit = SubmitField('Skapa konto')
+    submit = SubmitField('Create account')

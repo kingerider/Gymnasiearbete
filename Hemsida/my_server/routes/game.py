@@ -330,6 +330,27 @@ def handle_join_room(data):
     # if ongoing_games[data['room']].:
     #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
+        #Level play count++
+        game = ongoing_games[data['room']]
+        conn = create_connection()
+        cur = conn.cursor()
+        play_count = cur.execute("SELECT play_count FROM level WHERE id == ?", (game.id,)).fetchone()[0]
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+        print(play_count)
+
+        print(play_count)
+        play_count = int(play_count+1)
+        print(play_count)
+        cur.execute("UPDATE level SET play_count = ? WHERE id == ?", (play_count+1, game.id, ))
+        conn.commit()
+        conn.close()
+
         #startit(data['room'])
         # threading.Thread(target=monster_move, args=(data, )).start()
         # startit()
