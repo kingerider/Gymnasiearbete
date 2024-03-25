@@ -37,6 +37,30 @@ $(document).ready(() => {
         let player2 = start_game.players[1]
         let newData = null
 
+        // socket.emit('add_played_game', {
+        //     player1: player1,
+        //     player2: player2,
+        //     success: true
+        // })
+        $.ajax({
+            method: 'POST',
+            url: "/ajax-add-played-game",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+                player1: player1,
+                player2: player2
+            }),
+            dataType: "json",
+            success: (data) => {
+                if (data.success) {
+                    console.log(data.msg)
+                    // var base_url = window.location.origin;
+                    // window.location = (base_url + "/memberarea")
+                }
+            }
+        });
         //Players
         //let newHead1 = document.createElement("h1")
         //newHead1.innerText = "Player: " + player1
@@ -398,9 +422,46 @@ $(document).ready(() => {
             if (player1 == username){
                 if (heart1object.health < 1) {
                     youLose();
-
+                    $.ajax({
+                        method: 'POST',
+                        url: "/ajax-end-game",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify({
+                            winner: player2,
+                            loser: player1
+                        }),
+                        dataType: "json",
+                        success: (data) => {
+                            if (data.success) {
+                                console.log(data.msg)
+                                // var base_url = window.location.origin;
+                                // window.location = (base_url + "/memberarea")
+                            }
+                        }
+                    });
                 }else if (heart2object.health < 1) {
                     youWin();
+                    $.ajax({
+                        method: 'POST',
+                        url: "/ajax-end-game",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify({
+                            winner: player1,
+                            loser: player2
+                        }),
+                        dataType: "json",
+                        success: (data) => {
+                            if (data.success) {
+                                console.log(data.msg)
+                                // var base_url = window.location.origin;
+                                // window.location = (base_url + "/memberarea")
+                            }
+                        }
+                    });
                 }
             }else{
                 if (heart1object.health < 1) {
@@ -408,7 +469,7 @@ $(document).ready(() => {
 
                 }else if (heart2object.health < 1) {
                     youLose();
-                    
+
                 }
             }
         }

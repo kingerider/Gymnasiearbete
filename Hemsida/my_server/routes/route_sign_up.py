@@ -18,7 +18,7 @@ def sign_up():
         conn.commit()
         session['logged_in'] = True
         session['username'] = username
-        flash(f"Välkommen {session['username']}", "success")
+        flash(f"Welcome {session['username']}!", "success")
         conn.close()
         return redirect(url_for('memberarea'))
     return render_template('sign_up.html', form = form)

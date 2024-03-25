@@ -30,13 +30,13 @@ def login():
                 session['logged_in'] = True
                 session['username'] = user[1]
                 session['id'] = user[0]
-                flash(f"Välkommen {session['username']}", "success")
+                flash(f"Welcome {session['username']}!", "success")
                 conn.close()
                 return redirect(url_for('memberarea'))
             conn.close()
         except:
-            print("username or password was incorrect")
-        flash("username or password was incorrect", "warning")
+            flash('username was incorrect', 'warning')
+        flash("password was incorrect", "warning")
     return render_template('login.html', form = form)
         
 @app.route('/logout')

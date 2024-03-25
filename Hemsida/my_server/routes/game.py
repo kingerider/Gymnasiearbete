@@ -377,6 +377,49 @@ def handle_join_room(data):
     #    'room': data['room']
     #})
     #emit('navigate_to', f'/play_game/{data["role"]}/{data["room"]}')
+# @socket.on('add_played_game')
+# def add_played_game(data):
+#     print('Nu spelas det')
+#     print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+#     print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+#     print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+#     print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+#     print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+#     print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+#     print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+#     conn = create_connection()
+#     cur = conn.cursor()
+#     player1count = cur.execute("SELECT games_played FROM user WHERE username = ?", (data['player1'], )).fetchone()[0]
+#     player1count += 1
+#     cur.execute("UPDATE user SET games_played = ? WHERE username = ?", (player1count, data['player1']))
+#     conn.commit()
+#     player2count = cur.execute("SELECT games_played FROM user WHERE username = ?", (data['player2'], )).fetchone()[0]
+#     player2count += 1
+#     cur.execute("UPDATE user SET games_played = ? WHERE username = ?", (player2count, data['player2']))
+#     conn.commit()
+#     conn.close()
+
+# @socket.on('end_game')
+# def end_game(data):
+#     print('spelet slut')
+#     print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+#     print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+#     print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+#     print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+#     print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+#     print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+#     print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+#     conn = create_connection()
+#     cur = conn.cursor()
+#     winner = cur.execute("SELECT wins FROM user WHERE username = ?", (data['winner'], )).fetchone()[0]
+#     winner += 1
+#     cur.execute("UPDATE user SET wins = ? WHERE username = ?", (winner, data['winner']))
+#     conn.commit()
+#     loser = cur.execute("SELECT wins FROM user WHERE username = ?", (data['loser'], )).fetchone()[0]
+#     loser += 1
+#     cur.execute("UPDATE user SET wins = ? WHERE username = ?", (loser, data['loser']))
+#     conn.commit()
+#     conn.close()
 
 @socket.on('leave')
 def on_leave(data):

@@ -132,3 +132,56 @@ def ajax_get_data_level():
         'title': title,
         'description': description
     })
+
+@app.route('/ajax-add-played-game')
+def ajax_add_played_game():
+    data = request.get_json()
+    print('Nu spelas det')
+    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
+    conn = create_connection()
+    cur = conn.cursor()
+    player1count = cur.execute("SELECT games_played FROM user WHERE username = ?", (data['player1'], )).fetchone()[0]
+    player1count += 1
+    cur.execute("UPDATE user SET games_played = ? WHERE username = ?", (player1count, data['player1']))
+    conn.commit()
+    player2count = cur.execute("SELECT games_played FROM user WHERE username = ?", (data['player2'], )).fetchone()[0]
+    player2count += 1
+    cur.execute("UPDATE user SET games_played = ? WHERE username = ?", (player2count, data['player2']))
+    conn.commit()
+    conn.close()
+    return json.dumps({
+        'msg': 'game started successfully',
+        'success': True
+    })
+@app.route('/ajax-end-game', methods = ['POST'])
+def ajax_end_game():
+    data = request.get_json()
+    print('spelet slut')
+    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
+    conn = create_connection()
+    cur = conn.cursor()
+    winner = cur.execute("SELECT wins FROM user WHERE username = ?", (data['winner'], )).fetchone()[0]
+    winner += 1
+    cur.execute("UPDATE user SET wins = ? WHERE username = ?", (winner, data['winner']))
+    conn.commit()
+    loser = cur.execute("SELECT wins FROM user WHERE username = ?", (data['loser'], )).fetchone()[0]
+    loser += 1
+    cur.execute("UPDATE user SET wins = ? WHERE username = ?", (loser, data['loser']))
+    conn.commit()
+    conn.close()
+    return json.dumps({
+        'msg': 'game ended successfully',
+        'success': True
+    })
