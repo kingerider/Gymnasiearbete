@@ -26,7 +26,7 @@ class EnemyThread(Thread):
     def run(self):
         while not self._stop_event.is_set():
             self.enemy.move(ongoing_games[self.enemy.room_id])
-            time.sleep(0.1)
+            time.sleep(0.2)
 
 class Enemy(Entity):
     def __init__(self, id, level_id, posX, posY, dir, room_id):
@@ -326,6 +326,7 @@ def handle_join_room(data):
     #clients.append(request.namespace)
     #ongoing_games[data['room']].ongoing_players += 1
 
+    game = ongoing_games[data['room']]
     print(clients)
     # if ongoing_games[data['room']].:
     #HÄR SKA DET FIXAS MED SOCKETIO
@@ -350,14 +351,15 @@ def handle_join_room(data):
         cur.execute("UPDATE level SET play_count = ? WHERE id == ?", (play_count, game.id, ))
         conn.commit()
         conn.close()
+    if len(game.players) == 2:
 
         #startit(data['room'])
         # threading.Thread(target=monster_move, args=(data, )).start()
         # startit()
-        ongoing_games[data['room']].field.start_monsters()
+        game.field.start_monsters()
         emit('message_from_server', {
             'message': f'start_game',
-            'game': ongoing_games[data['room']].get_game_info(),
+            'game': game.get_game_info()
             #'username': session['username']
         }, to=data['room'])
     else:

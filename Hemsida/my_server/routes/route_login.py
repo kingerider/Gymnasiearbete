@@ -35,7 +35,8 @@ def login():
                 return redirect(url_for('memberarea'))
             conn.close()
         except:
-            flash("username not found", "warning")
+            print("username or password was incorrect")
+        flash("username or password was incorrect", "warning")
     return render_template('login.html', form = form)
         
 @app.route('/logout')

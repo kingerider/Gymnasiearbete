@@ -3,7 +3,13 @@
 
 {% block title %}Memberarea{% endblock %}
 
-{% block headline %}Welcome{% endblock %}
+{% block headline %}
+  <div class="col-md-5 p-lg-5 mx-auto my-5">
+    <h1 class="display-4 font-weight-normal">Sofisticus Gamebuilder</h1>
+    <a class="btn btn-outline-secondary text-center" href="{{url_for('list_levels')}}">Created Levels</a>
+    <a class="btn btn-outline-secondary text-center" href="{{url_for('list_games')}}">Current Games</a>
+  </div>
+{% endblock %}
 
 {% block content %}
 <script src="{{url_for('static', filename='list_level_js.js')}}"></script>
