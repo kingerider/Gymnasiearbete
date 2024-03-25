@@ -347,7 +347,7 @@ def handle_join_room(data):
         print(play_count)
         play_count = int(play_count+1)
         print(play_count)
-        cur.execute("UPDATE level SET play_count = ? WHERE id == ?", (play_count+1, game.id, ))
+        cur.execute("UPDATE level SET play_count = ? WHERE id == ?", (play_count, game.id, ))
         conn.commit()
         conn.close()
 
