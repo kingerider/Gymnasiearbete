@@ -9,15 +9,13 @@
 <input type="hidden" id="playerName" value="{{username}}">
 
 {% for current_game in ongoing_games %}
-{% if current_game.players|length < 2 %}
-<a class="nav-link" href="{{url_for('play_game_join', room_id = ongoing_games[current_game].room_id)}}">
+<a class="nav-link" href="{{url_for('play_game_join', room_id = current_game.room_id)}}">
   <div class="card game_card">
     <div class="card-body">
-      <h4 class="text-dark">{{ongoing_games[current_game].name}} in room {{ongoing_games[current_game].room_id}}</h4>
+      <h4 class="text-dark"><strong>{{current_game.name}}</strong> | {{current_game.host}}</h4>
     </div>
   </div>
 </a>
-{% endif %}
 {% endfor %}
 
 {% endblock %}

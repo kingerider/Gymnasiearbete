@@ -8,6 +8,7 @@ class Game:
     def __init__(self, id, name, room_id):
         self.id = id
         self.name = name
+        self.host = None
         self.awaiting_players = True
         self.players = []
         self.projectiles = [None, None]
@@ -25,6 +26,9 @@ class Game:
     
     def add_field(self, field):
         self.field = field
+    
+    def set_host(self, host):
+        self.host = host
     
     def place_objects_field(self):
         for wall in self.field.walls:

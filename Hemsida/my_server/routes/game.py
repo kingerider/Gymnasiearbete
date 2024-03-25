@@ -279,6 +279,7 @@ def play_game_create(level_id = None):
         field = Field(level_id, level[1], game.room_id)
         field.load_from_database()
         game.add_field(field)
+        game.set_host(session['username'])
         print(ongoing_games)
         ongoing_games[game.room_id] = game
         print(ongoing_games)
@@ -592,7 +593,7 @@ class BulletThread(Thread):
     def run(self):
         while not self._stop_event.is_set():
             self.bullet.move(ongoing_games[self.bullet.room_id])
-            time.sleep(0.1)
+            time.sleep(0.05)
 
 class Projectile(Entity):
     def __init__(self, posX, posY, dir, id, ri):
@@ -810,7 +811,11 @@ def shoot_projectile(data):
             
 @app.route('/list_games')
 def list_games():
-    return render_template('list_game.html', username = session['username'], ongoing_games = ongoing_games)
+    available_games = []
+    for key in ongoing_games.keys():
+        if len(ongoing_games[key].players) == 1:
+            available_games.append(ongoing_games[key])
+    return render_template('list_game.html', username = session['username'], ongoing_games = available_games)
 
 @app.route('/list_levels')
 def list_levels():
