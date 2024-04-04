@@ -6,6 +6,7 @@
 
 {% block content %}
 <script src="{{url_for('static', filename='list_level_js.js')}}"></script>
+<script src="{{url_for('static', filename='search_js.js')}}" defer></script>
 <div class="mb-3 row">
   <div class="col-sm-10">
     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="inputsearchlevel">
@@ -20,30 +21,24 @@
 </select>
 
 <h3 style="margin-top: 40px;">Most Popular Levels</h3>
-{% set count = namespace(value=0) %}
-{% for level in levels %}
-{% if count.value == 0 %}
-  <div class="card-deck">
-{% endif %}
-  <div class="card">
-    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
-      <canvas id="levelId{{level[0]}}"></canvas>
-      <input type="hidden" value="{{level[0]}}" class="allId">
-      <div class="card-body">
-        <h5 class="card-title text-dark">{{level[2]}}</h5>
-        <p class="card-text text-dark">{{level[4]}}</p>
-        <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
-        <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
-      </div>
-    </a>
+<div>
+  {% for level in levels %}
+  <div class="card_display" style="display: inline;">
+    <div class="card d-inline-block align-top mb-4" style="width: 350px; height: 400px;">
+      <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+        <canvas id="levelId{{level[0]}}"></canvas>
+        <input type="hidden" value="{{level[0]}}" class="allId">
+        <div class="card-body">
+          <h5 class="card-title text-dark">{{level[2]}}</h5>
+          <p class="card-text text-dark">{{level[4]}}</p>
+          <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
+          <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
+        </div>
+      </a>
+    </div>
   </div>
-{% if count.value == 2 %}
-  </div>
-  {% set count.value = 0 %}
-{% else %}
-  {% set count.value = count.value + 1 %}
-{% endif %}
-{% endfor %}
+  {% endfor %}
+</div>
 <br>
 <script>
   $(".allId").each(function () {

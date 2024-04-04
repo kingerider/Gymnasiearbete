@@ -215,7 +215,7 @@ $(document).ready(() => {
     $("#create_level").click(() => {
         if ($("#create_description").val() != "" && $("#create_title").val() != "") {
             if ($("#create_title").val().length < 26) {
-                if ($("#create_description").val().length < 101) {
+                if ($("#create_description").val().length < 151) {
 
 
                     playerXArray = []
@@ -275,7 +275,7 @@ $(document).ready(() => {
                 } else {
                     console.log("Hello")
                     $("#message_td").css('display', 'block')
-                    $("#message_td").text('Description can only contian max 100 chracters')
+                    $("#message_td").text('Description can only contian max 150 chracters')
     
                 }
             } else {

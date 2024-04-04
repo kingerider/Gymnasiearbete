@@ -248,8 +248,10 @@ $(document).ready(() => {
     });
     $("#edit_level").click(() => {
         if ($("#edit_description").val() != "" && $("#edit_title").val() != "") {
-            if ($("#create_title").val().length < 26) {
-                if ($("#create_description").val().length < 101) {
+            if ($("#edit_title").val().length < 26) {
+                if ($("#edit_description").val().length < 151) {
+                    console.log("Hello Again")
+
                     playerXArray = []
                     playerYArray = []
                     monsterXArray = []
@@ -302,7 +304,7 @@ $(document).ready(() => {
                 } else {
                     console.log("Hello")
                     $("#message_td").css('display', 'block')
-                    $("#message_td").text('Description can only contian max 100 chracters')
+                    $("#message_td").text('Description can only contian max 150 chracters')
 
                 }
             } else {
