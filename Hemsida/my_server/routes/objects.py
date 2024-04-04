@@ -92,8 +92,8 @@ class Player(Entity):
         self.direction = direction
         super().__init__(posX, posY)
 
-    def moveTo(self, newPosX, newPosY):
-        self.set_position(newPosX, newPosY)
+    def move(self, newPosX, newPosY):
+        pass
     
     def object_to_dict(self):
         return dict(type = "player", name = self.name, direction = self.direction, health = self.health)

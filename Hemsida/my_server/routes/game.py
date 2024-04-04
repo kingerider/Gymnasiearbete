@@ -74,7 +74,9 @@ class Enemy(Entity):
                 self.direction = dir
                 if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
                     print("rör sig")
+                    print(f'före: {self.positionX}')
                     self.set_x(int(self.positionX) - 1)
+                    print(f'efter: {self.positionX}')
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX) + 1][(int(self.positionY))] = None
                 elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
@@ -93,7 +95,9 @@ class Enemy(Entity):
                 self.direction = dir
                 if field_map[int(self.positionX)][(int(self.positionY) - 1)] == None:
                     print("rör sig")
+                    print(f'före: {self.positionY}')
                     self.set_y(int(self.positionY) - 1)
+                    print(f'efter: {self.positionY}')
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX)][(int(self.positionY) + 1)] = None
                 elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
@@ -112,7 +116,9 @@ class Enemy(Entity):
                 self.direction = dir
                 if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
                     print("rör sig")
+                    print(f'före: {self.positionY}')
                     self.set_y(int(self.positionY) + 1)
+                    print(f'efter: {self.positionY}')
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX)][(int(self.positionY) - 1)] = None
                 elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
@@ -370,13 +376,6 @@ def handle_join_room(data):
             'game': None,
             #'username': session['username']
         }, to=data['room'])
-
-
-    #send_message_to_room({
-    #    'heading': 'Info',
-    #    'message': f'User {data["username"]} has joined the room.',
-    #    'room': data['room']
-    #})
     #emit('navigate_to', f'/play_game/{data["role"]}/{data["room"]}')
 # @socket.on('add_played_game')
 # def add_played_game(data):
@@ -430,30 +429,9 @@ def on_leave(data):
     for client in clients:
         if client['room'] == data['room'] and client['name'] == session['username']:
             clients.remove(client)
-            # if clients.count(data['room']) == 0:
-            #     ongoing_games.pop(data['room'], None)
-            
-        
-    # print(ongoing_games.pop(data['room'], None))
     print(ongoing_games)
-    # thread_start[data['room']]['threadmonster'].cancel()
-    #thread_start[data['room']]['threadbullet'].cancel()
-    #send_message_to_room({
-    #    'heading': 'Info',
-    #    'message': f'User {data["username"]} has left the room.',
-    #   'room': data['room']
-    #})
-    #print("%s disconnected" % (request.namespace.socket.sessid))
-    #clients.remove(request.namespace)
     emit('navigate_to', f'/memberarea')
-    
-# @socket.on('clientlist')
-# def get_clients_in_room(data):
-#     #clients = socket.server.manager.rooms[data['room']]
-#     clients = socket.server.manager.get_participants(data['room'])
-#     print('clients:' + clients)
-    
-    #return {'clients': clients}
+
 
 #Hämtar data från servern för att sidan ska kunna uppdatera
 @socket.on('update_canvas')
@@ -484,54 +462,46 @@ def update_game(data):
 def player_move(data):
     game = ongoing_games[data['room']]
     positions = game.field_map
-    if data['move'] == 'right':
-        try:
-            moved_player = game.players[data['player_id']]
-            moved_player.direction = data['move']
-            x = moved_player.positionX
-            y = moved_player.positionY
-            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-            positions[int(x + 1)][(int(y))] = dict_moved_player
-            positions[int(x)][(int(y))] = None
-            moved_player.positionX += 1
-        except:
-            print("Ajabaja, kan inte röra dig dära lillen")
-    elif data['move'] == 'left': 
-        try:
-            moved_player = game.players[data['player_id']]
-            moved_player.direction = data['move']
-            x = moved_player.positionX
-            y = moved_player.positionY
-            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-            positions[int(x - 1)][(int(y))] = dict_moved_player
-            positions[int(x)][(int(y))] = None
-            moved_player.positionX -= 1
-        except:
-            print("Ajabaja, kan inte röra dig dära lillen")
-    elif data['move'] == 'up': 
-        try:
-            moved_player = game.players[data['player_id']]
-            moved_player.direction = data['move']
-            x = moved_player.positionX
-            y = moved_player.positionY
-            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-            positions[int(x)][(int(y - 1))] = dict_moved_player
-            positions[int(x)][(int(y))] = None
-            moved_player.positionY -= 1
-        except:
-            print("Ajabaja, kan inte röra dig dära lillen")
-    elif data['move'] == 'down': 
-        try:
-            moved_player = game.players[data['player_id']]
-            moved_player.direction = data['move']
-            x = moved_player.positionX
-            y = moved_player.positionY
-            dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
-            positions[int(x)][(int(y + 1))] = dict_moved_player
-            positions[int(x)][(int(y))] = None
-            moved_player.positionY += 1
-        except:
-            print("Ajabaja, kan inte röra dig dära lillen")
+    try:
+        if data['move'] == 'right':
+                moved_player = game.players[data['player_id']]
+                moved_player.direction = data['move']
+                x = moved_player.positionX
+                y = moved_player.positionY
+                dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+                positions[int(x + 1)][(int(y))] = dict_moved_player
+                positions[int(x)][(int(y))] = None
+                moved_player.positionX += 1
+        elif data['move'] == 'left': 
+                moved_player = game.players[data['player_id']]
+                moved_player.direction = data['move']
+                x = moved_player.positionX
+                y = moved_player.positionY
+                dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+                positions[int(x - 1)][(int(y))] = dict_moved_player
+                positions[int(x)][(int(y))] = None
+                moved_player.positionX -= 1
+        elif data['move'] == 'up': 
+            
+                moved_player = game.players[data['player_id']]
+                moved_player.direction = data['move']
+                x = moved_player.positionX
+                y = moved_player.positionY
+                dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+                positions[int(x)][(int(y - 1))] = dict_moved_player
+                positions[int(x)][(int(y))] = None
+                moved_player.positionY -= 1
+        elif data['move'] == 'down': 
+                moved_player = game.players[data['player_id']]
+                moved_player.direction = data['move']
+                x = moved_player.positionX
+                y = moved_player.positionY
+                dict_moved_player = dict(type = "player", name = moved_player.name, direction = data['move'], health = moved_player.health)
+                positions[int(x)][(int(y + 1))] = dict_moved_player
+                positions[int(x)][(int(y))] = None
+                moved_player.positionY += 1
+    except:
+        print("Ajabaja, kan inte röra dig dära lillen")
 
 
 
@@ -825,7 +795,10 @@ def shoot_projectile(data):
                 if positions[int(player.positionX) + 1][(int(player.positionY))] == None:
                     game.projectiles[data['player_id']] = Projectile(int(player.positionX) + 1, int(player.positionY), player.direction, data['player_id'], data['room'])
                 elif positions[int(player.positionX) + 1][(int(player.positionY))]['type'] == 'player':
-                    game.players[data['player_id']].damage_taken()
+                    if data['player_id'] == 0:
+                        game.players[1].damage_taken()
+                    else:
+                        game.players[0].damage_taken()
             except:
                 print('Du kan inte skjuta där!')
         elif player.direction == 'left':
@@ -833,7 +806,10 @@ def shoot_projectile(data):
                 if positions[int(player.positionX) - 1][(int(player.positionY))] == None:
                     game.projectiles[data['player_id']] = Projectile(int(player.positionX) - 1, int(player.positionY), player.direction, data['player_id'], data['room'])
                 elif positions[int(player.positionX) - 1][(int(player.positionY))]['type'] == 'player':
-                    game.players[data['player_id']].damage_taken()
+                    if data['player_id'] == 0:
+                        game.players[1].damage_taken()
+                    else:
+                        game.players[0].damage_taken()
             except:
                 print('Du kan inte skjuta där!')
         elif player.direction == 'up':
@@ -841,7 +817,10 @@ def shoot_projectile(data):
                 if positions[int(player.positionX)][(int(player.positionY) - 1)] == None:
                     game.projectiles[data['player_id']] = Projectile(int(player.positionX), int(player.positionY) - 1, player.direction, data['player_id'], data['room'])
                 elif positions[int(player.positionX)][(int(player.positionY) - 1)]['type'] == 'player':
-                    game.players[data['player_id']].damage_taken()
+                    if data['player_id'] == 0:
+                        game.players[1].damage_taken()
+                    else:
+                        game.players[0].damage_taken()
             except:
                 print('Du kan inte skjuta där!')
         elif player.direction == 'down':
@@ -849,7 +828,10 @@ def shoot_projectile(data):
                 if positions[int(player.positionX)][(int(player.positionY) + 1)] == None:
                     game.projectiles[data['player_id']] = Projectile(int(player.positionX), int(player.positionY) + 1, player.direction, data['player_id'], data['room'])
                 elif positions[int(player.positionX)][(int(player.positionY) + 1)]['type'] == 'player':
-                    game.players[data['player_id']].damage_taken()
+                    if data['player_id'] == 0:
+                        game.players[1].damage_taken()
+                    else:
+                        game.players[0].damage_taken()
             except:
                 print('Du kan inte skjuta där!')
             
