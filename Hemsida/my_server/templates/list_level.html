@@ -6,13 +6,25 @@
 
 {% block content %}
 <script src="{{url_for('static', filename='list_level_js.js')}}"></script>
-<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="inputsearchlevel">
-<button class="btn btn-outline-info my-2 my-sm-0" id="btnsearchlevel">Search</button>
-<h3>Most Popular Levels</h3>
-  {% set count = 0 %}
-  {% for level in levels %}
-  <div class="card-deck">
+<div class="mb-3 row">
+  <div class="col-sm-10">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="inputsearchlevel">
+  </div>
+  <button class="btn btn-outline-info my-2 my-sm-0" id="btnsearchlevel">Search</button>
+</div>
+<select name="sort_level" id="sort_level" class="form-control" style="width: 150px;">
+  <option value="volvo">Popular</option>
+  <option value="saab">Least Popular</option>
+  <option value="opel">Newest</option>
+  <option value="opel">Oldest</option>
+</select>
 
+<h3 style="margin-top: 40px;">Most Popular Levels</h3>
+{% set count = namespace(value=0) %}
+{% for level in levels %}
+{% if count.value == 0 %}
+  <div class="card-deck">
+{% endif %}
   <div class="card">
     <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
       <canvas id="levelId{{level[0]}}"></canvas>
@@ -25,12 +37,16 @@
       </div>
     </a>
   </div>
+{% if count.value == 2 %}
   </div>
-
-  {% endfor %}
+  {% set count.value = 0 %}
+{% else %}
+  {% set count.value = count.value + 1 %}
+{% endif %}
+{% endfor %}
 <br>
 <script>
-  $(".allId").each(function() {
+  $(".allId").each(function () {
     levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
     //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
     initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
