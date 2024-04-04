@@ -214,65 +214,80 @@ $(document).ready(() => {
     });
     $("#create_level").click(() => {
         if ($("#create_description").val() != "" && $("#create_title").val() != "") {
+            if ($("#create_title").val().length < 26) {
+                if ($("#create_description").val().length < 101) {
 
-            playerXArray = []
-            playerYArray = []
-            monsterXArray = []
-            monsterYArray = []
-            wallXArray = []
-            wallYArray = []
 
-            for (let index = 0; index < playerArray.length; index++) {
-                playerXArray.push(playerArray[index].getX());
-                playerYArray.push(playerArray[index].getY());
-            }
-            for (let index = 0; index < monsterArray.length; index++) {
-                monsterXArray.push(monsterArray[index].getX());
-                monsterYArray.push(monsterArray[index].getY());
-            }
-            for (let index = 0; index < wallArray.length; index++) {
-                wallXArray.push(wallArray[index].getX());
-                wallYArray.push(wallArray[index].getY());
+                    playerXArray = []
+                    playerYArray = []
+                    monsterXArray = []
+                    monsterYArray = []
+                    wallXArray = []
+                    wallYArray = []
 
-            }
+                    for (let index = 0; index < playerArray.length; index++) {
+                        playerXArray.push(playerArray[index].getX());
+                        playerYArray.push(playerArray[index].getY());
+                    }
+                    for (let index = 0; index < monsterArray.length; index++) {
+                        monsterXArray.push(monsterArray[index].getX());
+                        monsterYArray.push(monsterArray[index].getY());
+                    }
+                    for (let index = 0; index < wallArray.length; index++) {
+                        wallXArray.push(wallArray[index].getX());
+                        wallYArray.push(wallArray[index].getY());
 
-            const data = {
-                title: $("#create_title").val(),
-                description: $("#create_description").val(),
-                username: $("#this_user").text(),
-                playerX_Positions: playerXArray, //is not in use
-                playerY_Positions: playerYArray, //is not in use
-                monsterX_Positions: monsterXArray,
-                monsterY_Positions: monsterYArray,
-                wallX_Positions: wallXArray,
-                wallY_Positions: wallYArray
-            }
-
-            //console.log(data)
-            $.ajax({
-                method: 'POST',
-                url: "/ajax-create-level",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: JSON.stringify(data),
-                dataType: "json",
-                success: (data) => {
-                    if (data.success) {
-                        var base_url = window.location.origin;
-                        window.location = (base_url + "/profile")
-                    }else {
-                        $("#message_td").css('display', 'block')
-                        $("#message_td").text('Something went wrong')
                     }
 
-                    //alert(JSON.stringify(data))
+                    const data = {
+                        title: $("#create_title").val(),
+                        description: $("#create_description").val(),
+                        username: $("#this_user").text(),
+                        playerX_Positions: playerXArray, //is not in use
+                        playerY_Positions: playerYArray, //is not in use
+                        monsterX_Positions: monsterXArray,
+                        monsterY_Positions: monsterYArray,
+                        wallX_Positions: wallXArray,
+                        wallY_Positions: wallYArray
+                    }
+
+                    //console.log(data)
+                    $.ajax({
+                        method: 'POST',
+                        url: "/ajax-create-level",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        success: (data) => {
+                            if (data.success) {
+                                var base_url = window.location.origin;
+                                window.location = (base_url + "/profile")
+                            } else {
+                                $("#message_td").css('display', 'block')
+                                $("#message_td").text('Something went wrong')
+                            }
+
+                            //alert(JSON.stringify(data))
+                        }
+                    });
+                } else {
+                    console.log("Hello")
+                    $("#message_td").css('display', 'block')
+                    $("#message_td").text('Description can only contian max 100 chracters')
+    
                 }
-            });
+            } else {
+                console.log("Hello")
+                $("#message_td").css('display', 'block')
+                $("#message_td").text('Title can only contain max 25 chracters')
+
+            }
         } else {
             console.log("Hello")
             $("#message_td").css('display', 'block')
-            $("#message_td").text('Skriv något i rubriken och beskrivningen')
+            $("#message_td").text('Title and description can not be empty')
 
         }
     })
