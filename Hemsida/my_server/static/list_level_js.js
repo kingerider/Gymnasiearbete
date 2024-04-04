@@ -145,7 +145,8 @@ function initializeCanvas(htmlId, levelId) {
             drawPlayer(playerArray[i].getX() * tileSize, playerArray[i].getY() * tileSize);
         }
     }
-    let updateInterval = setInterval(draw, 1000)
+    let updateInterval = setInterval(draw, 100);
+    setTimeout(function( ) { clearInterval(updateInterval); }, 2000); //Kill interval for efficent server resources
 
 }
 
