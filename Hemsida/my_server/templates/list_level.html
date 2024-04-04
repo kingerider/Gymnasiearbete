@@ -7,20 +7,23 @@
 {% block content %}
 <script src="{{url_for('static', filename='list_level_js.js')}}"></script>
 <script src="{{url_for('static', filename='search_js.js')}}" defer></script>
-<div class="mb-3 row">
-  <div class="col-sm-10">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="inputsearchlevel">
-  </div>
-  <button class="btn btn-outline-info my-2 my-sm-0" id="btnsearchlevel">Search</button>
+<div class="mb-3">
+  <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="inputsearchlevel">
 </div>
-<select name="sort_level" id="sort_level" class="form-control" style="width: 150px;">
-  <option value="volvo">Popular</option>
-  <option value="saab">Least Popular</option>
-  <option value="opel">Newest</option>
-  <option value="opel">Oldest</option>
-</select>
+<div class="mb-3 row">
+  <div class="col-sm-3">
+    <select name="sort_level" id="sort_level" class="form-control">
+      <option value="volvo">Popular</option>
+      <option value="saab">Least Popular</option>
+      <option value="opel">Newest</option>
+      <option value="opel">Oldest</option>
+    </select>
+  </div>
+  <button class="btn btn-outline-info my-sm-0" id="btnsortlevel">Sort</button>
+</div>
 
-<h3 style="margin-top: 40px;">Most Popular Levels</h3>
+
+<h3 style="margin-top: 40px;">User created levels</h3>
 <div>
   {% for level in levels %}
   <div class="card_display" style="display: inline;">
