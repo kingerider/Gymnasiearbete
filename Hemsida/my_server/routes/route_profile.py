@@ -1,5 +1,5 @@
 from my_server import app
-from flask import render_template, session
+from flask import render_template, abort, session
 from my_server.routes.dbhandler import create_connection
 
 
@@ -14,3 +14,4 @@ def profile():
         print(inlogged_user)
         print(user_levels)
         return render_template('profile.html', user = inlogged_user, levels = user_levels)
+    abort(401)

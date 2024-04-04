@@ -5,14 +5,16 @@
 {% block headline %}Create account{% endblock %}
 
 {% block content %}
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        <p>{{ form.username.label }}<br>
-            {{ form.username }}</p>
-        <p>{{form.password.label}}<br>
-            {{form.password}}</p>
-        <p>{{form.confirm_password.label}}<br>
-            {{form.confirm_password}}</p>
-        <p>{{ form.submit}}</p>
-    </form>
+    <div class="mx-auto text-center">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <p>{{ form.username.label }}<br>
+                {{ form.username }}</p>
+            <p>{{form.password.label}}<br>
+                {{form.password}}</p>
+            <p>{{form.confirm_password.label}}<br>
+                {{form.confirm_password}}</p>
+            <p>{{ form.submit}}</p>
+        </form>
+    </div>
 {% endblock %}

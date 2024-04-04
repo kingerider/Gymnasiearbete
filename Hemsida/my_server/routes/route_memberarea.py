@@ -1,5 +1,5 @@
 from my_server import app
-from flask import render_template, session
+from flask import render_template, abort, session
 from my_server.routes.dbhandler import create_connection
 
 
@@ -14,3 +14,4 @@ def memberarea():
         print(levels_date)
         conn.close()
         return render_template('memberarea.html', levels_play_count = levels_play_count, levels_date = levels_date)
+    abort(401)

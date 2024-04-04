@@ -302,6 +302,7 @@ def play_game_join(room_id = None):
             game.add_player(player)
             game.place_objects_field()
         return render_template('play_game.html', game = game.get_game_info())
+    abort(401)
 
 clients = []
 
