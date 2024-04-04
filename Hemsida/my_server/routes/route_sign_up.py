@@ -16,8 +16,10 @@ def sign_up():
         cur = conn.cursor()
         cur.execute("INSERT INTO user (username, password) VALUES (?, ?)", (username, bcrypt.generate_password_hash(password)))
         conn.commit()
+        user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
         session['logged_in'] = True
         session['username'] = username
+        session['id'] = user[0]
         flash(f"Welcome {session['username']}!", "success")
         conn.close()
         return redirect(url_for('memberarea'))

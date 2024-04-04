@@ -22,10 +22,6 @@ def login():
         cur = conn.cursor()
         try:
             user = cur.execute("SELECT * FROM user WHERE username = ?", (username, )).fetchone()
-            time = cur.execute("SELECT datetime('now')").fetchone
-            print("hello: ")
-            print(time)
-
             if bcrypt.check_password_hash(user[2], password):
                 session['logged_in'] = True
                 session['username'] = user[1]
@@ -43,6 +39,6 @@ def login():
 def logout():
     session['logged_in'] = False
     session.pop('username', None)
-    session.pop('author_id', None)
+    session.pop('id', None)
     flash('Du loggades ut', 'success')
     return redirect(url_for('index'))
