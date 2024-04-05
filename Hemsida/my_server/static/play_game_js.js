@@ -42,25 +42,27 @@ $(document).ready(() => {
         //     player2: player2,
         //     success: true
         // })
-        $.ajax({
-            method: 'POST',
-            url: "/ajax-add-played-game",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: JSON.stringify({
-                player1: player1,
-                player2: player2
-            }),
-            dataType: "json",
-            success: (data) => {
-                if (data.success) {
-                    console.log(data.msg)
-                    // var base_url = window.location.origin;
-                    // window.location = (base_url + "/memberarea")
+        if (player1 == $("#this_user").text()) {
+            $.ajax({
+                method: 'POST',
+                url: "/ajax-add-played-game",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify({
+                    player1: player1,
+                    player2: player2
+                }),
+                dataType: "json",
+                success: (data) => {
+                    if (data.success) {
+                        console.log(data.msg)
+                        // var base_url = window.location.origin;
+                        // window.location = (base_url + "/memberarea")
+                    }
                 }
-            }
-        });
+            });
+        }
         //Players
         //let newHead1 = document.createElement("h1")
         //newHead1.innerText = "Player: " + player1
