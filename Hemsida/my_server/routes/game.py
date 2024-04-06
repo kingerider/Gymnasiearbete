@@ -26,6 +26,8 @@ class EnemyThread(Thread):
     def run(self):
         while not self._stop_event.is_set():
             self.enemy.move(ongoing_games[self.enemy.room_id])
+            print("This looks at run but does not execute print")
+            print(ongoing_games)
             time.sleep(0.2)
 
 class Enemy(Entity):
@@ -40,7 +42,7 @@ class Enemy(Entity):
     def start_thread(self):
         self.thread.start()
     
-    def object_to_dict():
+    def object_to_dict(self):
         return dict(type="enemy")
 
     def move(self, game):
@@ -48,18 +50,22 @@ class Enemy(Entity):
         dir = self.thread.directions[random.randint(0, 3)]
         try:
             if self.direction == 'right':
-                print('Höger Ja')
+                #print('Höger Ja')
                 self.direction = dir
                 if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
-                    print(f'före: {self.positionX}')
+                    #print(f'före: {self.positionX}')
                     self.set_x(int(self.positionX) + 1)
-                    print(f'efter: {self.positionX}')
+                    #print(f'efter: {self.positionX}')
+                    print("old f")
+                    print(field_map)
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX) - 1][(int(self.positionY))] = None
-                    print("rör sig")
-                    print(f'field map: {field_map}')
+                    print("new f")
+                    print(field_map)
+                    #print("rör sig")
+                    #print(f'field map: {field_map}')
                 elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
-                    print("skadar")
+                    #print("skadar")
                     x = int(self.positionX) + 1
                     y = int(self.positionY)
                     players = game.players
@@ -70,17 +76,17 @@ class Enemy(Entity):
                             print(f'{player.name} tog skada')
                     # player_taken_damage(game.players, field_map, int(self.positionX) + 1, (int(self.positionY)))
             elif self.direction == 'left':
-                print('Vänster Ja')
+                #print('Vänster Ja')
                 self.direction = dir
                 if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
-                    print("rör sig")
-                    print(f'före: {self.positionX}')
+                    #print("rör sig")
+                    #print(f'före: {self.positionX}')
                     self.set_x(int(self.positionX) - 1)
-                    print(f'efter: {self.positionX}')
+                    #print(f'efter: {self.positionX}')
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX) + 1][(int(self.positionY))] = None
                 elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
-                    print("skadar")
+                    #print("skadar")
                     x = int(self.positionX) - 1
                     y = int(self.positionY)
                     players = game.players
@@ -88,20 +94,20 @@ class Enemy(Entity):
                         if player.name == field_map[int(x)][(int(y))]['name']:
                             player.damage_taken()
                             field_map[int(x)][(int(y))] = player.object_to_dict()
-                            print(f'{player.name} tog skada')
+                            #print(f'{player.name} tog skada')
                     # player_taken_damage(game.players, field_map, int(self.positionX) - 1, (int(self.positionY)))
             elif self.direction == 'up':
-                print('Upp ja')
+                #print('Upp ja')
                 self.direction = dir
                 if field_map[int(self.positionX)][(int(self.positionY) - 1)] == None:
-                    print("rör sig")
-                    print(f'före: {self.positionY}')
+                    #print("rör sig")
+                    #print(f'före: {self.positionY}')
                     self.set_y(int(self.positionY) - 1)
-                    print(f'efter: {self.positionY}')
+                    #print(f'efter: {self.positionY}')
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX)][(int(self.positionY) + 1)] = None
                 elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
-                    print("skadar")
+                    #print("skadar")
                     x = int(self.positionX)
                     y = int(self.positionY) - 1
                     players = game.players
@@ -109,20 +115,20 @@ class Enemy(Entity):
                         if player.name == field_map[int(x)][(int(y))]['name']:
                             player.damage_taken()
                             field_map[int(x)][(int(y))] = player.object_to_dict()
-                            print(f'{player.name} tog skada')
+                            #print(f'{player.name} tog skada')
                     # player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) - 1))
             elif self.direction == 'down':
-                print('Ner Ja')
+                #print('Ner Ja')
                 self.direction = dir
                 if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
-                    print("rör sig")
-                    print(f'före: {self.positionY}')
+                    #print("rör sig")
+                    #print(f'före: {self.positionY}')
                     self.set_y(int(self.positionY) + 1)
-                    print(f'efter: {self.positionY}')
+                    #print(f'efter: {self.positionY}')
                     field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
                     field_map[int(self.positionX)][(int(self.positionY) - 1)] = None
                 elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
-                    print("skadar")
+                    #print("skadar")
                     x = int(self.positionX)
                     y = int(self.positionY) + 1
                     players = game.players
@@ -130,7 +136,7 @@ class Enemy(Entity):
                         if player.name == field_map[int(x)][(int(y))]['name']:
                             player.damage_taken()
                             field_map[int(x)][(int(y))] = player.object_to_dict()
-                            print(f'{player.name} tog skada')
+                            #print(f'{player.name} tog skada')
                     # player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) + 1))
         except:
             pass
@@ -286,9 +292,9 @@ def play_game_create(level_id = None):
         field.load_from_database()
         game.add_field(field)
         game.set_host(session['username'])
-        print(ongoing_games)
+        #print(ongoing_games)
         ongoing_games[game.room_id] = game
-        print(ongoing_games)
+        #print(ongoing_games)
         conn.close()   
         return redirect(url_for('play_game_join', room_id = game.room_id))
     else:
@@ -624,6 +630,8 @@ class Projectile(Entity):
 
     def move(self, game):
         field_map = game.field_map
+        #print("Bullet")
+        #print(field_map)
         if self.direction == 'right':
             try:
                 if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
