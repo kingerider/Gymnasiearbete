@@ -291,7 +291,8 @@ def play_game_create(level_id = None):
         print(ongoing_games)
         conn.close()   
         return redirect(url_for('play_game_join', room_id = game.room_id))
-    abort(401)
+    else:
+        abort(401)
 
 #Skickar spelaren till playgame och tar med game
 @app.route('/play_game/join/<room_id>')
@@ -843,44 +844,59 @@ def list_games():
             available_games.append(ongoing_games[key])
     return render_template('list_game.html', username = session['username'], ongoing_games = available_games)
 
-@app.route('/list_levels')
+@app.route('/list_levels', methods=['POST', 'GET'])
 def list_levels():
-    conn = create_connection()
-    cur = conn.cursor()
-    levels = cur.execute("SELECT * FROM level").fetchall()
-    user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
-    conn.close()
-    return render_template('list_level.html', levels = levels, user_id_name = user_id_name)
+    if session['logged_in']:
+        if request.method == 'POST':
+
+            data = request.form['sort_level']
+          
+            conn = create_connection()
+            cur = conn.cursor()
+            if data == 'Popular':
+                levels = cur.execute("SELECT * FROM level ORDER BY play_count DESC").fetchall()
+            elif data == 'Least Popular':
+                levels = cur.execute("SELECT * FROM level ORDER BY play_count ASC").fetchall()
+            elif data == 'Newest':
+                levels = cur.execute("SELECT * FROM level ORDER BY date DESC").fetchall()
+            elif data == 'Oldest':
+                levels = cur.execute("SELECT * FROM level ORDER BY date ASC").fetchall()
+            else:
+                abort(404)
+                
+            user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
+            conn.close()
+            return render_template('list_level.html', levels = levels, user_id_name = user_id_name)
+        else:
+            conn = create_connection()
+            cur = conn.cursor()
+            levels = cur.execute("SELECT * FROM level").fetchall()
+            user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
+            conn.close()
+            return render_template('list_level.html', levels = levels, user_id_name = user_id_name)
+    else:
+        abort(401)
 
 @app.route('/build_game')
 def build_game():
-    conn = create_connection()
-    cur = conn.cursor()    
-    total_levels = cur.execute("SELECT COUNT(id) FROM level WHERE creator_id == ?", ((session['id']), )).fetchone()[0]
-    conn.close()
-    print("Hello")
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
-    print(total_levels)
+    if session['logged_in']:
+        conn = create_connection()
+        cur = conn.cursor()    
+        total_levels = cur.execute("SELECT COUNT(id) FROM level WHERE creator_id == ?", ((session['id']), )).fetchone()[0]
+        conn.close()
 
-    maps_you_can_create = 3
+        maps_you_can_create = 3
 
-    if total_levels >= maps_you_can_create: #You can only create two maps
-        flash(f"Hello {session['username']}, you can only create {maps_you_can_create} maps because of server overload", "info")
-        return redirect(url_for('profile'))
+        if total_levels >= maps_you_can_create: #You can only create two maps
+            flash(f"Hello {session['username']}, you can only create {maps_you_can_create} maps because of server overload", "info")
+            return redirect(url_for('profile'))
+        else:
+            return render_template('build_game.html')
     else:
-        return render_template('build_game.html')
-
+        abort(401)
 @app.route('/edit_game/<level_id>')
 def edit_game(level_id = None):
-    return render_template('edit_game.html', level_id = level_id)
+    if session['logged_in']:
+        return render_template('edit_game.html', level_id = level_id)
+    else:
+        abort(401)

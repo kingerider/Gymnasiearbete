@@ -8,19 +8,22 @@
 <script src="{{url_for('static', filename='list_level_js.js')}}"></script>
 <script src="{{url_for('static', filename='search_js.js')}}" defer></script>
 <div class="mb-3">
-  <input class="form-control" type="search" placeholder="Search for name or creator" aria-label="Search" id="inputsearchlevel">
+  <input class="form-control" type="search" placeholder="Search for name or creator" aria-label="Search"
+    id="inputsearchlevel">
 </div>
-<div class="mb-3 row">
-  <div class="col-sm-3">
-    <select name="sort_level" id="sort_level" class="form-control">
-      <option value="volvo">Popular</option>
-      <option value="saab">Least Popular</option>
-      <option value="opel">Newest</option>
-      <option value="opel">Oldest</option>
-    </select>
+<form action="{{url_for('list_levels')}}" id="sortform" method="POST">
+  <div class="mb-3 row">
+    <div class="col-sm-3">
+      <select name="sort_level" id="sort_level" class="form-control" form="sortform">
+        <option value="Popular">Popular</option>
+        <option value="Least Popular">Least Popular</option>
+        <option value="Newest">Newest</option>
+        <option value="Oldest">Oldest</option>
+      </select>
+    </div>
+    <button class="btn btn-outline-info my-sm-0" id="btnsortlevel" type="submit" value="Submit">Sort</button>
   </div>
-  <button class="btn btn-outline-info my-sm-0" id="btnsortlevel">Sort</button>
-</div>
+</form>
 
 
 <h3 style="margin-top: 40px;">User created levels</h3>
@@ -32,7 +35,8 @@
         <canvas id="levelId{{level[0]}}"></canvas>
         <input type="hidden" value="{{level[0]}}" class="allId">
         <div class="card-body">
-          <h5 class="card-title text-dark">{{level[2]}} by {% for user in user_id_name %}{% if user[0] == level[1] %}{{user[1]}}{%endif%}{% endfor %}</h5>
+          <h5 class="card-title text-dark">{{level[2]}} by {% for user in user_id_name %}{% if user[0] == level[1]
+            %}{{user[1]}}{%endif%}{% endfor %}</h5>
           <p class="card-text text-dark">{{level[4]}}</p>
           <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
           <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
