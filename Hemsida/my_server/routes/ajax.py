@@ -133,7 +133,7 @@ def ajax_get_data_level():
         'description': description
     })
 
-@app.route('/ajax-add-played-game')
+@app.route('/ajax-add-played-game', methods= ['POST'])
 def ajax_add_played_game():
     data = request.get_json()
     print('Nu spelas det')
@@ -176,9 +176,9 @@ def ajax_end_game():
     winner += 1
     cur.execute("UPDATE user SET wins = ? WHERE username = ?", (winner, data['winner']))
     conn.commit()
-    loser = cur.execute("SELECT wins FROM user WHERE username = ?", (data['loser'], )).fetchone()[0]
+    loser = cur.execute("SELECT loses FROM user WHERE username = ?", (data['loser'], )).fetchone()[0]
     loser += 1
-    cur.execute("UPDATE user SET wins = ? WHERE username = ?", (loser, data['loser']))
+    cur.execute("UPDATE user SET loses = ? WHERE username = ?", (loser, data['loser']))
     conn.commit()
     conn.close()
     return json.dumps({

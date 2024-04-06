@@ -11,6 +11,8 @@ $(document).ready(() => {
         room: player.room,
     })
 
+    let room_id = player.room
+
     //socket.on('message_from_server', (data) => {
     //    $("#message").text(data.message)
     //    $("#this_user").val() = data.username
@@ -24,13 +26,30 @@ $(document).ready(() => {
         }
     })
 
+    const leave = () => {
+        console.log("Lämna")
+        console.log("Lämna")
+        console.log("Lämna")
+        console.log("Lämna")
+        console.log("Lämna")
+        socket.emit('leave', {
+            room: room_id
+        })
+    }
+    $("#btnleave").click(() => {
+        leave()
+    })
+    socket.on('navigate_to', (path) => {
+        window.location.href = path
+        socket.disconnect()
+    })
+
     var start = (start_game) => {
 
         var audio = new Audio('../../static/sound/themeSound.mp3');
         audio.play();
 
         //if room = 1;
-        let room_id = player.room
 
         //let game = start_game.game
         let player1 = start_game.players[0]
@@ -445,6 +464,14 @@ $(document).ready(() => {
                     });
                 }else if (heart2object.health < 1) {
                     youWin();
+
+                }
+            }else{
+                if (heart1object.health < 1) {
+                    youWin();
+
+                }else if (heart2object.health < 1) {
+                    youLose();
                     $.ajax({
                         method: 'POST',
                         url: "/ajax-end-game",
@@ -464,14 +491,6 @@ $(document).ready(() => {
                             }
                         }
                     });
-                }
-            }else{
-                if (heart1object.health < 1) {
-                    youWin();
-
-                }else if (heart2object.health < 1) {
-                    youLose();
-
                 }
             }
         }
@@ -749,25 +768,6 @@ $(document).ready(() => {
                 default:
                     console.log("okej hörru...")
             }
-        })
-
-
-        const leave = () => {
-            console.log("Lämna")
-            console.log("Lämna")
-            console.log("Lämna")
-            console.log("Lämna")
-            console.log("Lämna")
-            socket.emit('leave', {
-                room: room_id
-            })
-        }
-        $("#btnleave").click(() => {
-            leave()
-        })
-        socket.on('navigate_to', (path) => {
-            window.location.href = path
-            socket.disconnect()
         })
         let updateInterval = setInterval(updatePage, 100)
     }

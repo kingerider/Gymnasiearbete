@@ -1,3 +1,9 @@
+from my_server.routes import ongoing_games
+from my_server.routes.dbhandler import create_connection
+from threading import Thread
+import threading
+import time
+import random
 canvasw = 800
 canvash = 400
 tile_size = 20
@@ -101,3 +107,415 @@ class Player(Entity):
     def damage_taken(self):
         if self.health >= 1:
             self.health -= 1
+
+class EnemyThread(Thread):
+    def __init__(self, enemy):
+        Thread.__init__(self)
+        self._stop_event = threading.Event()
+        self.enemy = enemy
+        self.directions = ['right', 'left', 'up', 'down']
+    
+    def stop(self):
+        self._stop_event.set()
+
+    def run(self):
+        while not self._stop_event.is_set():
+            self.enemy.move(ongoing_games[self.enemy.room_id])
+            print("This looks at run but does not execute print")
+            print(ongoing_games)
+            time.sleep(0.2)
+
+class Enemy(Entity):
+    def __init__(self, id, level_id, posX, posY, dir, room_id):
+        super().__init__(posX, posY)
+        self.id = id
+        self.level_id = level_id
+        self.room_id = room_id
+        self.direction = dir
+        self.thread = EnemyThread(self)
+    
+    def start_thread(self):
+        self.thread.start()
+    
+    def object_to_dict(self):
+        return dict(type="enemy")
+
+    def move(self, game):
+        field_map = game.field_map
+        dir = self.thread.directions[random.randint(0, 3)]
+        try:
+            if self.direction == 'right':
+                #print('Höger Ja')
+                self.direction = dir
+                if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
+                    #print(f'före: {self.positionX}')
+                    self.set_x(int(self.positionX) + 1)
+                    #print(f'efter: {self.positionX}')
+                    print("old f")
+                    print(field_map)
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX) - 1][(int(self.positionY))] = None
+                    print("new f")
+                    print(field_map)
+                    #print("rör sig")
+                    #print(f'field map: {field_map}')
+                elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
+                    #print("skadar")
+                    x = int(self.positionX) + 1
+                    y = int(self.positionY)
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX) + 1, (int(self.positionY)))
+            elif self.direction == 'left':
+                #print('Vänster Ja')
+                self.direction = dir
+                if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
+                    #print("rör sig")
+                    #print(f'före: {self.positionX}')
+                    self.set_x(int(self.positionX) - 1)
+                    #print(f'efter: {self.positionX}')
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX) + 1][(int(self.positionY))] = None
+                elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
+                    #print("skadar")
+                    x = int(self.positionX) - 1
+                    y = int(self.positionY)
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            #print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX) - 1, (int(self.positionY)))
+            elif self.direction == 'up':
+                #print('Upp ja')
+                self.direction = dir
+                if field_map[int(self.positionX)][(int(self.positionY) - 1)] == None:
+                    #print("rör sig")
+                    #print(f'före: {self.positionY}')
+                    self.set_y(int(self.positionY) - 1)
+                    #print(f'efter: {self.positionY}')
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX)][(int(self.positionY) + 1)] = None
+                elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
+                    #print("skadar")
+                    x = int(self.positionX)
+                    y = int(self.positionY) - 1
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            #print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) - 1))
+            elif self.direction == 'down':
+                #print('Ner Ja')
+                self.direction = dir
+                if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
+                    #print("rör sig")
+                    #print(f'före: {self.positionY}')
+                    self.set_y(int(self.positionY) + 1)
+                    #print(f'efter: {self.positionY}')
+                    field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                    field_map[int(self.positionX)][(int(self.positionY) - 1)] = None
+                elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
+                    #print("skadar")
+                    x = int(self.positionX)
+                    y = int(self.positionY) + 1
+                    players = game.players
+                    for player in players:
+                        if player.name == field_map[int(x)][(int(y))]['name']:
+                            player.damage_taken()
+                            field_map[int(x)][(int(y))] = player.object_to_dict()
+                            #print(f'{player.name} tog skada')
+                    # player_taken_damage(game.players, field_map, int(self.positionX), (int(self.positionY) + 1))
+        except:
+            pass
+            
+        
+
+    def change_direction(self, str):
+        self.direction = str
+
+    def moveTo(self, newPosX, newPosY):
+        self.set_position(newPosX, newPosY)
+
+class Wall(Entity):
+    def __init__(self, id, level_id, posX, posY):
+        self.id = id
+        self.level_id = level_id
+        super().__init__(posX, posY)
+
+class Item(Entity):
+    def __init__(self, id, level_id, posX, posY, type):
+        self.id = id
+        self.level_id = level_id
+        super().__init__(posX, posY)
+        self.type = type
+
+#Erik Change
+
+
+class Field:
+    def __init__(self, id, health, room_id):
+        self.id = id
+        self.room_id = room_id
+        self.health = health
+        self.walls = []
+        self.enemies = []
+        self.items = []
+
+        #self.field = [][]
+        #self.field[0][5] = Monster()
+        #self.field[0][6] = None
+        #self.field[5][6] = Wall()
+
+        #Flytta monster ned ett steg.
+        #self.field[1][5] = self.field[0][5]
+        #self.field[0][5] = None
+    
+    def load_from_database(self):
+        conn = create_connection()
+        cur = conn.cursor()
+        directions = ['right', 'left', 'up', 'down']
+        fetched_walls = cur.execute("SELECT * FROM wall WHERE level_id = ?", (self.id, )).fetchall()
+        for wall in fetched_walls:
+            self.walls.append(Wall(wall[0], wall[1], wall[2], wall[3]))
+        fetched_enemies = cur.execute("SELECT * FROM enemy WHERE level_id = ?", (self.id, )).fetchall()
+        for enemy in fetched_enemies:
+            self.enemies.append(Enemy(enemy[0], enemy[1], enemy[2], enemy[3], directions[random.randint(0, 3)], self.room_id))
+        fetched_items = cur.execute("SELECT * FROM item WHERE level_id = ?", (self.id, )).fetchall()
+        for item in fetched_items:
+            self.items.append(Item(item[0], item[1], item[2], item[3], item[4]))
+        conn.close()
+
+    def get_monster_pos(self):
+        list_of_positions = []
+        for enemy in self.enemies:
+            list_of_positions.append({
+                'x': enemy.positionX,
+                'y': enemy.positionY
+            })
+        return list_of_positions
+    
+    def start_monsters(self):
+        for enemy in self.enemies:
+            enemy.start_thread()
+    
+    def stop_monsters(self):
+        for enemy in self.enemies:
+            enemy.thread.stop()
+    
+    def get_wall_pos(self):
+        list_of_positions = []
+        for wall in self.walls:
+            list_of_positions.append({
+                'x': wall.positionX,
+                'y': wall.positionY
+            })
+        return list_of_positions
+    
+    def get_item_pos(self):
+        list_of_positions = []
+        for item in self.items:
+            list_of_positions.append({
+                'x': item.positionX,
+                'y': item.positionY
+            })
+        return list_of_positions
+
+class BulletThread(Thread):
+
+    def __init__(self, bullet):
+        Thread.__init__(self)
+        self._stop_event = threading.Event()
+        self.bullet = bullet
+    
+    def stop(self):
+        self._stop_event.set()
+
+    def run(self):
+        while not self._stop_event.is_set():
+            self.bullet.move(ongoing_games[self.bullet.room_id])
+            time.sleep(0.05)
+
+class Projectile(Entity):
+    def __init__(self, posX, posY, dir, id, ri):
+        super().__init__(posX, posY)
+        self.direction = dir
+        self.player_id = id
+        self.room_id = ri
+        self.thread = BulletThread(self)
+        self.thread.start()
+        
+    def object_to_dict(self):
+        return dict(type = 'projectile', player_id = self.player_id, direction = self.direction)
+
+    def move(self, game):
+        field_map = game.field_map
+        #print("Bullet")
+        #print(field_map)
+        if self.direction == 'right':
+            try:
+                if field_map[int(self.positionX) + 1][(int(self.positionY))] == None:
+                    try:
+                        self.set_x(int(self.positionX) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) - 1][(int(self.positionY))] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX) + 1][(int(self.positionY))]['type'] == 'player':
+                    if game.players[0].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[0].damage_taken()
+                        field_map[int(game.players[0].positionX)][(int(game.players[0].positionY))] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        # print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[1].damage_taken()
+                        field_map[int(game.players[1].positionX)][(int(game.players[1].positionY))] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        # print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'left':
+            try:
+                if field_map[int(self.positionX) - 1][(int(self.positionY))] == None:
+                    try:
+                        self.set_x(int(self.positionX) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX) + 1][(int(self.positionY))] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX) - 1][(int(self.positionY))]['type'] == 'player':
+                    if game.players[0].name == field_map[int(self.positionX) - 1][(int(self.positionY))]['name']:
+                        game.players[0].damage_taken()
+                        field_map[int(game.players[0].positionX)][(int(game.players[0].positionY))] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[1].damage_taken()
+                        field_map[int(game.players[1].positionX)][(int(game.players[1].positionY))] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'up':
+            try:
+                if field_map[int(self.positionX)][(int(self.positionY) -1)] == None:
+                    try:
+                        self.set_y(int(self.positionY) - 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY)) + 1] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX)][(int(self.positionY) - 1)]['type'] == 'player':
+                    if game.players[0].name == field_map[int(self.positionX)][(int(self.positionY) - 1)]['name']:
+                        game.players[0].damage_taken()
+                        field_map[int(game.players[0].positionX)][(int(game.players[0].positionY))] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX)][(int(self.positionY) - 1)]['name']:
+                        game.players[1].damage_taken()
+                        field_map[int(game.players[1].positionX)][(int(game.players[1].positionY))] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
+        elif self.direction == 'down':
+            try:
+                if field_map[int(self.positionX)][(int(self.positionY) + 1)] == None:
+                    try:
+                        self.set_y(int(self.positionY) + 1)
+                        field_map[int(self.positionX)][(int(self.positionY))] = self.object_to_dict()
+                        field_map[int(self.positionX)][(int(self.positionY)) - 1] = None
+                    except:
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                elif field_map[int(self.positionX)][(int(self.positionY) + 1)]['type'] == 'player':
+                    if game.players[0].name == field_map[int(self.positionX)][(int(self.positionY) + 1)]['name']:
+                        game.players[0].damage_taken()
+                        field_map[int(game.players[0].positionX)][(int(game.players[0].positionY))] = game.players[0].object_to_dict()
+                        print("Health:")
+                        print(game.players[0].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                    elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        game.players[1].damage_taken()
+                        field_map[int(game.players[1].positionX)][(int(game.players[1].positionY))] = game.players[1].object_to_dict()
+                        print("Health:")
+                        print(game.players[1].health)
+                        self.thread.stop()
+                        game.projectiles[self.player_id] = None
+                        field_map[int(self.positionX)][(int(self.positionY))] = None
+                        print(field_map)
+                else:
+                    self.thread.stop()
+                    game.projectiles[self.player_id] = None
+                    field_map[int(self.positionX)][(int(self.positionY))] = None
+                    print(field_map)
+            except:
+                self.thread.stop()
+                game.projectiles[self.player_id] = None
+                field_map[int(self.positionX)][(int(self.positionY))] = None
