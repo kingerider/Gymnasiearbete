@@ -338,7 +338,6 @@ $(document).ready(() => {
             //newData
             cancelWait();
             newData = data;
-            console.log(newData)
             updateEntityPosition();
             endGame();
             //canvas
@@ -770,6 +769,6 @@ $(document).ready(() => {
             window.location.href = path
             socket.disconnect()
         })
-        let updateInterval = setInterval(updatePage, 30)
+        let updateInterval = setInterval(updatePage, 100)
     }
 })
