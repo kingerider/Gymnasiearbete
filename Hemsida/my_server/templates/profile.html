@@ -15,26 +15,26 @@
             <p><strong>Wins:</strong> {{user[4]}}</p>
             <p><strong>Losses:</strong> {{user[5]}}</p>
             <div class="progress">
-                <div class="progress-bar" id="winprog" style="background-color: dodgerblue;">{{user[4]}} W</div>
-                <div class="progress-bar" id="lossprog" style="background-color: red;">{{user[5]}} L</div>
+                <div class="progress-bar" id="winprog" style="background-color: dodgerblue; min-width: 0px;">{{user[4]}} W</div>
+                <div class="progress-bar" id="lossprog" style="background-color: red; min-width: 0px;">{{user[5]}} L</div>
             </div>
             <script>
                 var win = $("#winprog").val();
                 var loss = $("#lossprog").val();
                 var games_played = win + loss;
-                var winpro = (win / games_played);
+                var winpro = Math.round(win / games_played);
                 winpro *= 100;
                 var losspro = 100 - winpro;
-                var stringwin = `${winpro}%`
-                var stringloss = `${losspro}%`
-                $("#winprog").css("width", stringwin)
-                $("#lossprog").css("width", stringloss)
+                //var stringwin = `${winpro}%`
+                //var stringloss = `${losspro}%`
+
+                var winbar = document.getElementById("#winprog");
+                winbar.style.width = winpro + "%";
+                var lossbar = document.getElementById("#lossprog");
+                lossbar.style.width = losspro + "%";
+                //$("#winprog").css("width", stringwin)
+                //$("#lossprog").css("width", stringloss)
             </script>
-            <!-- <div class="success progress" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuetext="50 percent" aria-valuemax="100">  
-                <span class="progress-meter" style="width: 50%"> 
-                    <span class="progress-meter-text">{{user[4]}} wins</span>  
-                </span> 
-            </div> -->
         </div>
         <div class="col-sm">
             <h3>Your levels</h3>
