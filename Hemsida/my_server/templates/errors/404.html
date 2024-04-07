@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
+{% block headline %}Page not found{% endblock %}
+
 {% block content %}
-    <div class="mx-auto text-center" style="width: auto;">
-        <div class="card" style="width: 36rem;">
-            <div class="card-body">
-                <h5 class="card-title">404 - Page not found</h5>
-                <p class="card-text">The page you are looking for doesn't exist or an other error occurred</p>
-            </div>
-        </div>
+<main role="main" class="container">
+    <div class="p-5 mb-5 mt-3" style="background-color: #E9ECEF; border-radius: 25px;">
+        <h3>404 - Page not found</h3>
+        <p>The page you are looking for doesn't exist or an other error occurred</p>
     </div>
+</main>
 {% endblock %}
