@@ -1,171 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8"> 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='/favicon_io/favicon.ico') }}">
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-    <script src="{{url_for('static', filename='script.js')}}"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"
+    integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='/favicon_io/favicon.ico') }}">
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="{{url_for('static', filename='script.js')}}"></script>
 </head>
+
 <body>
-    <div class="container-fluid bg-light">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <!--nav-->
-            <div class="collapse navbar-collapse w-100 order-3 dual-collapse2" id="navbarNav">
-              <ul class="navbar-nav ml-auto">
-                <!--logged in-->
-                {% if session['logged_in'] == True %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('memberarea')}}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('build_game')}}">Build Level</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('list_levels')}}">List Levels</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('list_games')}}">List games</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('profile')}}">Profile</a>
-                    </li>
-                <!--not logged in-->
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('index')}}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login')}}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('sign_up')}}">Create account</a>
-                    </li>
-                {% endif %}
-              </ul>
-            </div>
-          </nav>
-        <div class="container-fluid">
-            <!--flash-meddelande-->
-            
-            
-            <!--content-->
-            <div class="container">
-                <div class="jumbotron text-center">
-                    <h1>{% block headline %}{% endblock %}</h1>
-                </div>
-                {% for category, message in get_flashed_messages(with_categories = True) %}
-                  <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
-                      <strong>Message!</strong> {{message}}
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-              {% endfor %}
-                {% block content %}{% endblock %}
-            </div>
+  <div class="container-fluid bg-light">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <img class="float-start" style="width: 40px;" src="{{url_for('static', filename='favicon_io/android-chrome-192x192.png')}}" alt="logo">
+
+      <!--nav-->
+      <div class="collapse navbar-collapse w-100 order-3 dual-collapse2" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <!--logged in-->
+          {% if session['logged_in'] == True %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('memberarea')}}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('build_game')}}">Build Level</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('list_levels')}}">List Levels</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('list_games')}}">List games</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('profile')}}">Profile</a>
+          </li>
+          <!--not logged in-->
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('index')}}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('sign_up')}}">Create account</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <!--flash-meddelande-->
+
+
+      <!--content-->
+      <div class="container">
+        <div class="jumbotron text-center">
+          <h1>{% block headline %}{% endblock %}</h1>
         </div>
+        {% for category, message in get_flashed_messages(with_categories = True) %}
+        <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+          <strong>Message!</strong> {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+      </div>
     </div>
-    <footer class="bg-dark text-left text-lg-start text-white">
-        <!-- Grid container -->
-        <div class="container p-4">
-          <!--Grid row-->
-          <div class="row mt-4">
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <h5 class="text-uppercase">Contacts</h5>
-              <section>
-                <p>
-                Sofisticus AB <br>
-                Elektronvägen 1 <br>
-                141 49 Värmdö
-                </p>
-              </section>
-              <section>
-                <p>
-                Telefon: 0727414020 <br>
-                Swich: 123 640 76 88 <br>
-                E-post: erik.derelov@gmail.com</p>
-              </section>
-              
-            </div>
-            <!--Grid column-->
-    
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <h5 class="text-uppercase">Terms</h5>
-    
-              <ul class="list-unstyled">
-                <li>
-                  <a href="#!" class="text-white">Terms and conditions</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white">Cookies</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white">Privacy policy</a>
-                </li>
-              </ul>
-            </div>
-            <!--Grid column-->
-    
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <h5 class="text-uppercase">Sofisticus</h5>
-    
-              <ul class="list-unstyled">
-                <li>
-                  <a href="#!" class="text-white">Work at Sofisticus</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white">Sofisticus future</a>
-                </li>
-                <li>
-                  <a href="#!" class="text-white">About us</a>
-                </li>
-              </ul>
-            </div>
-            <!--Grid column-->
-    
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <h5 class="text-uppercase">Follow us</h5>
-              <ul class="list-unstyled">
-                <li>
-                  <div class="social-links">
-                    <a href="https://sv-se.facebook.com/"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://twitter.com/?lang=sv"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.linkedin.com/uas/login-submit"><i class="fab fa-linkedin-in"></i></a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <!--Grid column-->
-          </div>
-          <!--Grid row-->
+  </div>
+  <footer class="bg-dark text-left text-lg-start text-white">
+    <!-- Grid container -->
+    <div class="container p-4">
+      <!--Grid row-->
+      <div class="row mt-4">
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Contacts</h5>
+          <section>
+            <p>
+              Sofisticus AB <br>
+              Elektronvägen 1 <br>
+              141 49 Värmdö
+            </p>
+          </section>
+          <section>
+            <p>
+              Telefon: 0727414020 <br>
+              Swich: 123 640 76 88 <br>
+              E-post: erik.derelov@gmail.com</p>
+          </section>
+
         </div>
-        <!-- Grid container -->
-    
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-          © 2024 Copyright:
-          <a class="text-white" href="#">sofisticus2024.nackagymnasium.nu</a>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Terms</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a href="#!" class="text-white">Terms and conditions</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">Cookies</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">Privacy policy</a>
+            </li>
+          </ul>
         </div>
-        <!-- Copyright -->
-      </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Sofisticus</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a href="#!" class="text-white">Work at Sofisticus</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">Sofisticus future</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">About us</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Follow us</h5>
+          <ul class="list-unstyled">
+            <li>
+              <div class="social-links">
+                <a href="https://sv-se.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/?lang=sv"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/uas/login-submit"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      © 2024 Copyright:
+      <a class="text-white" href="#">sofisticus2024.nackagymnasium.nu</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>
