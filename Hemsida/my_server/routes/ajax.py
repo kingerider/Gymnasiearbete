@@ -2,33 +2,7 @@ from my_server import app
 from flask import request
 import json
 from my_server.routes.dbhandler import create_connection
-from my_server.routes.game import ongoing_games
 from datetime import datetime
-
-
-# @app.route('/ajax_get_positions', methods = ['POST'])
-# def ajax_get_positions():
-#     data = request.get_json()
-#     game = ongoing_games[data['id']]
-#     walls = game.field.get_wall_pos()
-#     monsters = game.field.get_monster_pos()
-#     items = game.field.get_item_pos()
-#     print(f'Walls: {walls}')
-#     print(f'Monsters: {monsters}')
-#     print(f'Items: {items}')
-#     try:
-#         return json.dumps({
-#             'msg': 'Positions recieved',
-#             'success': True,
-#             'walls': walls,
-#             'monsters': monsters,
-#             'items': items
-#         })
-#     except:
-#         return json.dumps({
-#             'msg': 'Something went wrong',
-#             'success': False
-#         })
 
 @app.route('/ajax-search-level', methods = ['POST'])
 def ajax_search_level():
@@ -37,7 +11,6 @@ def ajax_search_level():
     cur = conn.cursor()
     levels = cur.execute("SELECT * FROM level WHERE title LIKE ?", (data['input'],)).fetchall()
     conn.close()
-    print(levels)
     return json.dumps({
         'msg': 'levels gathered',
         'success': True,
@@ -47,8 +20,6 @@ def ajax_search_level():
 @app.route('/ajax-create-level', methods = ['POST'])
 def ajax_edit_level():
     data = request.get_json()
-    print("data:")
-    print(data)
     conn = create_connection()
     cur = conn.cursor()
     now = datetime.now()
@@ -58,7 +29,6 @@ def ajax_edit_level():
     cur.execute("INSERT INTO level (creator_id, title, player_health, description, date, play_count) VALUES (?, ?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date, 0))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
     
-  
     for i in range(len(data['wallX_Positions'])): #len(data[x]) is as long as len(data[y])
         cur.execute("INSERT INTO wall (level_id, x_coordinate, y_coordinate) VALUES (?, ?, ?)", (level_id, data['wallX_Positions'][i], data['wallY_Positions'][i],))
     for i in range(len(data['monsterX_Positions'])): 
@@ -75,8 +45,6 @@ def ajax_edit_level():
 @app.route('/ajax-edit-level', methods = ['POST'])
 def ajax_create_level():
     data = request.get_json()
-    print("data:")
-    print(data)
     conn = create_connection()
     cur = conn.cursor()
     now = datetime.now()
@@ -84,7 +52,6 @@ def ajax_create_level():
     formatted_date = now.strftime('%Y-%m-%d')
     cur.execute("UPDATE level SET title == ?, player_health == ?, description == ?, date == ? WHERE id == ?", (data['title'], 3, data['description'], formatted_date, data['level_id'], ))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
-
 
     cur.execute("DELETE FROM wall WHERE level_id == ?", (data['level_id'],))
     cur.execute("DELETE FROM enemy WHERE level_id == ?", (data['level_id'],))
@@ -105,8 +72,6 @@ def ajax_create_level():
 @app.route('/ajax-get-data-level', methods = ['POST'])
 def ajax_get_data_level():
     data = request.get_json()
-    print("data:")
-    print(data)
     conn = create_connection()
     cur = conn.cursor()    
     wall_x = cur.execute("SELECT x_coordinate FROM wall WHERE level_id == ?", (data['level_id'], )).fetchall()
@@ -121,7 +86,6 @@ def ajax_get_data_level():
     description = cur.execute("SELECT description FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
     conn.commit()
     conn.close()
-    #print(levels)
     return json.dumps({
         'msg': 'sql data',
         'success': True,
@@ -136,14 +100,6 @@ def ajax_get_data_level():
 @app.route('/ajax-add-played-game', methods= ['POST'])
 def ajax_add_played_game():
     data = request.get_json()
-    print('Nu spelas det')
-    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
-    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
-    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
-    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
-    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
-    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
-    print(f'Är {data["player1"]} och {data["player2"]} i farten nu igen...')
     conn = create_connection()
     cur = conn.cursor()
     player1count = cur.execute("SELECT games_played FROM user WHERE username = ?", (data['player1'], )).fetchone()[0]
@@ -162,14 +118,6 @@ def ajax_add_played_game():
 @app.route('/ajax-end-game', methods = ['POST'])
 def ajax_end_game():
     data = request.get_json()
-    print('spelet slut')
-    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
-    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
-    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
-    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
-    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
-    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
-    print(f'{data["winner"]} vann, {data["loser"]} förlorade')
     conn = create_connection()
     cur = conn.cursor()
     winner = cur.execute("SELECT wins FROM user WHERE username = ?", (data['winner'], )).fetchone()[0]

@@ -1,7 +1,5 @@
 player.room = $("#gameid").val()
 
-
-
 $(document).ready(() => {
     console.log("bläbl")
     console.log($("#this_user").text())
@@ -13,14 +11,9 @@ $(document).ready(() => {
 
     let room_id = player.room
 
-    //socket.on('message_from_server', (data) => {
-    //    $("#message").text(data.message)
-    //    $("#this_user").val() = data.username
-    //})
-
     socket.on('message_from_server', (data) => {
         $("#message").text(data.message)
-        if (data.game != null/*data.message == "start_game"*/) {
+        if (data.game != null) {
             console.log("NU VILL NAGON STARTA SPELET")
             start(data.game);
         }
@@ -49,18 +42,10 @@ $(document).ready(() => {
         var audio = new Audio('../../static/sound/themeSound.mp3');
         audio.play();
 
-        //if room = 1;
-
-        //let game = start_game.game
         let player1 = start_game.players[0]
         let player2 = start_game.players[1]
         let newData = null
 
-        // socket.emit('add_played_game', {
-        //     player1: player1,
-        //     player2: player2,
-        //     success: true
-        // })
         if (player1 == $("#this_user").text()) {
             $.ajax({
                 method: 'POST',
@@ -76,52 +61,24 @@ $(document).ready(() => {
                 success: (data) => {
                     if (data.success) {
                         console.log(data.msg)
-                        // var base_url = window.location.origin;
-                        // window.location = (base_url + "/memberarea")
                     }
                 }
             });
         }
-        //Players
-        //let newHead1 = document.createElement("h1")
-        //newHead1.innerText = "Player: " + player1
-        //let newHead2 = document.createElement("h1")
-        //newHead2.innerText = "Player: " + player2
-        //$("body").append(newHead1)
-        //$("body").append(newHead2)
-
-
-        //playerhearts
-        // let player1hearts = document.createElement("canvas")
-        // player1hearts.id = "player1hearts"
-        // player1hearts.width = 80;
-        // player1hearts.height = 20;
-        
-
-        // let player2hearts = document.createElement("canvas")
-        // player2hearts.id = "player2hearts"
-        // player2hearts.width = 80;
-        // player2hearts.height = 20;
-        // $("body").append(player1hearts)
-        // $("body").append(player2hearts)
 
         //New canvas
         let canvas = document.createElement("canvas")
         canvas.id = "myCanvas"
         $("body").append(canvas)
 
-        
-
-        //Else if room = 2;
         console.log("js document.ready")
 
         console.log(room_id)
         console.log("player1 :" + player1)
         console.log("player2 :" + player2)
-        //Console.log("username:" + $("#this_user").val())
 
         //Canvas
-        canvas = document.getElementById("myCanvas"); //Does not need var because it already exists
+        // canvas = document.getElementById("myCanvas"); //Does not need var because it already exists
         var ctx = canvas.getContext("2d");
         var tileSize = null;
 
@@ -154,7 +111,6 @@ $(document).ready(() => {
         //Grid
         var gridHeight = canvas.height / tileSize
         var gridWdith = canvas.width / tileSize
-
 
         //Position class for objects
         class Position {
@@ -224,23 +180,14 @@ $(document).ready(() => {
 
         //hearts
         function drawHearts() {
-            //dimensioner: w 300 h 50
-            //console.log("draw hearts")
-            //console.log("draw hearts")
-            //console.log("draw hearts")
             for (var i = 0; i < heart1object.health; i++) {
-                //console.log("Draw heart 1: " + i)
-                //console.log("heartWidth: " + heartWidth)
-                //console.log("heartHeight: " + heartHeight)
                 ctx.beginPath()
-                //ctx.rect(i*(heartWidth), 0, heartWidth, heartHeight,);
                 ctx.rect(i*(heartWidth + 5), (2*tileSize)/2, heartWidth, heartHeight)
                 ctx.fillStyle = "#ff0000";
                 ctx.fill()
                 ctx.closePath()
             }
             for (var i = 1; i <= heart2object.health; i++) {
-                //console.log("Draw heart 2: " + i)
                 ctx.beginPath()
                 if (i == 1) {
                     ctx.rect(canvas.width - i*(heartWidth), (2*tileSize)/2, heartWidth, heartHeight)
@@ -271,7 +218,6 @@ $(document).ready(() => {
             ctx.closePath();
         }
 
-
         //Player
         function drawPlayer(playerX, playerY) {
             ctx.beginPath();
@@ -301,9 +247,6 @@ $(document).ready(() => {
                 ctx.drawImage(image, x, y, imgW, imgH);  //aka, ctx2.drawImage(this, 0, 0);
             }
             image.src = '../../static/img/YouWinBig.png';
-            //Finally, start the loading process
-            //var image = new Image(); // or document.createElement('img'); 
-            //image.src = "../../static/img/jumbotron_bg.jpg"; 
             ctx.closePath();
         }
 
@@ -318,31 +261,10 @@ $(document).ready(() => {
                 ctx.drawImage(image, x, y, imgW, imgH);  //aka, ctx2.drawImage(this, 0, 0);
             }
             image.src = '../../static/img/YouLoseBig.png';
-            //Finally, start the loading process
-            //var image = new Image(); // or document.createElement('img'); 
-            //image.src = "../../static/img/jumbotron_bg.jpg"; 
             ctx.closePath();
         }
 
-        /*socket.emit("start_monster", {
-            room: room_id
-        })*/
-        
-
         const updatePage = () => {
-
-            //allowMonsterMove = true
-            //do socket requests that request info
-            //update the page based on the received info
-
-            //socket.emit('clientlist', {
-            //    room: room_id
-            //})
-
-            /*socket.emit('monster_move', {
-                room: room_id
-            })*/
-
             socket.emit('update_canvas', {
                 room: room_id
             })
@@ -350,10 +272,6 @@ $(document).ready(() => {
 
         //Updates variebles and gui
         socket.on('update', (data) => {
-            //console.log(data)
-            //console.log(data.field_map)
-            //update canvas based on the data received back from the server
-
             //newData
             cancelWait();
             newData = data;
@@ -365,12 +283,6 @@ $(document).ready(() => {
             canvas.width = newData.width;
             canvas.height = newData.height;
             tileSize = newData.tile_size;
-
-            //hearts
-            // player1hearts.style.top = "50%" - player1hearts.height
-            // player1hearts.style.left = "50%" - canvas.width/2
-            // player2hearts.style.top = "50%" - player2hearts.height
-            // player2hearts.style.left = "50%" + canvas.width - player2hearts.width
 
             //Wall
             wallHeight = tileSize;
@@ -411,8 +323,6 @@ $(document).ready(() => {
                                 const element2 = element1[square];
                                 if (element2 != null) {
                                     if (element2["type"] == "wall") {
-                                        //This is what wall is
-                                        //console.log("Wall:" + element2 + "X:" + countX + "Y:" + countY);
                                         drawWall(countX * tileSize, countY * tileSize);
                                     }
                                     if (element2["type"] == "enemy") {
@@ -457,8 +367,6 @@ $(document).ready(() => {
                         success: (data) => {
                             if (data.success) {
                                 console.log(data.msg)
-                                // var base_url = window.location.origin;
-                                // window.location = (base_url + "/memberarea")
                             }
                         }
                     });
@@ -486,8 +394,6 @@ $(document).ready(() => {
                         success: (data) => {
                             if (data.success) {
                                 console.log(data.msg)
-                                // var base_url = window.location.origin;
-                                // window.location = (base_url + "/memberarea")
                             }
                         }
                     });
@@ -516,7 +422,7 @@ $(document).ready(() => {
                                     monsterArray.push(new Position(countX, countY));
                                 }
                                 if (element2["type"] == "player") {
-                                    if (element2["name"] == player1/*$("#this_user").text()*/){
+                                    if (element2["name"] == player1){
                                         heart1object = element2;
                                     } else {
                                         heart2object = element2;  
@@ -711,34 +617,26 @@ $(document).ready(() => {
 
         //Shoot_projectile
         $("body").on("keypress", function (event) {
-            // if (waitUpdate()) {
-                if (event.keyCode == 32) { //spacebar
-                    var audio = new Audio('../../static/sound/laserSound.mp3');
-                    audio.play();
-                    console.log("Handler for `keypress` called.");
-                    let this_player_id = null
-                    let username = $("#this_user").text();
-                    if (username == player1) {
-                        this_player_id = 0
-                        console.log("Spelare 1");
-                    }
-                    else if (username == player2) {
-                        this_player_id = 1
-                        console.log("Spelare 2")
-                    }
-
-                    socket.emit('shoot_projectile', {
-                        room: room_id,
-                        player_id: this_player_id
-                    })
+            if (event.keyCode == 32) { //spacebar
+                var audio = new Audio('../../static/sound/laserSound.mp3');
+                audio.play();
+                console.log("Handler for `keypress` called.");
+                let this_player_id = null
+                let username = $("#this_user").text();
+                if (username == player1) {
+                    this_player_id = 0
+                    console.log("Spelare 1");
                 }
-            // }
-            
-            
-            // usernamePosition = new Position;
-            // usernamePosition = userPosition(username);
-            //console.log(character)
-            
+                else if (username == player2) {
+                    this_player_id = 1
+                    console.log("Spelare 2")
+                }
+
+                socket.emit('shoot_projectile', {
+                    room: room_id,
+                    player_id: this_player_id
+                })
+            }
         })
 
         addEventListener("mouseup", (event) => {
