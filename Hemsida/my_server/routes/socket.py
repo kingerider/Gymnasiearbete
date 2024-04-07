@@ -21,58 +21,30 @@ def handle_disconnect():
 
 @socket.on('join')
 def handle_join_room(data):
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
-    print('JOIN JOIN JOY')
     join_room(data['room'])
-    print(f'session: {session["username"]}')
     clients.append({'name': session['username'], 'room': data['room']})
 
     game = ongoing_games[data['room']]
-    print(clients)
-    # if ongoing_games[data['room']].:
-    #HÄR SKA DET FIXAS MED SOCKETIO
     if len(ongoing_games[data['room']].players) == 2:
-        #Level play count++
         game = ongoing_games[data['room']]
         conn = create_connection()
         cur = conn.cursor()
         play_count = cur.execute("SELECT play_count FROM level WHERE id == ?", (game.id,)).fetchone()[0]
-        print(play_count)
-        print(play_count)
-        print(play_count)
-        print(play_count)
-        print(play_count)
-        print(play_count)
-        print(play_count)
-        print(play_count)
-
-        print(play_count)
         play_count = int(play_count+1)
-        print(play_count)
         cur.execute("UPDATE level SET play_count = ? WHERE id == ?", (play_count, game.id, ))
         conn.commit()
         conn.close()
     if len(game.players) == 2:
-
-        #startit(data['room'])
-        # threading.Thread(target=monster_move, args=(data, )).start()
-        # startit()
         game.field.start_monsters()
         emit('message_from_server', {
             'message': f'start_game',
             'game': game.get_game_info()
-            #'username': session['username']
         }, to=data['room'])
     else:
         emit('message_from_server', {
             'message': 'Första gick med i rummet',
             'game': None,
-            #'username': session['username']
         }, to=data['room'])
-    #emit('navigate_to', f'/play_game/{data["role"]}/{data["room"]}')
 
 @socket.on('leave')
 def on_leave(data):
@@ -86,11 +58,9 @@ def on_leave(data):
         game.projectiles[1].thread.stop()
     except:
         print("Det fanns inga bullets")
-    print(ongoing_games)
     for client in clients:
         if client['room'] == data['room'] and client['name'] == session['username']:
             clients.remove(client)
-    print(ongoing_games)
     emit('navigate_to', f'/memberarea')
 
 

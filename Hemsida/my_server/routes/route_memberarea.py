@@ -2,7 +2,6 @@ from my_server import app
 from flask import render_template, abort, session
 from my_server.routes.dbhandler import create_connection
 
-
 @app.route('/memberarea')
 def memberarea():
     if session['logged_in']:
