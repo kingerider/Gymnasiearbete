@@ -1,15 +1,20 @@
 from my_server import app
-from flask import render_template, redirect, url_for, flash, session
+from flask import render_template, redirect, url_for, flash, abort, session
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.forms import LoginForm
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt(app)
 
+def user_logged_in():
+    if 'logged_in' in session and session['logged_in']:
+        pass
+    else:
+        abort(401)
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm()
-
 
     #https://hyperskill.org/learn/step/27151
     #https://popsql.com/learn-sql/sql-server/how-to-query-date-and-time-in-sql-server
