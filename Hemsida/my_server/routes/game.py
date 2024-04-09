@@ -50,7 +50,7 @@ def play_game_join(room_id = None):
         player = Player(session['username'], game.field.health, "right", int(canvasw/tile_size)/8, int(canvash/tile_size)/2)
         game.add_player(player)
     else:
-        player = Player(session['username'], game.field.health, "left", int(canvasw/tile_size) - (int(canvasw/tile_size)/8), int(canvash/tile_size)/2)
+        player = Player(session['username'], game.field.health, "left", int(canvasw/tile_size) - (int(canvasw/tile_size)/8) - 1, int(canvash/tile_size)/2)
         game.add_player(player)
         game.place_objects_field()
     return render_template('play_game.html', game = game.get_game_info())

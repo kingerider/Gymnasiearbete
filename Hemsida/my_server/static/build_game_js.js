@@ -47,7 +47,7 @@ $(document).ready(() => {
     var playerArray = [];
     console.log(canvasWidth)
     playerArray.push(new Position(parseInt(canvasWidth) / 8, parseInt(canvasHeight) / 2));
-    playerArray.push(new Position(parseInt(canvasWidth) - parseInt(canvasWidth) / 8, parseInt(canvasHeight) / 2));
+    playerArray.push(new Position(parseInt(canvasWidth) - parseInt(canvasWidth) / 8 - 1, parseInt(canvasHeight) / 2));
 
     //Wall
     var wallHeight = tileSize;
