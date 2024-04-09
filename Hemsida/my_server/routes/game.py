@@ -57,17 +57,6 @@ def play_game_join(room_id = None):
         game.add_player(player)
         game.place_objects_field()
     return render_template('play_game.html', game = game.get_game_info())
-    
-
-            
-@app.route('/list_games')
-def list_games():
-    user_logged_in()
-    available_games = []
-    for key in ongoing_games.keys():
-        if len(ongoing_games[key].players) == 1:
-            available_games.append(ongoing_games[key])
-    return render_template('list_game.html', username = session['username'], ongoing_games = available_games)
 
 @app.route('/list_levels', methods=['POST', 'GET'])
 def list_levels():
@@ -99,6 +88,15 @@ def list_levels():
         user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
         conn.close()
         return render_template('list_level.html', levels = levels, user_id_name = user_id_name)
+
+@app.route('/list_games')
+def list_games():
+    user_logged_in()
+    available_games = []
+    for key in ongoing_games.keys():
+        if len(ongoing_games[key].players) == 1:
+            available_games.append(ongoing_games[key])
+    return render_template('list_game.html', username = session['username'], ongoing_games = available_games)
 
 @app.route('/build_game')
 def build_game():
