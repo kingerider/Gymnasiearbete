@@ -49,6 +49,9 @@ def play_game_join(room_id = None):
     if len(game.players) == 0:
         player = Player(session['username'], game.field.health, "right", int(canvasw/tile_size)/8, int(canvash/tile_size)/2)
         game.add_player(player)
+    elif len(game.players) == 2:
+        flash("Game is full", "warning")
+        return redirect(url_for("list_games"))
     else:
         player = Player(session['username'], game.field.health, "left", int(canvasw/tile_size) - (int(canvasw/tile_size)/8) - 1, int(canvash/tile_size)/2)
         game.add_player(player)

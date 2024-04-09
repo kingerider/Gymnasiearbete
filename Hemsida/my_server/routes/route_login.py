@@ -45,5 +45,5 @@ def logout():
     session['logged_in'] = False
     session.pop('username', None)
     session.pop('id', None)
-    flash('Du loggades ut', 'success')
+    flash('User logged out', 'success')
     return redirect(url_for('index'))
