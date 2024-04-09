@@ -1,5 +1,4 @@
 function initializeCanvas(htmlId, levelId) {
-   console.log("hello")
     //Position class for objects
     class Position {
         constructor(x, y) {
@@ -31,7 +30,6 @@ function initializeCanvas(htmlId, levelId) {
     var playerHeight = tileSize;
     var playerWidth = tileSize;
     var playerArray = [];
-    console.log(canvasWidth)
     playerArray.push(new Position(parseInt(canvasWidth) / 8, parseInt(canvasHeight) / 2));
     playerArray.push(new Position(parseInt(canvasWidth) - parseInt(canvasWidth) / 8, parseInt(canvasHeight) / 2));
 
@@ -60,7 +58,6 @@ function initializeCanvas(htmlId, levelId) {
         success: (data) => {
             if (data.success) {
                 console.log("success");
-                console.log(data);
                 setVariables(data);
 
             }
@@ -132,9 +129,6 @@ function initializeCanvas(htmlId, levelId) {
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawGrid();
-        console.log("Hellooo")
-        console.log(wallArray)
-        console.log(wallArray.length)
         for (let i = 0; i < wallArray.length; i++) {
             drawWall(wallArray[i].getX() * tileSize, wallArray[i].getY() * tileSize);
         }
@@ -146,7 +140,7 @@ function initializeCanvas(htmlId, levelId) {
         }
     }
     let updateInterval = setInterval(draw, 100);
-    setTimeout(function( ) { clearInterval(updateInterval); }, 2000); //Kill interval for efficent server resources
+    setTimeout(function( ) { clearInterval(updateInterval); }, 1000); //Kill interval for efficent server resources
 
 }
 
