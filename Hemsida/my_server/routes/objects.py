@@ -1,7 +1,6 @@
 from my_server.routes import ongoing_games
 from my_server.routes.dbhandler import create_connection
-from threading import Thread
-import threading
+from threading import Thread, Event
 import time
 import random
 canvasw = 800
@@ -87,7 +86,7 @@ class Player(Entity):
 class EnemyThread(Thread):
     def __init__(self, enemy):
         Thread.__init__(self)
-        self._stop_event = threading.Event()
+        self._stop_event = Event()
         self.enemy = enemy
         self.directions = ['right', 'left', 'up', 'down']
     
@@ -240,7 +239,7 @@ class BulletThread(Thread):
 
     def __init__(self, bullet):
         Thread.__init__(self)
-        self._stop_event = threading.Event()
+        self._stop_event = Event()
         self.bullet = bullet
     
     def stop(self):
