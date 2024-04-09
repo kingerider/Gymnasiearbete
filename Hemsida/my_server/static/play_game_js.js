@@ -39,7 +39,7 @@ $(document).ready(() => {
 
     var start = (start_game) => {
 
-        var audio = new Audio('../../static/sound/themeSound.mp3');
+        var audio = new Audio('../../static/audio/adventure.mp3');
         audio.play();
 
         let player1 = start_game.players[0]
