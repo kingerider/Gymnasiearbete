@@ -1,37 +1,27 @@
+import { Position, drawPlayer, drawMonster, drawWall, drawGrid } from './draw_module_js.js';
+
+document.querySelector('#wall').addEventListener('click', function () {
+    setWall()
+});
+document.querySelector('#monster').addEventListener('click', function () {
+    setMonster()
+});
+
 function setWall() {
-    button = document.getElementById("wall");
+    var button = document.getElementById("wall");
     button.disabled = true;
     button = document.getElementById("monster");
     button.disabled = false;
 
 }
 function setMonster() {
-    button = document.getElementById("wall");
+    var button = document.getElementById("wall");
     button.disabled = false;
     button = document.getElementById("monster");
     button.disabled = true;
 }
 
 $(document).ready(() => {
-    //Position class for objects
-    class Position {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-        }
-        getX() {
-            return this.x;
-        }
-        getY() {
-            return this.y;
-        }
-        setX(x) {
-            this.x = x;
-        }
-        setY(y) {
-            this.y = y;
-        }
-    }
 
     //Canvas
     var canvas = document.getElementById("myCanvas");
@@ -144,15 +134,15 @@ $(document).ready(() => {
     //Draw objects
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawGrid();
+        drawGrid(canvas.width, canvas.height, tileSize, ctx);
         for (let i = 0; i < wallArray.length; i++) {
-            drawWall(wallArray[i].getX() * tileSize, wallArray[i].getY() * tileSize);
+            drawWall(wallArray[i].getX() * tileSize, wallArray[i].getY() * tileSize, wallWidth, wallHeight, ctx);
         }
         for (let i = 0; i < monsterArray.length; i++) {
-            drawMonster(monsterArray[i].getX() * tileSize, monsterArray[i].getY() * tileSize);
+            drawMonster(monsterArray[i].getX() * tileSize, monsterArray[i].getY() * tileSize, monsterWidth, monsterHeight, ctx);
         }
         for (let i = 0; i < playerArray.length; i++) {
-            drawPlayer(playerArray[i].getX() * tileSize, playerArray[i].getY() * tileSize);
+            drawPlayer(playerArray[i].getX() * tileSize, playerArray[i].getY() * tileSize, playerWidth, playerHeight, ctx);
         }
     }
     var interval = setInterval(draw, 60);
@@ -164,8 +154,8 @@ $(document).ready(() => {
         var x = event.clientX - rect.left + (canvas.width - parseInt(getComputedStyle(canvas).getPropertyValue("width"), 10)) / 2; //Sets origo in canvas corner
         var y = event.clientY - rect.top + (canvas.height - parseInt(getComputedStyle(canvas).getPropertyValue("height"), 10)) / 2;
 
-        canvasClickX = parseInt(x / tileSize)
-        canvasClickY = parseInt(y / tileSize)
+        var canvasClickX = parseInt(x / tileSize)
+        var canvasClickY = parseInt(y / tileSize)
 
         switch (event.button) {
             case 0:
@@ -250,14 +240,13 @@ $(document).ready(() => {
         if ($("#edit_description").val() != "" && $("#edit_title").val() != "") {
             if ($("#edit_title").val().length < 26) {
                 if ($("#edit_description").val().length < 151) {
-                    console.log("Hello Again")
 
-                    playerXArray = []
-                    playerYArray = []
-                    monsterXArray = []
-                    monsterYArray = []
-                    wallXArray = []
-                    wallYArray = []
+                    var playerXArray = []
+                    var playerYArray = []
+                    var monsterXArray = []
+                    var monsterYArray = []
+                    var wallXArray = []
+                    var wallYArray = []
 
                     for (let index = 0; index < playerArray.length; index++) {
                         playerXArray.push(playerArray[index].getX());
