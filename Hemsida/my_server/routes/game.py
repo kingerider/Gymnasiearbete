@@ -1,12 +1,10 @@
-from my_server import app, socket
+from my_server import app
 from flask import render_template, redirect, url_for, abort, flash, session, request
 from my_server.routes.dbhandler import create_connection
 from my_server.routes.route_login import user_logged_in
 from my_server.routes.objects import Game, Player, Field
 from my_server.routes import ongoing_games
 
-
-#should not be here later on
 tile_size = 20
 canvasw = 800
 canvash = 440
@@ -23,12 +21,10 @@ def set_room_id():
     
     return f'room_{max + 1}'
 
-#kollar alla id på varje spel och lägger till max + 1 som nytt id, får tillbaka 0 om listan är tom
-
+#Skapar ett nytt spel som läggs in i ongoing_games och går till play_game_join
 @app.route('/play_game/create/<level_id>')
 def play_game_create(level_id = None):
     user_logged_in()
-    #Skapar ett nytt spel som läggs in i ongoing_games och går till play_game_join
     conn = create_connection()
     cur = conn.cursor()
     level = cur.execute("SELECT title, player_health FROM level WHERE id = ?", (level_id, )).fetchone()
