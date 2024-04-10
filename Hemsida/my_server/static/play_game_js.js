@@ -69,7 +69,8 @@ $(document).ready(() => {
         //New canvas
         let canvas = document.createElement("canvas")
         canvas.id = "myCanvas"
-        $("body").append(canvas)
+        $("#canvasbody").text("")
+        $("#canvasbody").append(canvas)
 
         console.log("js document.ready")
 
