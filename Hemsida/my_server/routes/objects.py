@@ -74,7 +74,6 @@ class Player(Entity):
         self.health = health
         self.direction = direction
         super().__init__(posX, posY)
-
     
     def object_to_dict(self):
         return dict(type = "player", name = self.name, direction = self.direction, health = self.health)
