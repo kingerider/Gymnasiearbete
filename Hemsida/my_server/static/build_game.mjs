@@ -165,7 +165,6 @@ $(document).ready(() => {
                     var monsterYArray = []
                     var wallXArray = []
                     var wallYArray = []
-
                     for (let index = 0; index < playerArray.length; index++) {
                         playerXArray.push(playerArray[index].getX());
                         playerYArray.push(playerArray[index].getY());
@@ -184,6 +183,7 @@ $(document).ready(() => {
                         title: $("#create_title").val(),
                         description: $("#create_description").val(),
                         username: $("#this_user").text(),
+                        hearts: $("#hearts").val(),
                         playerX_Positions: playerXArray, //is not in use
                         playerY_Positions: playerYArray, //is not in use
                         monsterX_Positions: monsterXArray,

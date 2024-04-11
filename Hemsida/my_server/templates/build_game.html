@@ -7,40 +7,46 @@
 {% block content %}
 <script src="{{url_for('static', filename='build_game.mjs')}}" type="module"></script>
 <div class="col-sm">
-    <h3 id="info_h3">Info</h3>
-    <div id="info_p"><p class="text-justify">Add a wall or monster to canvas my clicking a button below, then left click a square on the canvas to place it. Too undo Right click with mouse</p></div>
-
-    <h3 id="settings_h3">Settings</h3>
-
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-            Player has one heart
-        </label>
+    <div class="col-md-6">
+        <h3 id="info_h3">Info</h3>
+        <div id="info_p">
+            <p class="text-justify">Add a wall or monster to canvas my clicking the button below in Game map, then left click a square
+                on the canvas to place it. Too undo Right click with mouse. More info exists on info page title: build
+                game, please read that before you create a game</p>
+        </div>
+        <p><a class="btn btn-outline-secondary" href="info" role="button">More info »</a></p>
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-        <label class="form-check-label" for="flexCheckChecked">
-            Item Drops
-        </label>
+    <hr>
+    <div class="col-md-8">
+        <h3 id="settings_h3">Settings</h3>
+        <h6>Player hearts</h6>
+        <select name="hearts" id="hearts" class="form-control col-md-3">
+            <option value="3">Three hearts</option>
+            <option value="1">One heart</option>
+        </select>
     </div>
-    <h3 id="game_h3">Game map</h3>
-    <div>
-        <button id="wall" disabled>Wall</button>
-        <button id="monster">Monster</button>
+    <hr>
+    <div class="col-md-12">
+        <h3 id="game_h3">Game map</h3>
+        <div>
+            <button class="btn btn-outline-secondary" id="wall" disabled>Wall</button>
+            <button class="btn btn-outline-secondary" id="monster">Monster</button>
+        </div>
+        <p id="message_m" class="alert alert-info" role="alert" style="display: none;"></p>
     </div>
-    <p id="message_m" class="alert alert-info" role="alert" style="display: none;"></p>
 </div>
 <div class="col-sm" style="height: 500px;">
     <canvas id="myCanvas" width="800" height="400" oncontextmenu="event.preventDefault();"></canvas>
 </div>
 <p id="message_td" class="alert alert-info" role="alert" style="display: none;"></p>
-<div>
-    <label for="fname">Title:</label><br>
-    <input type="text" name="create_title" id="create_title">
-    <label for="lname">Description:</label><br>
-    <textarea name="create_description" id="create_description" cols="30" rows="10"></textarea>
-    <input type="submit" value="Create Level" class="btn btn-primary m-5" id="create_level">
+<div class="col-md-8">
+    <div>
+        <label for="fname">Title:</label><br>
+        <input type="text" name="create_title" id="create_title" class="mb-3"><br>
+        <label for="lname">Description:</label><br>
+        <textarea name="create_description" id="create_description" cols="30" rows="10"></textarea>
+        <input type="submit" value="Create Level" class="btn btn-primary ml-5 mb-5" id="create_level">
+    </div>
 </div>
 <div id="this_user" style="display: none;">{{ session['username'] }}</div>
 {% endblock %}

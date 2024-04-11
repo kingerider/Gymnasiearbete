@@ -79,7 +79,7 @@
 <div class="row align-items-md-stretch mt-3 mb-5">
     <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <img class="float-start" style="width: 320px; height: 100px;"
+            <img class="float-start" style="width: 320px; height: 90px;"
                 src="{{url_for('static', filename='img/info/info_games.jpg')}}" alt="logo">
             <img class="float-start" style="width: 320px; height: 130px;"
                 src="{{url_for('static', filename='img/info/info_games_click.jpg')}}" alt="logo">
@@ -88,8 +88,8 @@
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Join game</h2>
-            <p>When you have created a game as show above, a game will be displayed in the list games tab. Either a
-                friend or strager may join the game by clicking on the created game as shown to the left.</p>
+            <p>When you have created a game as shown above, a game will be displayed in the list games tab in the nav bar as shown to the left. Either a
+                friend or strager may join the game by clicking on the created game that will be displayed with the chosen level name and username.</p>
             {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
                 href="{{url_for('list_games')}}">Go to levels</button>{% endif %}
         </div>
@@ -97,7 +97,7 @@
 </div>
 
 <div class="row align-items-md-stretch mt-3 mb-5">
-    <div class="col-md-5">
+    <div class="col-md-7">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Controls and info</h2>
             <h5>Info</h5>
@@ -119,12 +119,17 @@
                 projectiles from.</p>
         </div>
     </div>
-    <div class="col-md-7">
+    <div class="col-md-5">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <img class="float-start" style="width: 400px; height: 220px;"
-                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
-            <img class="float-start" style="width: 400px; height: 220px;"
-                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
+            <h5>Player</h5>
+            <img class="float-start mb-4" style="width: 200px; height: 200px;"
+                src="{{url_for('static', filename='img/info/info_player_move.jpg')}}" alt="logo">
+            <h5>Monster</h5>
+            <img class="float-start mb-4" style="width: 200px; height: 200px;"
+                src="{{url_for('static', filename='img/info/info_monster.jpg')}}" alt="logo">
+            <h5>Wall</h5>
+            <img class="float-start" style="width: 200px; height: 110px;"
+                src="{{url_for('static', filename='img/info/info_wall.jpg')}}" alt="logo">
         </div>
     </div>
 </div>

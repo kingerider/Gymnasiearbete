@@ -80,55 +80,7 @@ $(document).ready(() => {
         }
         $("#edit_title").val(data['title'])
         $("#edit_description").val(data['description'])
-
-    }
-
-    //Player
-    function drawPlayer(playerX, playerY) {
-        ctx.beginPath();
-        ctx.rect(playerX, playerY, playerWidth, playerHeight);
-        ctx.fillStyle = "#046cd4";
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    //Wall
-    function drawWall(wallX, wallY) {
-        ctx.beginPath();
-        ctx.rect(wallX, wallY, wallWidth, wallHeight,);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    //Monster
-    function drawMonster(monsterX, monsterY) {
-        ctx.beginPath();
-        ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
-        ctx.fillStyle = "#04d49d";
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    //Grid
-    function drawGrid() {
-        ctx.strokeStyle = '#cccccc';
-        ctx.stroke();
-        for (var i = 0; i <= canvas.width; i += tileSize) {
-            ctx.beginPath();
-            ctx.moveTo(i, 0);
-            ctx.lineTo(i, canvas.height);
-            ctx.stroke();
-            ctx.closePath();
-        }
-
-        for (var i = 0; i <= canvas.height; i += tileSize) {
-            ctx.beginPath();
-            ctx.moveTo(0, i);
-            ctx.lineTo(canvas.width, i);
-            ctx.stroke();
-        }
-
+        $("#hearts").val(data['hearts'])
     }
 
     //Draw objects
@@ -266,6 +218,7 @@ $(document).ready(() => {
                         title: $("#edit_title").val(),
                         description: $("#edit_description").val(),
                         level_id: $("#this_level").text(),
+                        hearts: $("#hearts").val(),
                         playerX_Positions: playerXArray, //is not in use
                         playerY_Positions: playerYArray, //is not in use
                         monsterX_Positions: monsterXArray,

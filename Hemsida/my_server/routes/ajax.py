@@ -26,7 +26,7 @@ def ajax_edit_level():
     formatted_date = now.strftime('%Y-%m-%d')
     username_id = cur.execute("SELECT id FROM user WHERE username LIKE ?", (data['username'],)).fetchone()[0]
     # cur.execute("INSERT INTO level (creator_id, title, player_health, description, date) VALUES (?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date))
-    cur.execute("INSERT INTO level (creator_id, title, player_health, description, date, play_count) VALUES (?, ?, ?, ?, ?, ?)", (username_id, data['title'], 3, data['description'], formatted_date, 0))
+    cur.execute("INSERT INTO level (creator_id, title, player_health, description, date, play_count) VALUES (?, ?, ?, ?, ?, ?)", (username_id, data['title'], data['hearts'], data['description'], formatted_date, 0))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
     
     for i in range(len(data['wallX_Positions'])): #len(data[x]) is as long as len(data[y])
@@ -50,7 +50,7 @@ def ajax_create_level():
     now = datetime.now()
 
     formatted_date = now.strftime('%Y-%m-%d')
-    cur.execute("UPDATE level SET title == ?, player_health == ?, description == ?, date == ? WHERE id == ?", (data['title'], 3, data['description'], formatted_date, data['level_id'], ))
+    cur.execute("UPDATE level SET title == ?, player_health == ?, description == ?, date == ? WHERE id == ?", (data['title'], data['hearts'], data['description'], formatted_date, data['level_id'], ))
     level_id = cur.execute("SELECT MAX(id) FROM level").fetchone()[0]
 
     cur.execute("DELETE FROM wall WHERE level_id == ?", (data['level_id'],))
@@ -84,6 +84,7 @@ def ajax_get_data_level():
     monster_y = [y[0] for y in monster_y]
     title = cur.execute("SELECT title FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
     description = cur.execute("SELECT description FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
+    hearts = cur.execute("SELECT player_health FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
     conn.commit()
     conn.close()
     return json.dumps({
@@ -94,7 +95,8 @@ def ajax_get_data_level():
         'monsterX': monster_x,
         'monsterY': monster_y,
         'title': title,
-        'description': description
+        'description': description,
+        'hearts': hearts
     })
 
 @app.route('/ajax-add-played-game', methods= ['POST'])
