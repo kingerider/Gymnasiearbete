@@ -3,11 +3,10 @@ from my_server.routes.dbhandler import create_connection
 from threading import Thread, Event
 import time
 import random
+
 canvasw = 800
 canvash = 400
 tile_size = 20
-
-
 
 class Game:
     def __init__(self, id, name, room_id):
