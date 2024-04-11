@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-<script src="{{url_for('static', filename='list_level_js.js')}}"></script>
+<script src="{{url_for('static', filename='list_level_js.js')}}" type="module"></script>
 <h3>Most Popular Levels</h3>
 <div class="card-deck">
   {% for level in levels_play_count %}
@@ -50,14 +50,16 @@
   {% endfor %}
 </div>
 <br>
-<script>
+<script type="module">
+  import {initializeCanvas} from "{{url_for('static', filename='list_level_js.js')}}"
+
   $(".newId").each(function() {
-    levelID = "newLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+    var levelID = "newLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
     //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
     initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
   });
   $(".popId").each(function() {
-    levelID = "popLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+    var levelID = "popLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
     //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
     initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
   });

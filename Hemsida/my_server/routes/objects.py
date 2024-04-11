@@ -74,7 +74,6 @@ class Player(Entity):
         self.health = health
         self.direction = direction
         super().__init__(posX, posY)
-
     
     def object_to_dict(self):
         return dict(type = "player", name = self.name, direction = self.direction, health = self.health)
@@ -246,6 +245,7 @@ class BulletThread(Thread):
         self._stop_event.set()
 
     def run(self):
+        time.sleep(0.1)
         while not self._stop_event.is_set():
             self.bullet.move(ongoing_games[self.bullet.room_id])
             time.sleep(0.05)

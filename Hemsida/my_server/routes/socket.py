@@ -25,7 +25,7 @@ def handle_join_room(data):
     clients.append({'name': session['username'], 'room': data['room']})
 
     game = ongoing_games[data['room']]
-    if len(ongoing_games[data['room']].players) == 2:
+    if len(game.players) == 2:
         game = ongoing_games[data['room']]
         conn = create_connection()
         cur = conn.cursor()
@@ -34,7 +34,6 @@ def handle_join_room(data):
         cur.execute("UPDATE level SET play_count = ? WHERE id == ?", (play_count, game.id, ))
         conn.commit()
         conn.close()
-    if len(game.players) == 2:
         game.field.start_monsters()
         emit('message_from_server', {
             'message': f'start_game',
@@ -53,11 +52,10 @@ def on_leave(data):
     if len(game.players) == 1:
         game.players.append(None)
     game.field.stop_monsters()
-    try:
+    if game.projectiles[0] != None:
         game.projectiles[0].thread.stop()
+    if game.projectiles[1] != None:
         game.projectiles[1].thread.stop()
-    except:
-        print("Det fanns inga bullets")
     for client in clients:
         if client['room'] == data['room'] and client['name'] == session['username']:
             clients.remove(client)

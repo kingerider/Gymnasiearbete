@@ -5,10 +5,10 @@
 {% block headline %}Game Builder{% endblock %}
 
 {% block content %}
-<script src="{{url_for('static', filename='build_game_js.js')}}"></script>
+<script src="{{url_for('static', filename='build_game_js.js')}}" type="module"></script>
 <div class="col-sm">
     <h3 id="info_h3">Info</h3>
-    <div id="info_p"><p class="text-justify">Add a wall or monster to canvas my clicking a btn below, then left click a square on the canavss to place it. Too undo Right click with mouse</p></div>
+    <div id="info_p"><p class="text-justify">Add a wall or monster to canvas my clicking a button below, then left click a square on the canvas to place it. Too undo Right click with mouse</p></div>
 
     <h3 id="settings_h3">Settings</h3>
 
@@ -26,8 +26,8 @@
     </div>
     <h3 id="game_h3">Game map</h3>
     <div>
-        <button id="wall" onclick="setWall()" disabled>Wall</button>
-        <button id="monster" onclick="setMonster()">Monster</button>
+        <button id="wall" disabled>Wall</button>
+        <button id="monster">Monster</button>
     </div>
     <p id="message_m" class="alert alert-info" role="alert" style="display: none;"></p>
 </div>
