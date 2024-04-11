@@ -1,4 +1,4 @@
-import { Position, drawPlayer, drawMonster, drawWall, drawGrid } from './draw_module_js.js';
+import { Position, drawPlayer, drawMonster, drawWall, drawGrid } from './draw_module_js.mjs';
 
 document.querySelector('#wall').addEventListener('click', function () {
     setWall()

@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-<script src="{{url_for('static', filename='list_level_js.js')}}" type="module"></script>
+<script src="{{url_for('static', filename='list_level_js.mjs')}}" type="module"></script>
 <h3>Most Popular Levels</h3>
 <div class="card-deck">
   {% for level in levels_play_count %}
@@ -51,7 +51,7 @@
 </div>
 <br>
 <script type="module">
-  import {initializeCanvas} from "{{url_for('static', filename='list_level_js.js')}}"
+  import {initializeCanvas} from "{{url_for('static', filename='list_level_js.mjs')}}"
 
   $(".newId").each(function() {
     var levelID = "newLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
