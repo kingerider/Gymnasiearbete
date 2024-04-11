@@ -504,7 +504,7 @@ $(document).ready(() => {
             return pos;
         }
 
-        //Tar in input från klienten var den vill sin spelare ska röra sig
+        //player_move
         $("body").on("keypress", function (event) {
             if (waitUpdate()) {
                 console.log("Handler for `keypress` called.");

@@ -36,7 +36,7 @@ def handle_join_room(data):
         conn.close()
         game.field.start_monsters()
         emit('message_from_server', {
-            'message': f'start_game',
+            'message': 'start_game',
             'game': game.get_game_info()
         }, to=data['room'])
     else:
