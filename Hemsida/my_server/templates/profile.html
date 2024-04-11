@@ -10,10 +10,22 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <p><strong>Username:</strong> {{user[1]}}</p>
-            <p><strong>Games played:</strong> {{user[3]}}</p>
-            <p><strong>Wins:</strong> {{user[4]}}</p>
-            <p><strong>Losses:</strong> {{user[5]}}</p>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Username</th>
+                        <td>{{user[1]}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Wins</th>
+                        <td>{{user[4]}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Losses</th>
+                        <td>{{user[5]}}</td>
+                    </tr>
+                </tbody>
+            </table>
             <style>
                 #winprog {
                     background-color: dodgerblue;
@@ -37,20 +49,16 @@
                 var win = parseInt($("#winval").val());
                 var loss = parseInt($("#loseval").val());
                 var games_played = win + loss;
-                var winpro = Math.round(win / games_played);
-                console.log(winpro)
+                var winpro = win / games_played;
                 winpro = winpro * 100;
                 var losspro = 100 - winpro;
                 var stringwin = `${winpro}%`
                 var stringloss = `${losspro}%`
 
                 var winbar = document.getElementById("winprog");
-                console.log("NUAR JAG HAR")
                 winbar.style.width = stringwin;
                 var lossbar = document.getElementById("lossprog");
                 lossbar.style.width = stringloss;
-                //$("#winprog").css("width", stringwin)
-                //$("#lossprog").css("width", stringloss)
             </script>
         </div>
         <div class="col-sm">
