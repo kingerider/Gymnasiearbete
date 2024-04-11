@@ -38,7 +38,7 @@
     <input type="hidden" value="{{game['players'][1]}}" id="player2">
     <input type="hidden" value="{{session['username']}}" id="username"> -->
     <div id="this_user" style="display: none;">{{ session['username'] }}</div>
-    <script src="{{url_for('static', filename='play_game_js.js')}}"></script>
+    <script src="{{url_for('static', filename='play_game.mjs')}}" type="module"></script>
 
     <!-- <h1>Player 1: {{game['players'][0]}}</h1> -->
     <!-- {% if game['awaiting_players'] == False %}

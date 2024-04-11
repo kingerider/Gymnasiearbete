@@ -1,4 +1,4 @@
-import { Position, drawPlayer, drawMonster, drawWall, drawGrid } from './draw_module_js.mjs';
+import { Position, drawPlayer, drawMonster, drawWall, drawGrid } from './draw_module.mjs';
 
 function initializeCanvas(htmlId, levelId) {
 

@@ -6,8 +6,8 @@
 {% block headline %}All Levels{% endblock %}
 
 {% block content %}
-<script src="{{url_for('static', filename='list_level_js.mjs')}}" type="module"></script>
-<script src="{{url_for('static', filename='search_js.js')}}" defer></script>
+<script src="{{url_for('static', filename='list_level.mjs')}}" type="module"></script>
+<script src="{{url_for('static', filename='search.js')}}" defer></script>
 <div class="mb-3">
   <input class="form-control" type="search" placeholder="Search for name or creator" aria-label="Search"
     id="inputsearchlevel">
@@ -49,7 +49,7 @@
 </div>
 <br>
 <script type="module">
-  import {initializeCanvas} from "{{url_for('static', filename='list_level_js.mjs')}}"
+  import {initializeCanvas} from "{{url_for('static', filename='list_level.mjs')}}"
 
   $(".allId").each(function () {
     var levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database

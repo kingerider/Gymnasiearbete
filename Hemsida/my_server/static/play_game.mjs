@@ -1,3 +1,5 @@
+import { Position, drawPlayer, drawMonster, drawWall } from './draw_module.mjs';
+
 player.room = $("#gameid").val()
 
 $(document).ready(() => {
@@ -113,28 +115,6 @@ $(document).ready(() => {
         var gridHeight = canvas.height / tileSize
         var gridWdith = canvas.width / tileSize
 
-        //Position class for objects
-        class Position {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-            }
-            getX() {
-                return this.x;
-            }
-            getY() {
-                return this.y;
-            }
-            setX(x) {
-                this.x = x;
-            }
-            setY(y) {
-                this.y = y;
-            }
-
-
-        }
-
         var wait = false;
         function waitUpdate() {
             if (wait == false) {
@@ -148,6 +128,16 @@ $(document).ready(() => {
             wait = false;
         }
 
+
+        //text
+        function drawText() {
+            var x = canvas.width/2
+            ctx.font = `${tileSize}pt Calibri`;
+            ctx.textAlign = 'center'
+            ctx.fillStyle = 'black'
+            ctx.fillText(`${player1} vs ${player2}`, x, (2*tileSize)/2);
+        }
+
         //Grid
         function drawGrid() {
             ctx.strokeStyle = '#eeeeee';
@@ -159,7 +149,7 @@ $(document).ready(() => {
                 ctx.stroke();
                 ctx.closePath();
             }
-
+        
             for (var i = 0; i <= canvas.height; i += tileSize) {
                 ctx.beginPath();
                 ctx.moveTo(0, i + 40);
@@ -167,16 +157,7 @@ $(document).ready(() => {
                 ctx.stroke();
                 ctx.closePath();
             }
-
-        }
-
-        //text
-        function drawText() {
-            var x = canvas.width/2
-            ctx.font = `${tileSize}pt Calibri`;
-            ctx.textAlign = 'center'
-            ctx.fillStyle = 'black'
-            ctx.fillText(`${player1} vs ${player2}`, x, (2*tileSize)/2);
+        
         }
 
         //hearts
@@ -199,33 +180,6 @@ $(document).ready(() => {
                 ctx.fill()
                 ctx.closePath()
             }
-        }
-
-        //Wall
-        function drawWall(wallX, wallY) {
-            ctx.beginPath();
-            ctx.rect(wallX, wallY, wallWidth, wallHeight,);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        //Monster
-        function drawMonster(monsterX, monsterY) {
-            ctx.beginPath();
-            ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
-            ctx.fillStyle = "#04d49d";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        //Player
-        function drawPlayer(playerX, playerY) {
-            ctx.beginPath();
-            ctx.rect(playerX, playerY, playerWidth, playerHeight);
-            ctx.fillStyle = "#046cd4";
-            ctx.fill();
-            ctx.closePath();
         }
 
         //Projectile
@@ -324,13 +278,13 @@ $(document).ready(() => {
                                 const element2 = element1[square];
                                 if (element2 != null) {
                                     if (element2["type"] == "wall") {
-                                        drawWall(countX * tileSize, countY * tileSize);
+                                        drawWall(countX * tileSize, countY * tileSize, wallWidth, wallWidth, ctx);
                                     }
                                     if (element2["type"] == "enemy") {
-                                        drawMonster(countX * tileSize, countY * tileSize);
+                                        drawMonster(countX * tileSize, countY * tileSize, monsterWidth, monsterHeight, ctx);
                                     }
                                     if (element2["type"] == "player") {
-                                        drawPlayer(countX * tileSize, countY * tileSize)
+                                        drawPlayer(countX * tileSize, countY * tileSize, playerWidth, playerHeight, ctx)
                                     }
                                     if (element2["type"] == "projectile") {
                                         drawProjectile(countX * tileSize, countY * tileSize)
@@ -450,7 +404,7 @@ $(document).ready(() => {
         //Direction indicates where to move (right)
 
         function checkForEntity(position, direction) {
-            entityNotThere = true;
+            var entityNotThere = true;
             console.log(playerArray)
             console.log(wallArray)
             switch (direction) {
@@ -530,7 +484,7 @@ $(document).ready(() => {
 
         //Gives returns a instence of position with the X and Y position of player with given username
         function userPosition(username) {
-            pos = new Position(0, 0);
+            var pos = new Position(0, 0);
             var countX = 0;
             for (const colum in newData.field_map) {
                 if (Object.hasOwnProperty.call(newData.field_map, colum)) {
@@ -574,7 +528,7 @@ $(document).ready(() => {
                     event.keyCode :
                     event.which);
                 let character = String.fromCharCode(key)
-                usernamePosition = new Position;
+                var usernamePosition = new Position;
                 usernamePosition = userPosition(username);
                 console.log(character)
 

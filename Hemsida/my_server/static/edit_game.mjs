@@ -1,4 +1,4 @@
-import { Position, drawPlayer, drawMonster, drawWall, drawGrid } from './draw_module_js.mjs';
+import { Position, drawPlayer, drawMonster, drawWall, drawGrid } from './draw_module.mjs';
 
 document.querySelector('#wall').addEventListener('click', function () {
     setWall()
@@ -7,12 +7,12 @@ document.querySelector('#monster').addEventListener('click', function () {
     setMonster()
 });
 
-
 function setWall() {
     var button = document.getElementById("wall");
     button.disabled = true;
     button = document.getElementById("monster");
     button.disabled = false;
+
 }
 function setMonster() {
     var button = document.getElementById("wall");
@@ -36,7 +36,7 @@ $(document).ready(() => {
     var playerArray = [];
     console.log(canvasWidth)
     playerArray.push(new Position(parseInt(canvasWidth) / 8, parseInt(canvasHeight) / 2));
-    playerArray.push(new Position(parseInt(canvasWidth) - parseInt(canvasWidth) / 8 - 1, parseInt(canvasHeight) / 2));
+    playerArray.push(new Position(parseInt(canvasWidth) - parseInt(canvasWidth) / 8, parseInt(canvasHeight) / 2));
 
     //Wall
     var wallHeight = tileSize;
@@ -47,6 +47,89 @@ $(document).ready(() => {
     var monsterHeight = tileSize;
     var monsterWidth = tileSize;
     var monsterArray = [];
+
+    const dataLevel = {
+        level_id: $("#this_level").text()
+    }
+    //console.log(data)
+    $.ajax({
+        method: 'POST',
+        url: "/ajax-get-data-level",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataLevel),
+        dataType: "json",
+        success: (data) => {
+            if (data.success) {
+                console.log("success");
+                console.log(data);
+                setVariables(data);
+
+            }
+            //alert(JSON.stringify(data))
+        }
+    });
+
+    function setVariables(data) {
+        for (let index = 0; index < data['wallX'].length; index++) {
+            wallArray.push(new Position(data['wallX'][index], data['wallY'][index]));
+        }
+        for (let index = 0; index < data['monsterX'].length; index++) {
+            monsterArray.push(new Position(data['monsterX'][index], data['monsterY'][index]));
+        }
+        $("#edit_title").val(data['title'])
+        $("#edit_description").val(data['description'])
+
+    }
+
+    //Player
+    function drawPlayer(playerX, playerY) {
+        ctx.beginPath();
+        ctx.rect(playerX, playerY, playerWidth, playerHeight);
+        ctx.fillStyle = "#046cd4";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    //Wall
+    function drawWall(wallX, wallY) {
+        ctx.beginPath();
+        ctx.rect(wallX, wallY, wallWidth, wallHeight,);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    //Monster
+    function drawMonster(monsterX, monsterY) {
+        ctx.beginPath();
+        ctx.rect(monsterX, monsterY, monsterWidth, monsterHeight);
+        ctx.fillStyle = "#04d49d";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    //Grid
+    function drawGrid() {
+        ctx.strokeStyle = '#cccccc';
+        ctx.stroke();
+        for (var i = 0; i <= canvas.width; i += tileSize) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvas.height);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        for (var i = 0; i <= canvas.height; i += tileSize) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(canvas.width, i);
+            ctx.stroke();
+        }
+
+    }
 
     //Draw objects
     function draw() {
@@ -102,7 +185,7 @@ $(document).ready(() => {
                         if (document.getElementById("wall").disabled == true) {
                             wallArray.push(new Position(canvasClickX, canvasClickY));
                         } else {
-                            if (monsterArray.length < 6) {
+                            if (monsterArray.length < 5) {
                                 monsterArray.push(new Position(canvasClickX, canvasClickY));
                             } else {
                                 $("#message_m").css('display', 'block')
@@ -153,11 +236,10 @@ $(document).ready(() => {
 
 
     });
-    $("#create_level").click(() => {
-        if ($("#create_description").val() != "" && $("#create_title").val() != "") {
-            if ($("#create_title").val().length < 26) {
-                if ($("#create_description").val().length < 151) {
-
+    $("#edit_level").click(() => {
+        if ($("#edit_description").val() != "" && $("#edit_title").val() != "") {
+            if ($("#edit_title").val().length < 26) {
+                if ($("#edit_description").val().length < 151) {
 
                     var playerXArray = []
                     var playerYArray = []
@@ -181,9 +263,9 @@ $(document).ready(() => {
                     }
 
                     const data = {
-                        title: $("#create_title").val(),
-                        description: $("#create_description").val(),
-                        username: $("#this_user").text(),
+                        title: $("#edit_title").val(),
+                        description: $("#edit_description").val(),
+                        level_id: $("#this_level").text(),
                         playerX_Positions: playerXArray, //is not in use
                         playerY_Positions: playerYArray, //is not in use
                         monsterX_Positions: monsterXArray,
@@ -192,10 +274,10 @@ $(document).ready(() => {
                         wallY_Positions: wallYArray
                     }
 
-                    //console.log(data)
+                    console.log(data)
                     $.ajax({
                         method: 'POST',
-                        url: "/ajax-create-level",
+                        url: "/ajax-edit-level",
                         headers: {
                             "Content-Type": "application/json"
                         },
@@ -203,13 +285,8 @@ $(document).ready(() => {
                         dataType: "json",
                         success: (data) => {
                             if (data.success) {
-                                var base_url = window.location.origin;
-                                window.location = (base_url + "/profile")
-                            } else {
-                                $("#message_td").css('display', 'block')
-                                $("#message_td").text('Something went wrong')
+                                console.log("success")
                             }
-
                             //alert(JSON.stringify(data))
                         }
                     });
