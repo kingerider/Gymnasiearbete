@@ -5,7 +5,9 @@
 {% block headline %}Profile{% endblock %}
 
 {% block content %}
-<div id="info">Hello {{session['username']}}, here in your profile your game maps will be displayed. If want to edit them simply click it and edit away. Also if you want to start a game click on the list game tab and search for your name and game title</div>
+<div id="info">Hello {{session['username']}}, here in your profile your game maps will be displayed. If want to edit
+    them simply click it and edit away. Also if you want to start a game click on the list game tab and search for your
+    name and game title</div>
 <br>
 <div class="container">
     <div class="row">
@@ -34,8 +36,8 @@
                 }
 
                 #lossprog {
-                    background-color: red; 
-                    min-width: 0px; 
+                    background-color: red;
+                    min-width: 0px;
                     /*width: 50%;*/
                 }
             </style>
@@ -65,19 +67,37 @@
             <h3>Your levels</h3>
             <div class="scrollable-div">
                 {% for level in levels %}
-                    <div class="card">
-                        <a class="nav-link" href="{{url_for('edit_game', level_id = level[0])}}">
-                            <img class="card-img-top" src="static/img/jumbotron_bg.jpg" alt="Card image cap">
+                <div class="card_display" style="display: inline;">
+                    <div class="card d-inline-block align-top mb-4" style="width: 350px; height: 400px;">
+                        <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+                            <canvas id="levelId{{level[0]}}"></canvas>
+                            <input type="hidden" value="{{level[0]}}" class="allId">
                             <div class="card-body">
-                                <h5 class="card-title text-dark">{{level[2]}}</h5>
+                                <h5 class="card-title text-dark">{{level[2]}} by {% for user in user_id_name %}{% if
+                                    user[0] == level[1]
+                                    %}{{user[1]}}{%endif%}{% endfor %}</h5>
                                 <p class="card-text text-dark">{{level[4]}}</p>
-                                <p class="card-text text-dark"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <p class="card-text text-dark"><small class="text-muted">Last updated
+                                        {{level[5]}}</small></p>
+                                <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small>
+                                </p>
                             </div>
                         </a>
                     </div>
+                </div>
                 {% endfor %}
+                <script type="module" type=text/javascript>
+                    import { initializeCanvasNew } from "{{url_for('static', filename='profile.mjs')}}"
+                    var data = JSON.parse({{ levels_data|tojson|safe }});
+                    $(".allId").each(function () {
+                        var levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+                        //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
+                        initializeCanvasNew(levelID, $(this).val(), data) //Parameter htmlId = levelId2 and parameter database levelId = 2
+                    });
+                </script>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
