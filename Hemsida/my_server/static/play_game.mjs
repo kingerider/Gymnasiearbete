@@ -23,10 +23,6 @@ $(document).ready(() => {
 
     const leave = () => {
         console.log("Lämna")
-        console.log("Lämna")
-        console.log("Lämna")
-        console.log("Lämna")
-        console.log("Lämna")
         socket.emit('leave', {
             room: room_id
         })
