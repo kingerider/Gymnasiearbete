@@ -18,55 +18,113 @@
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Login</h2>
-            <p>Byt ut bakgrundsfärgverktyget och lägg till ett `.text-*`-färgverktyg för att blanda ihop
-                jumbotronutseendet. Blanda och matcha sedan med ytterligare komponentteman och mer.</p>
-            <button class="btn btn-outline-light" type="button">Exempelknapp</button>
+            <p>To use our website, you will first have to login by clicking login in the navigation bar</p>
+            <p>Next you will have to enter you username and password in the form show to the left, if you don't already
+                have a account you will have to sign up by clicking in the navigation bar or at the bottem of login from
+                as show to the right.</p>
+            {% if session['logged_in'] == False %}<button class="btn btn-outline-light" type="button"
+                href="{{url_for('login')}}">login now</button>{% endif %}
         </div>
     </div>
     <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <h2>Lägg till kanter</h2>
-            <img class="float-start" style="width: 40px; height: 100px;" src="{{url_for('static', filename='favicon_io/android-chrome-192x192.png')}}" alt="logo">
+            <img class="float-start" style="width: 300px; height: 180px;"
+                src="{{url_for('static', filename='img/info/info_login.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 250px; height: 210px;"
+                src="{{url_for('static', filename='img/info/info_login_click.jpg')}}" alt="logo">
         </div>
     </div>
 </div>
-
 <div class="row align-items-md-stretch mt-3 mb-5">
+    <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <img class="float-start" style="width: 230px; height: 120px;"
+                src="{{url_for('static', filename='img/info/info_sign_in.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 250px; height: 250px;"
+                src="{{url_for('static', filename='img/info/info_sign_in_click.jpg')}}" alt="logo">
+        </div>
+    </div>
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>Start game</h2>
-            <p>Byt ut bakgrundsfärgverktyget och lägg till ett `.text-*`-färgverktyg för att blanda ihop
-                jumbotronutseendet. Blanda och matcha sedan med ytterligare komponentteman och mer.</p>
-            <button class="btn btn-outline-light" type="button">Exempelknapp</button>
+            <h2>Sign up</h2>
+            <p>To sign in you will the to navigate to create account</p>
+            <p>Then fill in the form as shown to the left, if you already have a account you can navigate to login as
+                mentioned before.</p>
+            {% if session['logged_in'] == False %}<button class="btn btn-outline-light" type="button"
+                href="{{url_for('sign_up')}}">Sign up now</button>{% endif %}
         </div>
     </div>
-    <div class="col-md-6">
+</div>
+<div class="row align-items-md-stretch mt-3 mb-5">
+    <div class="col-md-4">
+        <div class="h-100 p-5 text-white bg-dark rounded-3">
+            <h2>Start game</h2>
+            <p>If you have a account you will be able to navigate to list levels as shown to the right</p>
+            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('list_levels')}}">Go to levels</button>{% endif %}
+            <p>You will be able to search for levels by entering a friends username or level name. Their name will be
+                displayed in the tile as the image to the right.</p>
+        </div>
+    </div>
+    <div class="col-md-8">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <h2>Lägg till kanter</h2>
-            <p>Eller håll det lätt och lägg till en kant för att få en extra definition av gränserna för ditt innehåll.
-                Se till att titta under huven på käll-HTML här eftersom vi har justerat justeringen och storleken på
-                båda kolumnernas innehåll för lika höjd.</p>
-            <button class="btn btn-outline-secondary" type="button">Exempelknapp</button>
+            <img class="float-start" style="width: 320px; height: 180px;"
+                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 600px; height: 330px;"
+                src="{{url_for('static', filename='img/info/info_levels_search.jpg')}}" alt="logo">
         </div>
     </div>
 </div>
 
 <div class="row align-items-md-stretch mt-3 mb-5">
+    <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <img class="float-start" style="width: 320px; height: 100px;"
+                src="{{url_for('static', filename='img/info/info_games.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 320px; height: 130px;"
+                src="{{url_for('static', filename='img/info/info_games_click.jpg')}}" alt="logo">
+        </div>
+    </div>
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Join game</h2>
-            <p>Byt ut bakgrundsfärgverktyget och lägg till ett `.text-*`-färgverktyg för att blanda ihop
-                jumbotronutseendet. Blanda och matcha sedan med ytterligare komponentteman och mer.</p>
-            <button class="btn btn-outline-light" type="button">Exempelknapp</button>
+            <p>When you have created a game as show above, a game will be displayed in the list games tab. Either a
+                friend or strager may join the game by clicking on the created game as shown to the left.</p>
+            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('list_games')}}">Go to levels</button>{% endif %}
         </div>
     </div>
-    <div class="col-md-6">
+</div>
+
+<div class="row align-items-md-stretch mt-3 mb-5">
+    <div class="col-md-5">
+        <div class="h-100 p-5 text-white bg-dark rounded-3">
+            <h2>Controls and info</h2>
+            <h5>Info</h5>
+            <p>The game is about winning over your oppenent by shootig him or her with a projectile, and avoiding
+                lurking monsters that are unable to be killed. By surviving and killing your oppenent a winning font
+                will show up and a win will be added to your profile.</p>
+            <h5>Player</h5>
+            <p>The player is of a dark blue color. To move a character use: w for up, s for down, a for left and d for
+                right. To shoot a projectile use the space-bar or left-click if you have a mouse. The projectiles
+                direction is chosen by your last move by your character which is a part of the game difficulty. Each
+                player has three or one heart dependent on the game map, the hearts are displayed in the right and left
+                corners of the game map. Have fun!</p>
+            <h5>Monster</h5>
+            <p>The monsters are green and lurk around in the game, waiting to kill player characters by touch. They are
+                also unkillble so stay warry!</p>
+            <h5>Wall</h5>
+            <p>The walls are light blue, and are unable to be destoryed and pose a great threat to player characters.
+                Tight spaces may give monsters or opponents a advatage in game so choose a safe place to shoot
+                projectiles from.</p>
+        </div>
+    </div>
+    <div class="col-md-7">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <h2>Lägg till kanter</h2>
-            <p>Eller håll det lätt och lägg till en kant för att få en extra definition av gränserna för ditt innehåll.
-                Se till att titta under huven på käll-HTML här eftersom vi har justerat justeringen och storleken på
-                båda kolumnernas innehåll för lika höjd.</p>
-            <button class="btn btn-outline-secondary" type="button">Exempelknapp</button>
+            <img class="float-start" style="width: 400px; height: 220px;"
+                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 400px; height: 220px;"
+                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
         </div>
     </div>
 </div>
@@ -74,20 +132,32 @@
 <h3 class="mt-3 mb-4">Build game</h3>
 <div class="row align-items-md-stretch mt-3 mb-5">
     <div class="col-md-6">
-        <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>Ändra bakgrunden</h2>
-            <p>Byt ut bakgrundsfärgverktyget och lägg till ett `.text-*`-färgverktyg för att blanda ihop
-                jumbotronutseendet. Blanda och matcha sedan med ytterligare komponentteman och mer.</p>
-            <button class="btn btn-outline-light" type="button">Exempelknapp</button>
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <img class="float-start" style="width: 320px; height: 180px;"
+                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
         </div>
     </div>
     <div class="col-md-6">
-        <div class="h-100 p-5 bg-light border rounded-3">
-            <h2>Lägg till kanter</h2>
-            <p>Eller håll det lätt och lägg till en kant för att få en extra definition av gränserna för ditt innehåll.
-                Se till att titta under huven på käll-HTML här eftersom vi har justerat justeringen och storleken på
-                båda kolumnernas innehåll för lika höjd.</p>
-            <button class="btn btn-outline-secondary" type="button">Exempelknapp</button>
+        <div class="h-100 p-5 text-white bg-dark rounded-3">
+            <h2>Build game</h2>
+            <h5>Info</h5>
+            <p>If you navigate to play build game in the navbar you will be able to create your very own level. This is
+                done by choosing settings, placing monsters, walls, choosing a title and a desctiption. When you click
+                save game your map will be saved in profile and it will be shown globaly in list levels</p>
+            <h5>Settings</h5>
+            <p>As of right now there exists only one setting. You are able to choose either three or one heart for the
+                players to begin with on the map</p>
+            <h5>Place Monsters and Walls</h5>
+            <p>You can place walls by left-clicking on the canvas grid, to remove a placed wall right-click instead. To
+                place a monster click on the button monster which will be shown disabled. When disabled you will be able
+                to place monsters the same way as you did with walls. Note that you can only remove walls when you have
+                wall selected and monster when you have monster selected. You are also only able to place a max of six
+                monster each level.</p>
+            <h5>Tile and Description</h5>
+            <p>you can choose a tilte with up to 15 characters and a Description with up to 150 chracters. Note that
+                spaces are included, have fun!</p>
+            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('build_game')}}">Build game now</button>{% endif %}
         </div>
     </div>
 </div>
@@ -95,19 +165,17 @@
 <div class="row align-items-md-stretch mt-3 mb-5">
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>Ändra bakgrunden</h2>
-            <p>Byt ut bakgrundsfärgverktyget och lägg till ett `.text-*`-färgverktyg för att blanda ihop
-                jumbotronutseendet. Blanda och matcha sedan med ytterligare komponentteman och mer.</p>
-            <button class="btn btn-outline-light" type="button">Exempelknapp</button>
+            <h2>Eidt game</h2>
+            <p>To edit game you will have to navigate to profile as shown to the right. Then you scroll through saved levels and choose then one you want to edit. Then everything will be the same as build game show above. Keep being creative and have fun!</p>
+            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('profile')}}">Go to profile now</button>{% endif %}
         </div>
     </div>
     <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <h2>Lägg till kanter</h2>
-            <p>Eller håll det lätt och lägg till en kant för att få en extra definition av gränserna för ditt innehåll.
-                Se till att titta under huven på käll-HTML här eftersom vi har justerat justeringen och storleken på
-                båda kolumnernas innehåll för lika höjd.</p>
-            <button class="btn btn-outline-secondary" type="button">Exempelknapp</button>
+            <img class="float-start" style="width: 320px; height: 180px;"
+                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
         </div>
     </div>
+</div>
 {% endblock %}
