@@ -504,7 +504,7 @@ $(document).ready(() => {
             return pos;
         }
 
-        //Tar in input från klienten var den vill sin spelare ska röra sig
+        //player_move and shoot_projectile
         $("body").on("keypress", function (event) {
             if (waitUpdate()) {
                 console.log("Handler for `keypress` called.");
@@ -563,11 +563,6 @@ $(document).ready(() => {
                     move: move
                 })
             }
-
-        });
-
-        //Shoot_projectile
-        $("body").on("keypress", function (event) {
             if (event.keyCode == 32) { //spacebar
                 var audio = new Audio('../../static/sound/laserSound.mp3');
                 audio.play();
@@ -588,7 +583,7 @@ $(document).ready(() => {
                     player_id: this_player_id
                 })
             }
-        })
+        });
 
         addEventListener("mouseup", (event) => {
             switch (event.button) {

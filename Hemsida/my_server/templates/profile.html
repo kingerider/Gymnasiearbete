@@ -14,24 +14,41 @@
             <p><strong>Games played:</strong> {{user[3]}}</p>
             <p><strong>Wins:</strong> {{user[4]}}</p>
             <p><strong>Losses:</strong> {{user[5]}}</p>
+            <style>
+                #winprog {
+                    background-color: dodgerblue;
+                    min-width: 0px;
+                    /*width: 50%;*/
+                }
+
+                #lossprog {
+                    background-color: red; 
+                    min-width: 0px; 
+                    /*width: 50%;*/
+                }
+            </style>
+            <input type="hidden" value="{{user[4]}}" id="winval">
+            <input type="hidden" value="{{user[5]}}" id="loseval">
             <div class="progress">
-                <div class="progress-bar" id="winprog" style="background-color: dodgerblue; min-width: 0px;">{{user[4]}} W</div>
-                <div class="progress-bar" id="lossprog" style="background-color: red; min-width: 0px;">{{user[5]}} L</div>
+                <div class="progress-bar text-left" id="winprog">{{user[4]}} W</div>
+                <div class="progress-bar text-right" id="lossprog">{{user[5]}} L</div>
             </div>
             <script>
-                var win = $("#winprog").val();
-                var loss = $("#lossprog").val();
+                var win = parseInt($("#winval").val());
+                var loss = parseInt($("#loseval").val());
                 var games_played = win + loss;
                 var winpro = Math.round(win / games_played);
-                winpro *= 100;
+                console.log(winpro)
+                winpro = winpro * 100;
                 var losspro = 100 - winpro;
-                //var stringwin = `${winpro}%`
-                //var stringloss = `${losspro}%`
+                var stringwin = `${winpro}%`
+                var stringloss = `${losspro}%`
 
-                var winbar = document.getElementById("#winprog");
-                winbar.style.width = winpro + "%";
-                var lossbar = document.getElementById("#lossprog");
-                lossbar.style.width = losspro + "%";
+                var winbar = document.getElementById("winprog");
+                console.log("NUAR JAG HAR")
+                winbar.style.width = stringwin;
+                var lossbar = document.getElementById("lossprog");
+                lossbar.style.width = stringloss;
                 //$("#winprog").css("width", stringwin)
                 //$("#lossprog").css("width", stringloss)
             </script>
