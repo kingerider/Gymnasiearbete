@@ -177,12 +177,12 @@
         </div>
     </div>
 </div>
-<h3 class="mt-3 mb-4">Edit game</h3>
+<h3 class="mt-3 mb-4">Edit level</h3>
 <div class="row align-items-md-stretch mt-3 mb-5">
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>Eidt game</h2>
-            <p>To edit game you will have to navigate to profile as shown to the right. Then you scroll through saved
+            <h2>Edit level</h2>
+            <p>To edit level you will have to navigate to profile as shown to the right. Then you scroll through saved
                 levels and choose then one you want to edit. Then everything will be the same as build game show above.
                 Keep being creative and have fun!</p>
             {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
@@ -191,9 +191,9 @@
     </div>
     <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <img class="float-start" style="width: 320px; height: 100px;"
+            <img class="float-start" style="width: 300px; height: 80px;"
                 src="{{url_for('static', filename='img/info/info_profile.jpg')}}" alt="logo">
-            <img class="float-start" style="width: 350px; height: 230px;"
+            <img class="float-start" style="width: 350px; height: 210px;"
                 src="{{url_for('static', filename='img/info/info_edit.jpg')}}" alt="logo">
         </div>
     </div>
