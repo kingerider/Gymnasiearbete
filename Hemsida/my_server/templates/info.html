@@ -18,9 +18,9 @@
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Login</h2>
-            <p>To use our website, you will first have to login by clicking login in the navigation bar</p>
+            <p>To use our website, you will have to login by clicking login in the navigation bar</p>
             <p>Next you will have to enter you username and password in the form show to the left, if you don't already
-                have a account you will have to sign up by clicking in the navigation bar or at the bottem of login from
+                have a account you will have to sign up by clicking in the navigation bar or at the bottom of login from
                 as show to the right.</p>
             {% if session['logged_in'] == False %}<button class="btn btn-outline-light" type="button"
                 href="{{url_for('login')}}">login now</button>{% endif %}
@@ -47,7 +47,7 @@
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Sign up</h2>
-            <p>To sign in you will the to navigate to create account</p>
+            <p>To sign in you will need to navigate to create account</p>
             <p>Then fill in the form as shown to the left, if you already have a account you can navigate to login as
                 mentioned before.</p>
             {% if session['logged_in'] == False %}<button class="btn btn-outline-light" type="button"

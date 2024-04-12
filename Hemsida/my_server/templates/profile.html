@@ -69,7 +69,7 @@
                 {% for level in levels %}
                 <div class="card_display" style="display: inline;">
                     <div class="card d-inline-block align-top mb-4" style="width: 350px; height: 400px;">
-                        <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+                        <a class="nav-link" href="{{url_for('edit_game', level_id = level[0])}}">
                             <canvas id="levelId{{level[0]}}"></canvas>
                             <input type="hidden" value="{{level[0]}}" class="allId">
                             <div class="card-body">
