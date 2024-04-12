@@ -239,6 +239,12 @@ $(document).ready(() => {
                         success: (data) => {
                             if (data.success) {
                                 console.log("success")
+                                $("#info_message").text(data.msg)
+                                $("#info_message").show(() => {
+                                    setTimeout(function(){
+                                        $('#info_message').fadeOut();
+                                      },4000);
+                                });
                             }
                             //alert(JSON.stringify(data))
                         }
