@@ -4,6 +4,7 @@ from my_server.routes.dbhandler import create_connection
 from my_server.routes.route_login import user_logged_in
 from my_server.routes.objects import Game, Player, Field
 from my_server.routes import ongoing_games
+import json
 
 tile_size = 20
 canvasw = 800
@@ -73,17 +74,53 @@ def list_levels():
             levels = cur.execute("SELECT * FROM level ORDER BY date ASC").fetchall()
         else:
             abort(404)
-            
+
+        list_levels_data = list(levels)
         user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
         conn.close()
-        return render_template('list_level.html', levels = levels, user_id_name = user_id_name)
+        return render_template('list_level.html', levels = levels, user_id_name = user_id_name, levels_data=json.dumps(list_levels_data))
     else:
+        user_logged_in()
         conn = create_connection()
         cur = conn.cursor()
-        levels = cur.execute("SELECT * FROM level").fetchall()
         user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
+        levels = cur.execute("SELECT * FROM level").fetchall()
+        list_levels_data = list(levels)
         conn.close()
-        return render_template('list_level.html', levels = levels, user_id_name = user_id_name)
+        
+        return render_template('list_level.html', levels = levels, user_id_name = user_id_name, levels_data=json.dumps(list_levels_data))
+
+def list(user_levels):
+    conn = create_connection()
+    cur = conn.cursor()
+
+    list_user_levels_data = []
+    for level in user_levels:
+        level_id = level[0]
+        wall_x = cur.execute("SELECT x_coordinate FROM wall WHERE level_id == ?", (level[0], )).fetchall()
+        wall_x = [x[0] for x in wall_x]
+        wall_y = cur.execute("SELECT y_coordinate FROM wall WHERE level_id == ?", (level[0], )).fetchall()
+        wall_y = [y[0] for y in wall_y]
+        monster_x = cur.execute("SELECT x_coordinate FROM enemy WHERE level_id == ?", (level[0], )).fetchall()
+        monster_x = [x[0] for x in monster_x]
+        monster_y = cur.execute("SELECT y_coordinate FROM enemy WHERE level_id == ?", (level[0], )).fetchall()
+        monster_y = [y[0] for y in monster_y]
+        title = cur.execute("SELECT title FROM level WHERE id == ?", (level[0], )).fetchone()[0]
+        description = cur.execute("SELECT description FROM level WHERE id == ?", (level[0], )).fetchone()[0]
+        hearts = cur.execute("SELECT player_health FROM level WHERE id == ?", (level[0], )).fetchone()[0]
+        user_levels_data = {
+            'levelId': level_id,
+            'wallX': wall_x,
+            'wallY': wall_y,
+            'monsterX': monster_x,
+            'monsterY': monster_y,
+            'title': title,
+            'description': description,
+            'hearts': hearts
+        }
+        list_user_levels_data.append(user_levels_data)
+    conn.close()
+    return list_user_levels_data
 
 @app.route('/list_games')
 def list_games():

@@ -22,8 +22,7 @@
             <p>Next you will have to enter you username and password in the form show to the left, if you don't already
                 have a account you will have to sign up by clicking in the navigation bar or at the bottom of login from
                 as show to the right.</p>
-            {% if session['logged_in'] == False %}<button class="btn btn-outline-light" type="button"
-                href="{{url_for('login')}}">login now</button>{% endif %}
+            {% if session['logged_in'] == False %}<a class="btn btn-outline-light" type="button" href="{{url_for('login')}}">login now</a>{% endif %}
         </div>
     </div>
     <div class="col-md-6">
@@ -50,8 +49,8 @@
             <p>To sign in you will need to navigate to create account</p>
             <p>Then fill in the form as shown to the left, if you already have a account you can navigate to login as
                 mentioned before.</p>
-            {% if session['logged_in'] == False %}<button class="btn btn-outline-light" type="button"
-                href="{{url_for('sign_up')}}">Sign up now</button>{% endif %}
+            {% if session['logged_in'] == False %}<a class="btn btn-outline-light" type="button"
+                href="{{url_for('sign_up')}}">Sign up now</a>{% endif %}
         </div>
     </div>
 </div>
@@ -60,8 +59,8 @@
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Start game</h2>
             <p>If you have a account you will be able to navigate to list levels as shown to the right</p>
-            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
-                href="{{url_for('list_levels')}}">Go to levels</button>{% endif %}
+            {% if session['logged_in'] == True %}<a class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('list_levels')}}">Go to levels</a>{% endif %}
             <p>You will be able to search for levels by entering a friends username or level name. Their name will be
                 displayed in the tile as the image to the right.</p>
         </div>
@@ -92,8 +91,8 @@
                 bar as shown to the left. Either a
                 friend or strager may join the game by clicking on the created game that will be displayed with the
                 chosen level name and username.</p>
-            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
-                href="{{url_for('list_games')}}">Go to levels</button>{% endif %}
+            {% if session['logged_in'] == True %}<a class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('list_games')}}">Current games</a>{% endif %}
         </div>
     </div>
 </div>
@@ -172,8 +171,8 @@
             <h5>Tile and Description</h5>
             <p>you can choose a tilte with up to 15 characters and a Description with up to 150 chracters. Note that
                 spaces are included, have fun!</p>
-            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
-                href="{{url_for('build_game')}}">Build game now</button>{% endif %}
+            {% if session['logged_in'] == True %}<a class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('build_game')}}">Build game now</a>{% endif %}
         </div>
     </div>
 </div>
@@ -185,8 +184,8 @@
             <p>To edit level you will have to navigate to profile as shown to the right. Then you scroll through saved
                 levels and choose then one you want to edit. Then everything will be the same as build game show above.
                 Keep being creative and have fun!</p>
-            {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
-                href="{{url_for('profile')}}">Go to profile now</button>{% endif %}
+            {% if session['logged_in'] == True %}<a class="btn btn-outline-light mb-3" type="button"
+                href="{{url_for('profile')}}">Go to profile now</a>{% endif %}
         </div>
     </div>
     <div class="col-md-6">

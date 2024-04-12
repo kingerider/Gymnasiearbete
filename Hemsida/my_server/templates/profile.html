@@ -85,7 +85,7 @@
                 </div>
                 {% endfor %}
                 <script type="module" type=text/javascript>
-                    import { initializeCanvasNew } from "{{url_for('static', filename='profile.mjs')}}"
+                    import { initializeCanvasNew } from "{{url_for('static', filename='list_levels.mjs')}}"
                     var data = JSON.parse({{ levels_data|tojson|safe }});
                     $(".allId").each(function () {
                         var levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database

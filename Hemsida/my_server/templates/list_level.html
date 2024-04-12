@@ -6,7 +6,7 @@
 {% block headline %}All Levels{% endblock %}
 
 {% block content %}
-<script src="{{url_for('static', filename='list_level.mjs')}}" type="module"></script>
+<script src="{{url_for('static', filename='list_levels.mjs')}}" type="module"></script>
 <script src="{{url_for('static', filename='search.js')}}" defer></script>
 <div class="mb-3">
   <input class="form-control" type="search" placeholder="Search for name or creator" aria-label="Search"
@@ -48,13 +48,13 @@
   {% endfor %}
 </div>
 <br>
-<script type="module">
-  import {initializeCanvas} from "{{url_for('static', filename='list_level.mjs')}}"
-
+<script type="module" type=text/javascript>
+  import { initializeCanvasNew } from "{{url_for('static', filename='list_levels.mjs')}}"
+  var data = JSON.parse({{ levels_data|tojson|safe }});
   $(".allId").each(function () {
-    var levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
-    //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
-    initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
+      var levelID = "levelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+      //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
+      initializeCanvasNew(levelID, $(this).val(), data) //Parameter htmlId = levelId2 and parameter database levelId = 2
   });
 </script>
 {% endblock %}

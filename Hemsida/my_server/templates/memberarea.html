@@ -13,55 +13,60 @@
 {% endblock %}
 
 {% block content %}
-<script src="{{url_for('static', filename='list_level.mjs')}}" type="module"></script>
+<script src="{{url_for('static', filename='list_levels.mjs')}}" type="module"></script>
 <h3>Most Popular Levels</h3>
-<div class="card-deck">
-  {% for level in levels_play_count %}
-  <div class="card">
-    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
-      <canvas id="popLevelId{{level[0]}}"></canvas>
-      <input type="hidden" value="{{level[0]}}" class="popId">
-      <div class="card-body">
-        <h5 class="card-title text-dark">{{level[2]}} by {% for user in user_id_name %}{% if user[0] == level[0] %}{{user[1]}}{%endif%}{% endfor %}</h5>
-        <p class="card-text text-dark">{{level[4]}}</p>
-        <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
-        <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
-      </div>
-    </a>
+{% for level in levels_play_count %}
+  <div class="card_display" style="display: inline;">
+    <div class="card d-inline-block align-top mb-4" style="width: 350px; height: 400px;">
+      <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+        <canvas id="popLevelId{{level[0]}}"></canvas>
+        <input type="hidden" value="{{level[0]}}" class="popId">
+        <div class="card-body">
+          <h5 class="card-title text-dark">{{level[2]}} by {% for user in user_id_name %}{% if user[0] == level[1]
+            %}{{user[1]}}{%endif%}{% endfor %}</h5>
+          <p class="card-text text-dark">{{level[4]}}</p>
+          <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
+          <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
+        </div>
+      </a>
+    </div>
   </div>
   {% endfor %}
-</div>
+
 <br>
 <h3>Newest Levels</h3>
-<div class="card-deck">
-  {% for level in levels_date %}
-  <div class="card">
-    <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
-      <canvas id="newLevelId{{level[0]}}"></canvas>
-      <input type="hidden" value="{{level[0]}}" class="newId">
-      <div class="card-body">
-        <h5 class="card-title text-dark">{{level[2]}} by {% for user in user_id_name %}{% if user[0] == level[1] %}{{user[1]}}{%endif%}{% endfor %}</h5>
-        <p class="card-text text-dark">{{level[4]}}</p>
-        <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
-        <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
-      </div>
-    </a>
+{% for level in levels_date %}
+  <div class="card_display" style="display: inline;">
+    <div class="card d-inline-block align-top mb-4" style="width: 350px; height: 400px;">
+      <a class="nav-link" href="{{url_for('play_game_create', level_id = level[0])}}">
+        <canvas id="newLevelId{{level[0]}}"></canvas>
+        <input type="hidden" value="{{level[0]}}" class="newId">
+        <div class="card-body">
+          <h5 class="card-title text-dark">{{level[2]}} by {% for user in user_id_name %}{% if user[0] == level[1]
+            %}{{user[1]}}{%endif%}{% endfor %}</h5>
+          <p class="card-text text-dark">{{level[4]}}</p>
+          <p class="card-text text-dark"><small class="text-muted">Last updated {{level[5]}}</small></p>
+          <p class="card-text text-dark"><small class="text-muted">Play count {{level[6]}}</small></p>
+        </div>
+      </a>
+    </div>
   </div>
   {% endfor %}
-</div>
 <br>
-<script type="module">
-  import {initializeCanvas} from "{{url_for('static', filename='list_level.mjs')}}"
+<script type="module" type=text/javascript>
+  import { initializeCanvasNew } from "{{url_for('static', filename='list_levels.mjs')}}"
+  var dataPop = JSON.parse({{ levels_play_count_j|tojson|safe }});
+  var dataCount = JSON.parse({{ levels_date_j|tojson|safe }});
 
-  $(".newId").each(function() {
-    var levelID = "newLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
-    //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
-    initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
+  $(".newId").each(function () {
+      var levelID = "newLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
+      //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
+      initializeCanvasNew(levelID, $(this).val(), dataCount) //Parameter htmlId = levelId2 and parameter database levelId = 2
   });
-  $(".popId").each(function() {
+  $(".popId").each(function () {
     var levelID = "popLevelId" + $(this).val(); //Creates level id from hidden value, example (OBS no # for Jquery) levelId2, 2 represents id in database
     //console.log($(levelID).attr('id')) //Test if id is right (OBS no #)
-    initializeCanvas(levelID, $(this).val()) //Parameter htmlId = levelId2 and parameter database levelId = 2
+    initializeCanvasNew(levelID, $(this).val(), dataPop) //Parameter htmlId = levelId2 and parameter database levelId = 2
   });
 </script>
 {% endblock %}
