@@ -70,6 +70,36 @@ def ajax_create_level():
         'success': True,
     })
 
+@app.route('/ajax-get-data-level', methods = ['POST'])
+def ajax_get_data_level():
+    data = request.get_json()
+    conn = create_connection()
+    cur = conn.cursor()    
+    wall_x = cur.execute("SELECT x_coordinate FROM wall WHERE level_id == ?", (data['level_id'], )).fetchall()
+    wall_x = [x[0] for x in wall_x]
+    wall_y = cur.execute("SELECT y_coordinate FROM wall WHERE level_id == ?", (data['level_id'], )).fetchall()
+    wall_y = [y[0] for y in wall_y]
+    monster_x = cur.execute("SELECT x_coordinate FROM enemy WHERE level_id == ?", (data['level_id'], )).fetchall()
+    monster_x = [x[0] for x in monster_x]
+    monster_y = cur.execute("SELECT y_coordinate FROM enemy WHERE level_id == ?", (data['level_id'], )).fetchall()
+    monster_y = [y[0] for y in monster_y]
+    title = cur.execute("SELECT title FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
+    description = cur.execute("SELECT description FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
+    hearts = cur.execute("SELECT player_health FROM level WHERE id == ?", (data['level_id'], )).fetchone()[0]
+    conn.commit()
+    conn.close()
+    return json.dumps({
+        'msg': 'sql data',
+        'success': True,
+        'wallX': wall_x,
+        'wallY': wall_y,
+        'monsterX': monster_x,
+        'monsterY': monster_y,
+        'title': title,
+        'description': description,
+        'hearts': hearts
+    })
+
 @app.route('/ajax-add-played-game', methods= ['POST'])
 def ajax_add_played_game():
     data = request.get_json()
