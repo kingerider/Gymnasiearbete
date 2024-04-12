@@ -81,6 +81,24 @@ class Player(Entity):
         if self.health >= 1:
             self.health -= 1
 
+    def win(self):
+        conn = create_connection()
+        cur = conn.cursor()
+        winner = cur.execute("SELECT wins FROM user WHERE username = ?", (self.name, )).fetchone()[0]
+        winner += 1
+        cur.execute("UPDATE user SET wins = ? WHERE username = ?", (winner, self.name))
+        conn.commit()
+        conn.close()
+    
+    def lose(self):
+        conn = create_connection()
+        cur = conn.cursor()
+        loser = cur.execute("SELECT loses FROM user WHERE username = ?", (self.name, )).fetchone()[0]
+        loser += 1
+        cur.execute("UPDATE user SET loses = ? WHERE username = ?", (loser, self.name))
+        conn.commit()
+        conn.close()
+
 class EnemyThread(Thread):
     def __init__(self, enemy):
         Thread.__init__(self)

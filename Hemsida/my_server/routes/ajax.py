@@ -2,6 +2,7 @@ from my_server import app
 from flask import request
 import json
 from my_server.routes.dbhandler import create_connection
+from my_server.routes import ongoing_games
 from datetime import datetime
 
 @app.route('/ajax-search-level', methods = ['POST'])
@@ -117,20 +118,28 @@ def ajax_add_played_game():
         'msg': 'game started successfully',
         'success': True
     })
-@app.route('/ajax-end-game', methods = ['POST'])
-def ajax_end_game():
+
+@app.route('/ajax-win-game', methods = ['POST'])
+def ajax_win_game():
     data = request.get_json()
-    conn = create_connection()
-    cur = conn.cursor()
-    winner = cur.execute("SELECT wins FROM user WHERE username = ?", (data['winner'], )).fetchone()[0]
-    winner += 1
-    cur.execute("UPDATE user SET wins = ? WHERE username = ?", (winner, data['winner']))
-    conn.commit()
-    loser = cur.execute("SELECT loses FROM user WHERE username = ?", (data['loser'], )).fetchone()[0]
-    loser += 1
-    cur.execute("UPDATE user SET loses = ? WHERE username = ?", (loser, data['loser']))
-    conn.commit()
-    conn.close()
+    game = ongoing_games[data['room']]
+    if game.players[0].name == data['winner']:
+        game.players[0].win()
+    elif game.players[1].name == data['winner']:
+        game.players[1].win()
+    return json.dumps({
+        'msg': 'game ended successfully',
+        'success': True
+    })
+
+@app.route('/ajax-lose-game', methods = ['POST'])
+def ajax_lose_game():
+    data = request.get_json()
+    game = ongoing_games[data['room']]
+    if game.players[0].name == data['loser']:
+        game.players[0].lose()
+    elif game.players[1].name == data['loser']:
+        game.players[1].lose()
     return json.dumps({
         'msg': 'game ended successfully',
         'success': True
