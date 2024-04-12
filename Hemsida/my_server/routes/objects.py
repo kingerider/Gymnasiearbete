@@ -313,7 +313,7 @@ class Projectile(Entity):
                             self.thread.stop()
                             game.projectiles[self.player_id] = None
                             field_map[int(self.positionX)][(int(self.positionY))] = None
-                        elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        elif game.players[1].name == field_map[int(self.positionX) - 1][(int(self.positionY))]['name']:
                             game.players[1].damage_taken()
                             field_map[int(game.players[1].positionX)][(int(game.players[1].positionY))] = game.players[1].object_to_dict()
                             self.thread.stop()
@@ -377,7 +377,7 @@ class Projectile(Entity):
                             self.thread.stop()
                             game.projectiles[self.player_id] = None
                             field_map[int(self.positionX)][(int(self.positionY))] = None
-                        elif game.players[1].name == field_map[int(self.positionX) + 1][(int(self.positionY))]['name']:
+                        elif game.players[1].name == field_map[int(self.positionX)][(int(self.positionY) + 1)]['name']:
                             game.players[1].damage_taken()
                             field_map[int(game.players[1].positionX)][(int(game.players[1].positionY))] = game.players[1].object_to_dict()
                             self.thread.stop()

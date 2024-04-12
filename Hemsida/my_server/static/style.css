@@ -47,3 +47,16 @@ nav {
     top: 0;
 }
   
+#winprog {
+    background-color: dodgerblue;
+    min-width: 0px;
+}
+
+#lossprog {
+    background-color: red;
+    min-width: 0px;
+}
+
+#canvasbody {
+    min-height: 400px;
+  }

@@ -18,7 +18,6 @@
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="{{url_for('static', filename='script.js')}}"></script>
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -35,7 +34,7 @@
     <div id="this_user" style="display: none;">{{ session['username'] }}</div>
     <script src="{{url_for('static', filename='play_game.mjs')}}" type="module"></script>
     <div>
-      <div id="canvasbody" style="min-height: 400px;" class="text-center mt-2"><h2>Waiting for player...</h2></div>
+      <div id="canvasbody" class="text-center mt-2"><h2>Waiting for player...</h2></div>
       <a id="btnleave" class="btn btn-outline-secondary text-center ml-3" href="#">Lämna spel</a>
     </div>
 </body>
