@@ -56,7 +56,7 @@
     </div>
 </div>
 <div class="row align-items-md-stretch mt-3 mb-5">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Start game</h2>
             <p>If you have a account you will be able to navigate to list levels as shown to the right</p>
@@ -66,11 +66,11 @@
                 displayed in the tile as the image to the right.</p>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-7">
         <div class="h-100 p-5 bg-light border rounded-3">
             <img class="float-start" style="width: 320px; height: 180px;"
                 src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
-            <img class="float-start" style="width: 600px; height: 330px;"
+            <img class="float-start" style="width: 400px; height: 230px;"
                 src="{{url_for('static', filename='img/info/info_levels_search.jpg')}}" alt="logo">
         </div>
     </div>
@@ -88,8 +88,10 @@
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Join game</h2>
-            <p>When you have created a game as shown above, a game will be displayed in the list games tab in the nav bar as shown to the left. Either a
-                friend or strager may join the game by clicking on the created game that will be displayed with the chosen level name and username.</p>
+            <p>When you have created a game as shown above, a game will be displayed in the list games tab in the nav
+                bar as shown to the left. Either a
+                friend or strager may join the game by clicking on the created game that will be displayed with the
+                chosen level name and username.</p>
             {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
                 href="{{url_for('list_games')}}">Go to levels</button>{% endif %}
         </div>
@@ -134,19 +136,28 @@
     </div>
 </div>
 
-<h3 class="mt-3 mb-4">Build game</h3>
+<h3 class="mt-3 mb-4">Build level</h3>
 <div class="row align-items-md-stretch mt-3 mb-5">
     <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <img class="float-start" style="width: 320px; height: 180px;"
-                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 380px; height: 180px;"
+                src="{{url_for('static', filename='img/info/info_build_level.jpg')}}" alt="logo">
+            <h5>Settings</h5>
+            <img class="float-start" style="width: 120px; height: 95px;"
+                src="{{url_for('static', filename='img/info/info_hearts.jpg')}}" alt="logo">
+            <h5>Game map</h5>
+            <img class="float-start" style="width: 120px; height: 65px;"
+                src="{{url_for('static', filename='img/info/info_game_map.jpg')}}" alt="logo">
+            <h5>Tile and Description</h5>
+            <img class="float-start" style="width: 320px; height: 260px;"
+                src="{{url_for('static', filename='img/info/info_ti_di.jpg')}}" alt="logo">
         </div>
     </div>
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>Build game</h2>
+            <h2>Build level</h2>
             <h5>Info</h5>
-            <p>If you navigate to play build game in the navbar you will be able to create your very own level. This is
+            <p>If you navigate to play build level in the navbar you will be able to create your very own level. This is
                 done by choosing settings, placing monsters, walls, choosing a title and a desctiption. When you click
                 save game your map will be saved in profile and it will be shown globaly in list levels</p>
             <h5>Settings</h5>
@@ -171,15 +182,19 @@
     <div class="col-md-6">
         <div class="h-100 p-5 text-white bg-dark rounded-3">
             <h2>Eidt game</h2>
-            <p>To edit game you will have to navigate to profile as shown to the right. Then you scroll through saved levels and choose then one you want to edit. Then everything will be the same as build game show above. Keep being creative and have fun!</p>
+            <p>To edit game you will have to navigate to profile as shown to the right. Then you scroll through saved
+                levels and choose then one you want to edit. Then everything will be the same as build game show above.
+                Keep being creative and have fun!</p>
             {% if session['logged_in'] == True %}<button class="btn btn-outline-light mb-3" type="button"
                 href="{{url_for('profile')}}">Go to profile now</button>{% endif %}
         </div>
     </div>
     <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-            <img class="float-start" style="width: 320px; height: 180px;"
-                src="{{url_for('static', filename='img/info/info_levels.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 320px; height: 100px;"
+                src="{{url_for('static', filename='img/info/info_profile.jpg')}}" alt="logo">
+            <img class="float-start" style="width: 350px; height: 230px;"
+                src="{{url_for('static', filename='img/info/info_edit.jpg')}}" alt="logo">
         </div>
     </div>
 </div>
