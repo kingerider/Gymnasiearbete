@@ -75,7 +75,7 @@ def list_levels():
         else:
             abort(404)
 
-        list_levels_data = list(levels)
+        list_levels_data = list_levels_j(levels)
         user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
         conn.close()
         return render_template('list_level.html', levels = levels, user_id_name = user_id_name, levels_data=json.dumps(list_levels_data))
@@ -85,12 +85,13 @@ def list_levels():
         cur = conn.cursor()
         user_id_name = cur.execute("SELECT user.id, user.username FROM user").fetchall()
         levels = cur.execute("SELECT * FROM level").fetchall()
-        list_levels_data = list(levels)
+        list_levels_data = list_levels_j(levels)
         conn.close()
         
         return render_template('list_level.html', levels = levels, user_id_name = user_id_name, levels_data=json.dumps(list_levels_data))
 
-def list(user_levels):
+
+def list_levels_j(user_levels):
     conn = create_connection()
     cur = conn.cursor()
 
