@@ -39,7 +39,7 @@ def ajax_edit_level():
     conn.close()
 
     return json.dumps({
-        'msg': 'level added',
+        'msg': 'Level added',
         'success': True,
     })
 
