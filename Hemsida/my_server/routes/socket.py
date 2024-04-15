@@ -17,6 +17,13 @@ def handle_connect():
 
 @socket.on('disconnect')
 def handle_disconnect():
+    for client in clients:
+        if client['name'] == session['username']:
+            game = ongoing_games[client['room']]
+            if len(game.players) == 1:
+                game.players.append(None)
+            clients.remove(client)
+    
     print("Client disconnected!")
 
 @socket.on('join')
