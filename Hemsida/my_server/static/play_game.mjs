@@ -169,8 +169,10 @@ $(document).ready(() => {
                 ctx.beginPath()
                 if (i == 1) {
                     ctx.rect(canvas.width - i*(heartWidth), (2*tileSize)/2, heartWidth, heartHeight)
+                } else if (i == 2) {
+                    ctx.rect((canvas.width - (i*heartWidth)) - 5, (2*tileSize)/2, heartWidth, heartHeight)
                 } else {
-                    ctx.rect(canvas.width - (i*heartWidth) - 5, (2*tileSize)/2, heartWidth, heartHeight)
+                    ctx.rect((canvas.width - (i*heartWidth)) - 10, (2*tileSize)/2, heartWidth, heartHeight)
                 }
                 ctx.fillStyle = "#ff0000";
                 ctx.fill()
