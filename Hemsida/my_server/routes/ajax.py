@@ -5,19 +5,6 @@ from my_server.routes.dbhandler import create_connection
 from my_server.routes import ongoing_games
 from datetime import datetime
 
-@app.route('/ajax-search-level', methods = ['POST'])
-def ajax_search_level():
-    data = request.get_json()
-    conn = create_connection()
-    cur = conn.cursor()
-    levels = cur.execute("SELECT * FROM level WHERE title LIKE ?", (data['input'],)).fetchall()
-    conn.close()
-    return json.dumps({
-        'msg': 'levels gathered',
-        'success': True,
-        'levels': levels
-    })
-
 @app.route('/ajax-create-level', methods = ['POST'])
 def ajax_edit_level():
     data = request.get_json()
