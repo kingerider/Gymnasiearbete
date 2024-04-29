@@ -3,8 +3,7 @@ import { Position, drawPlayer, drawMonster, drawWall } from './draw_module.mjs';
 player.room = $("#gameid").val()
 
 $(document).ready(() => {
-    console.log("bläbl")
-    console.log($("#this_user").text())
+    
     socket.connect();
 
     socket.emit('join', {
@@ -70,11 +69,6 @@ $(document).ready(() => {
         $("#canvasbody").text("")
         $("#canvasbody").append(canvas)
 
-        console.log("js document.ready")
-
-        console.log(room_id)
-        console.log("player1 :" + player1)
-        console.log("player2 :" + player2)
 
         //Canvas
         // canvas = document.getElementById("myCanvas"); //Does not need var because it already exists
@@ -310,7 +304,7 @@ $(document).ready(() => {
                                 const element2 = element1[square];
                                 if (element2 != null) {
                                     if (element2["type"] == "wall") {
-                                        drawWall(countX * tileSize, countY * tileSize, wallWidth, wallWidth, ctx);
+                                        drawWall(countX * tileSize, countY * tileSize, wallWidth, wallHeight, ctx);
                                     }
                                     if (element2["type"] == "enemy") {
                                         drawMonster(countX * tileSize, countY * tileSize, monsterWidth, monsterHeight, ctx);
