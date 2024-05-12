@@ -1,6 +1,4 @@
 const searchInput = document.getElementById("inputsearchlevel");
-console.log("AJGJLF LJ FLJFLJ LJF ")
-console.log(searchInput)
 searchInput.addEventListener("input", function (event) {
     const value = event.target.value.toLowerCase();
     //Create array with classname and then loop it the number of times the elements  :)

@@ -44,9 +44,6 @@ function initializeCanvasNew(htmlId, levelId, data) {
         for (let index = 0; index < data['monsterX'].length; index++) {
             monsterArray.push(new Position(data['monsterX'][index], data['monsterY'][index]));
         }
-        $("#edit_title").val(data['title'])
-        $("#edit_description").val(data['description'])
-
     }
 
     //Draw objects
