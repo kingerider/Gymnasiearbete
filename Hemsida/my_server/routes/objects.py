@@ -201,8 +201,6 @@ class Wall(Entity):
         self.level_id = level_id
         super().__init__(posX, posY)
 
-
-
 class Field:
     def __init__(self, id, health, room_id):
         self.id = id
@@ -233,7 +231,6 @@ class Field:
             enemy.thread.stop()
 
 class BulletThread(Thread):
-
     def __init__(self, bullet):
         Thread.__init__(self)
         self._stop_event = Event()
