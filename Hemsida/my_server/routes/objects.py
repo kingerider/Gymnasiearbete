@@ -93,9 +93,9 @@ class Player(Entity):
     def lose(self):
         conn = create_connection()
         cur = conn.cursor()
-        loser = cur.execute("SELECT loses FROM user WHERE username = ?", (self.name, )).fetchone()[0]
+        loser = cur.execute("SELECT losses FROM user WHERE username = ?", (self.name, )).fetchone()[0]
         loser += 1
-        cur.execute("UPDATE user SET loses = ? WHERE username = ?", (loser, self.name))
+        cur.execute("UPDATE user SET losses = ? WHERE username = ?", (loser, self.name))
         conn.commit()
         conn.close()
 
