@@ -105,15 +105,6 @@ def list_levels_j(user_levels):
         monster_x = [x[0] for x in monster_x_y]
         monster_y = [y[1] for y in monster_x_y]
 
-        #Might be needed in the future, for listing 
-        #title_description_hearts = cur.execute("SELECT title, description, player_health FROM level WHERE id == ?", (level[0], )).fetchall()[0]
-        #title = title_description_hearts[0]
-        #description = title_description_hearts[1]
-        #hearts = title_description_hearts[2]
-        #'title': title,
-        #'description': description,
-        #'hearts': hearts
-
         user_levels_data = {
             'levelId': level_id,
             'wallX': wall_x,
