@@ -98,26 +98,19 @@ def list_levels_j(user_levels):
     list_user_levels_data = []
     for level in user_levels:
         level_id = level[0]
-        wall_x = cur.execute("SELECT x_coordinate FROM wall WHERE level_id == ?", (level[0], )).fetchall()
-        wall_x = [x[0] for x in wall_x]
-        wall_y = cur.execute("SELECT y_coordinate FROM wall WHERE level_id == ?", (level[0], )).fetchall()
-        wall_y = [y[0] for y in wall_y]
-        monster_x = cur.execute("SELECT x_coordinate FROM enemy WHERE level_id == ?", (level[0], )).fetchall()
-        monster_x = [x[0] for x in monster_x]
-        monster_y = cur.execute("SELECT y_coordinate FROM enemy WHERE level_id == ?", (level[0], )).fetchall()
-        monster_y = [y[0] for y in monster_y]
-        title = cur.execute("SELECT title FROM level WHERE id == ?", (level[0], )).fetchone()[0]
-        description = cur.execute("SELECT description FROM level WHERE id == ?", (level[0], )).fetchone()[0]
-        hearts = cur.execute("SELECT player_health FROM level WHERE id == ?", (level[0], )).fetchone()[0]
+        wall_x_y = cur.execute("SELECT x_coordinate, y_coordinate FROM wall WHERE level_id == ?", (level[0], )).fetchall()
+        wall_x = [x[0] for x in wall_x_y]
+        wall_y = [y[1] for y in wall_x_y]
+        monster_x_y = cur.execute("SELECT x_coordinate, y_coordinate FROM enemy WHERE level_id == ?", (level[0], )).fetchall()
+        monster_x = [x[0] for x in monster_x_y]
+        monster_y = [y[1] for y in monster_x_y]
+
         user_levels_data = {
             'levelId': level_id,
             'wallX': wall_x,
             'wallY': wall_y,
             'monsterX': monster_x,
-            'monsterY': monster_y,
-            'title': title,
-            'description': description,
-            'hearts': hearts
+            'monsterY': monster_y
         }
         list_user_levels_data.append(user_levels_data)
     conn.close()

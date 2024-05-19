@@ -61,7 +61,7 @@ function initializeCanvasNew(htmlId, levelId, data) {
         }
     }
     let updateInterval = setInterval(draw, 100);
-    setTimeout(function () { clearInterval(updateInterval); }, 1000); //Kill interval for efficent server resources
+    setTimeout(function () { clearInterval(updateInterval); }, 1000); //Kill interval for efficent server resources (has to have interval otherwise loaded resources might not exist yet)
 
 }
 
